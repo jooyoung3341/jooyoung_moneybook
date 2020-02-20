@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{layout/default}">
+<head>
+<th:block layout:fragment="css">
+<style type="text/css">
+/* .left {
+	width: 10%;
+	height:100px;
+	float: left;
+
+}
+.right {
+	width: 90%;
+	height:100px;
+	float: right;
+} */
+</style>
+</th:block>
+<meta charset="UTF-8">
+<title>자산</title>
+</head>
+<div layout:fragment="content" style="height:250px;">
+<div class="row">
+
+	<div class="col-md-2">
+		<div id="getAsset">
+ 			<ul class="list-group">
+ 				<th:block th:each="asset, i : ${assetlist}" id="asset_">
+ 				  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start"
+ 				    id="assetprice_span" th:value="${asset.ano}">
+				    <div class="d-flex w-100 justify-content-between">				   
+				      <small class="text-primary" th:text="${asset.type}" style="width:49%;"></small>
+				      <span class="badge badge-light" id="asset_price" th:text="${#numbers.formatInteger(asset.asset_price,0,'COMMA')}"></span>
+				      <button type="button" class="close" data-dismiss="alert" th:id="${'asset_delete'+i.index}" name="asset_delete" th:value="${asset.ano}">&times;</button>
+				      <input type="hidden" id="delete_ano" th:value="${asset.ano}">
+				    </div>
+				  </a>
+ 				</th:block>
+			</ul>
+		</div>
+	</div>
+
+	<div class="col-md-6">
+		<div class="alert alert-dismissible alert-light">
+		<form method="post" id="asset_form">
+			<div class="form-group">
+				<label class="control-label" for="inputDefault">자산 분류</label>
+				<input type="text" class="form-control" id="type">
+				<button type="button" class="btn btn-primary" id="asset_insert">자산 추가</button>
+			</div>
+		</form>
+		</div>
+
+<div id="getAssetprice" class="right"></div>
+</div>
+
+<div class="col-md-3">
+	<div id="getAssetprice_form"></div>
+</div>
+
+</div>
+<!-- Modal -->	           
+<div class="modal" id="assetprice_modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			  	<h5 class="modal-title">자산내역 수정</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post">
+					<div id="modal_ano"></div>
+					<div id="modal_pno"></div>
+					<div class="form-group" id="modal_insert_date"></div>
+					<div class="form-group" id="modal_price"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="update_assetprice">수정</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<th:block layout:fragment="script">
+<script>
+ window.onload = function(){
+	 statusSelect();
+} 
+
+//자산 추가
+$(document).ready(function(){
+	$("#asset_insert").click(function(){
+		var type = $("#type").val();
+		if(type == ""){
+			alert("자산 이름을 입력하셔야됩니다.");
+		}else
+		$.ajax({
+				url : "asset/insert",
+				type : "post",
+				data : {"type" : type},
+				dataType : "text",
+				success : function(){
+					assetSelect();
+					$("#asset_form")[0].reset();
+				}
+		})
+	})	
+})
+
+//자산 삭제
+	$(document).on("click","button[name=asset_delete]", function(){
+ 
+		var $delete = $(this).attr("id");
+		var ano = $("#"+$delete).attr("value");
+		var confirm_val = confirm("삭제 하시겠습니까?");
+		if(confirm_val){
+			
+			alert(ano);
+			$.ajax({
+				url : "asset/delete",
+				type : "post",
+				data : {"ano" : ano},
+				dataType : "text",
+				success : function(){
+					alert("삭제 완료했습니다.");
+					assetSelect();
+				}
+			})
+		}
+	})
+
+//자산 목록
+function assetSelect(){
+	var moneybook_name = '';
+	$.ajax({
+			url : "asset/select",
+			data : {"moneybook_name" : moneybook_name},
+			dataType : "json",
+			success : function(data){
+				getAsset(data);
+			}
+	});
+}
+ 
+//자산 목록 disp
+ function getAsset(data){
+	disp = "";
+	disp += "<ul class='list-group'>";
+	$(data).each(function(idx, item){
+		disp += "<a href='#' class='list-group-item list-group-item-action flex-column align-items-start' id='assetprice_span' value='"+item.ano+"'>";
+		disp += "<div class='d-flex w-100 justify-content-between'>";
+		disp += "<small class='text-primary' style='width:49%;'>"+item.type+"</small>";
+		disp += "<span class='badge badge-light' id='asset_price'>"+AddComma(Math.floor(item.asset_price))+"</span>";
+		disp += "<button type='button' class='close' data-dismiss='alert' id='asset_delete"+idx+"' name='asset_delete' value='"+item.ano+"'>&times;</button>";
+		disp += "</div></a>";
+		
+	}) 
+	disp += "</ul>";
+	document.getElementById("getAsset").innerHTML = disp;
+} 
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+//자산내역 등록
+$(document).on("click", "#assetprice_insert", function(){
+	var price = $("#price").val();
+	var ano = $("#hidden_ano").val();
+	var insert_date = $("#insert_date").val();
+	if(price == ""){
+		alert("금액을 입력하셔야 합니다.");
+	}else
+	$.ajax({
+			url : "assetprice/insert",
+			type : "post",
+			data : {"ano" : ano,
+					   "price" : price,
+					   "insert_date" : insert_date},
+			dateType : "json",
+			success : function(){
+				getAssetprice_select(ano);
+				assetSelect();
+			}
+	})
+})
+
+//자산 내역 
+ $(document).on("click","#assetprice_span", function Assetprice(ano){
+		var ano = $(this).attr("value");
+		$.ajax({
+			url : "assetprice/select",
+			data : {"ano" : ano},
+			dataType : "json",
+			success : function(data){
+				getAssetprice(data, ano)
+			}
+		});
+}); 
+
+//자산 내역 목록
+function getAssetprice(data, ano){
+	var disp = "";
+	var form_disp = "";
+	form_disp += "<div class='alert alert-dismissible alert-light'>";
+	form_disp += "<form method='post'>";
+	form_disp += "<input type='hidden' id='hidden_ano' value='"+ano+"'>";
+	form_disp += "<div class='form-group'>";
+	form_disp += "<label class='col-form-label' for='inputDefault'>날짜</label>";
+	form_disp += "<input type='date' class='form-control' name='insert_date' id='insert_date'>";
+	form_disp += "</div>";
+	form_disp += "<div class='form-group'>";
+	form_disp += "<label class='col-form-label' for='inputDefault'>금액</label>";
+	form_disp += "<input type='text' class='form-control' name='price' id='price'>";
+	form_disp += "</div>";
+	form_disp += "<button type='button' class='btn btn-primary' id='assetprice_insert'>등록</button>";
+	form_disp += "</form>";
+	form_disp += "<div>";
+	
+	disp += "<div align='right' style='width: 90%'>";
+	disp += "<button type='button' class='btn btn-outline-danger' id='assetprice_delete'>선택 삭제</button>";
+	disp += "</div>";
+	disp += "<table class='table table-hover'>";
+	disp += "<th scope='row'></th>";
+	disp += "<th scope='row'>날짜</th>";
+	disp += "<th scope='row'>금액</th>";
+	disp += "<th scope='row'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'/>";
+	disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
+	$(data).each(function(idx, item){
+		disp += "<tr>";																									  
+		disp += "<td><button type='button' class='btn btn-outline-primary' id='"+idx+item.pno+"' name='assetprice_update_modal' value='"+item.pno+"'>수정</button>";
+		disp += "<td>"+item.insert_date+"</td>";
+		disp += "<td>"+AddComma(Math.floor(item.price))+"</td>";
+		disp += "<td><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.pno+"' />"
+		disp += "<label class='custom-control-label' for='customCheck"+idx+"'></label></div></td>";
+		disp += "</tr>";
+	})
+	document.getElementById("getAssetprice").innerHTML = disp;
+	document.getElementById("getAssetprice_form").innerHTML = form_disp;
+	document.getElementById("insert_date").valueAsDate = new Date();
+} 
+
+//자산내역 수정 모달
+$(document).on("click","button[name=assetprice_update_modal]",function(){
+	var $update =$(this).attr("id");
+	var pno = $("#"+$update).attr("value");
+	$.ajax({
+		url : "assetprice/updateform",
+		data : {"pno" : pno},
+		dataType : "json",
+		success : function(data){
+			$("#modal_ano").html("<input type='hidden' id='update_ano' value='"+data.ano+"'>");
+			$("#modal_pno").html("<input type='hidden' id='update_pno' value='"+data.pno+"'>");
+			$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label><input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'>");
+			$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label> <input type='number' min='0' class='form-control' id='update_price' value='"+data.price+"'>")
+			$("#assetprice_modal").modal();
+		}
+	})
+});
+
+//자산내역 수정
+
+$(document).on("click", "#update_assetprice", function(){
+	var confirm_val = confirm("수정 하시겠습니까?");
+	if(confirm_val){
+		var ano = $("#update_ano").val();
+		var update_price = $("#update_price").val();
+		var update_insert_date = $("#update_insert_date").val();
+		var update_pno = $("#update_pno").val();
+
+		$.ajax({
+			url : "assetprice/update",
+			type : "post",
+			data : {"price" : update_price,
+					   "insert_date" : update_insert_date,
+					   "pno" : update_pno},
+			success : function(){
+				$("#assetprice_modal").modal("hide");
+				alert("수정 완료!");
+				getAssetprice_select(ano);
+			}		
+		})
+	}
+})
+
+
+//자산내역 삭제
+$(document).on("click","#assetprice_delete", function(){
+		var delete_check = false;
+		var ano = $("#hidden_ano").val();
+		var confirm_val = confirm("삭제 하시겠습니까?");
+		if(confirm_val){
+			var checkArr = new Array();
+			$("input[name=checkRow]:checked").each(function(){
+				checkArr.push($(this).val());
+				delete_check = true;
+			});
+			if(delete_check == true){
+			$.ajax({
+					url : "assetprice/delete",
+					type : "post",
+					data : {"checkArr" : checkArr},
+					traditional : true,
+					success : function(){
+						getAssetprice_select(ano);
+					}
+			})
+			}
+		}
+})
+
+//등록 완료/삭제/수정 후 내역
+function getAssetprice_select(ano){
+	$.ajax({
+		url : "assetprice/select",
+		data : {"ano" : ano},
+		dataType : "json",
+		success : function(data){
+			getAssetprice(data, ano)
+		}
+	})
+}
+
+</script>
+</th:block>
+</html>
+

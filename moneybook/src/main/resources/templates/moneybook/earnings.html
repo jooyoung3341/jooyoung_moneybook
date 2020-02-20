@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.na/thymeleaf/layout"
+	    layout:decorate="~{layout/default}">
+<head>
+<meta charset="UTF-8">
+<title>수입</title>
+</head>
+
+<div layout:fragment="content">
+<div class="row">
+	<div class="col-md-9">
+		<input type="month" id="indate" onchange="earningsSelect(this)"/>
+		<div align="right" style="width: 92%">
+			<button type="button" class="btn btn-outline-danger" id="earnings_delete">선택 삭제</button>
+		</div>
+		<div id="getEarnings"></div>
+	</div>
+	
+	<div class="col-md-3">
+	<div class="alert alert-dismissible alert-light">
+		<form method="post" id="earnings_form">
+			<div class="form-group">
+				<label class="col-form-label" for="inputDefault">날짜</label>
+				<input type="date" class="form-control" id="insert_date" name="insert_date">
+			</div>
+			<div class="form-group">
+				<label class="col-form-label" for="inputDefault">금액</label>
+				<input type="number" class="form-control" min="0" id="price" name="price">
+			</div>
+			<div class="form-group">
+				<label class="col-form-label" for="inputDefault">수입처</label>
+				<input type="text" class="form-control" id="cartegory" name="cartegory">
+			</div>
+			<button type="button" class="btn btn-primary" id="earnings_insert">등록</button>
+		</form>
+		</div>
+	</div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal" id="earnings_modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			  	<h5 class="modal-title">수입내역 수정</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post">
+					<div id="modal_ino"></div>
+					<div class="form-group" id="modal_insert_date"></div>
+					<div class="form-group" id="modal_price"></div>
+					<div class="form-group" id="modal_cartegory"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="update_earnings">수정</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+</div>
+<th:block layout:fragment="script">
+<script>
+//현재 페이지로 올 때 함수실행
+window.onload = function(){
+	earningsSelect();
+	statusSelect();
+}
+document.getElementById("insert_date").valueAsDate = new Date();
+document.getElementById("indate").valueAsDate = new Date()
+
+	//수입내역 등록
+	$(document).ready(function(){
+		$("#earnings_insert").click(function(){
+			var insert_date = $("#insert_date").val();
+			var cartegory = $("#cartegory").val();
+			var price = $("#price").val();
+			if(price == ""){
+				alert("금액을 입력하셔야 합니다.");
+			}else if(cartegory == ""){
+				alert("사용내역을 입력하셔야 합니다.");
+			}else
+			$.ajax({
+					url : "earnings/insert",
+					type : "post",
+					data : {
+							   "insert_date" : insert_date,
+							   "price" : price,
+							   "cartegory" : cartegory},
+					dateType : "json",
+					success : function(){
+						earningsSelect();
+						$("#earnings_form")[0].reset();
+						document.getElementById("insert_date").valueAsDate = new Date();
+					}
+			})
+		})
+	})
+	
+	//수입내역 목록
+	function earningsSelect(){
+		var indate = $("#indate").val();
+		$.ajax({
+				url : "earnings/select",
+				data : {"indate" : indate},
+				dataType : "json",
+				success : function(data){
+					getEarnings(data);
+				}
+		})
+	}
+	
+	//수입내역
+	function getEarnings(data){
+		disp = "";
+		disp += "<table class='table table-hover'>";
+		disp += "<tr>";
+		disp += "<th scope='row' width='100'></th>";
+		disp += "<th scope='row' width='200'>날짜</th>";
+		disp += "<th scope='row'>금액</th>";
+		disp += "<th scope='row'>수입처</th>";
+		disp += "<th scope='row'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'>"
+		disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
+		disp += "</tr>";
+		$(data).each(function(idx, item){
+			disp += "<tr>";
+			disp += "<td><button type='button' class='btn btn-outline-primary' id='"+idx+item.ino+"' name='earnings_update_modal' value='"+item.ino+"'>수정</button>";
+			disp += "<td>"+item.insert_date+"</td>";
+			disp += "<td>"+AddComma(Math.floor(item.price))+"</td>";
+			disp += "<td>"+item.cartegory+"</td>";
+			disp += "<td><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.ino+"'>"
+			disp += "<label class='custom-control-label' for='customCheck"+idx+"'></label></div></td>";
+			disp += "</tr>";
+			
+		});
+		disp += "</table>";
+		document.getElementById("getEarnings").innerHTML = disp;
+	}
+	 
+	 //수입내역 삭제
+	 $(document).ready(function(){
+	  	var delete_check = false;
+ 		$("#earnings_delete").click(function(){
+ 			var confirm_val = confirm("삭제 하시겠습니까?");
+ 			if(confirm_val){
+ 				var checkArr = new Array();
+ 				$("input[name=checkRow]:checked").each(function(){
+ 					checkArr.push($(this).val())
+ 					delete_check = true;
+ 				});
+ 			if(delete_check == true){
+ 			$.ajax({
+ 					url : "earnings/delete",
+ 					type : "post",
+ 					data : {"checkArr" : checkArr},
+ 					//배열값을 넘기기 위한 설정
+ 					traditional : true,
+ 					dateType : "json",
+ 					success : function(){
+ 						earningsSelect();
+ 					}
+ 			})
+ 			}
+ 			}
+ 		})
+ 	});
+	 
+	 //수입내역 수정 모달
+	 $(document).on("click","button[name=earnings_update_modal]",function(){
+		 var $update = $(this).attr("id");
+		 var ino = $("#"+$update).attr("value");
+		 $.ajax({
+				url: "earnings/updateform",
+				data : {"ino" : ino},
+				dataType : "json",
+				success : function(data){
+					$("#modal_ino").html("<input type='hidden' id='update_ino' value='"+data.ino+"'>");
+					$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label><input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'/>");
+					$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label> <input type='number' min='0' class='form-control' id='update_price' value='"+AddComma(Math.floor(data.price))+"' />")
+					$("#modal_cartegory").html("<label class='col-form-label' for='inputDefault'>사용내역</label> <input tpye='text' class='form-control' id='update_cartegory' value='"+data.cartegory+"'/>");
+					$("#earnings_modal").modal();
+				}
+		 })
+	 });
+	 
+	 //수입내역 수정
+	 $(document).ready(function(){
+		$(document).on("click", "#update_earnings", function(){
+			var confirm_val = confirm("수정 하시겠습니까?");
+			if(confirm_val){
+				var update_price = $("#update_price").val();
+	 			var update_cartegory = $("#update_cartegory").val();
+	 			var update_insert_date = $("#update_insert_date").val();
+	 			var update_ino = $("#update_ino").val();
+	 			$.ajax({
+	 				url : "earnings/update",
+	 				type : "post",
+	 				data : {"price" : update_price,
+	 						   "cartegory" : update_cartegory,
+	 						   "insert_date" : update_insert_date,
+	 						   "ino" : update_ino},
+	 				dataType : "text",
+	 				success : function(){
+	 					$("#earnings_modal").modal("hide"); 
+	 					alert("수정 완료!");
+	 					earningsSelect();
+	 				}
+	 			})
+			}
+		})
+	 })
+	 
+</script>
+</th:block>
+</html>

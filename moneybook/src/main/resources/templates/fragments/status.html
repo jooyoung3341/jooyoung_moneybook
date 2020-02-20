@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="status">
+<div class="form-group">
+	<input type="month" class="form-control" id="status_date" onchange="statusSelect()">
+</div>
+<h3>가계부 현황</h3>
+<button class="badge badge-pill badge-primary" id="refresh" onclick="statusSelect()">Refresh</button>
+<div id="getStatus"></div>
+</th:block>
+</html>

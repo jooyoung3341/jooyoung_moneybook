@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.moneybook.mapper.StatusMapper">
+
+<select id="status_select" parameterType="hashMap" resultType="kr.co.moneybook.domain.Status">
+     <!-- ifnull : sum(price)값이 없을 경우 0값 치환 -->
+     <!-- union : 두개 이상의 select 명령어에서 나온 결과를 합치는 연산문 중복되는 값 없이 출력
+     	    union all : 중복을 고려하지 않고 전체 데이터가 출력됨 -->
+	select ifnull(sum(price), 0) as status
+	from expense
+	where insert_date like CONCAT(#{insert_date},'%') and moneybook_name = #{moneybook_name}   
+	union all
+	select ifnull(sum(price), 0)
+	from earnings
+	where insert_date like CONCAT(#{insert_date},'%') and moneybook_name = #{moneybook_name}   
+	union all
+	select ifnull(sum(p.price), 0) 
+	from assetprice as p,(select ano 
+		                         from asset as a
+						         where moneybook_name = #{moneybook_name}) a
+	where p.ano = a.ano
+</select>
+</mapper>
+
+

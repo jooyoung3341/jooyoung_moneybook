@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.moneybook.mapper.AssetMapper">
+
+<!-- 자산 추가-->
+<insert id="asset_insert" parameterType="kr.co.moneybook.domain.Asset">
+	insert into asset(moneybook_name, type)
+					 values(#{moneybook_name}, #{type})
+</insert>
+
+<!-- 자산 목록 -->
+<select id="asset_select" parameterType="java.lang.String" resultType="kr.co.moneybook.domain.Asset">
+	select a.type, a.ano,(
+								 select sum(price)
+								 from assetprice ap
+								 where a.ano = ap.ano
+								 ) as asset_price
+	from asset a
+	where moneybook_name = #{moneybook_name}
+</select>
+
+<!-- 자산 삭제 -->
+<delete id="asset_delete" parameterType="java.lang.Integer">
+	delete 
+	from asset
+	where ano = #{ano}
+</delete>
+</mapper>

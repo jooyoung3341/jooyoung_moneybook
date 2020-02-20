@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.moneybook.mapper.ExpenseMapper">
+
+<!-- 지출내역 삽입 -->
+<insert id="expense_insert" parameterType="kr.co.moneybook.domain.Expense">
+	insert into expense(moneybook_name, price, type, cartegory, insert_date)
+						values(#{moneybook_name}, #{price}, #{type}, #{cartegory}, #{insert_date})
+</insert>
+
+<!-- 지출내역 목록 -->
+<select id="expense_select" parameterType="hashMap" resultType="hashMap">
+	select price, type, cartegory, insert_date, eno
+	from expense
+	where insert_date like CONCAT('%',#{insert_date},'%') and moneybook_name = #{moneybook_name}
+	order by insert_date desc, eno desc
+</select>
+
+<!-- 지출내역 삭제 -->
+<delete id="expense_delete" parameterType="java.lang.Integer">
+	delete from expense
+	where eno = #{eno}
+</delete>
+
+<!-- 지출내역 수정 폼 입력 값 가져오기 -->
+<select id="expense_updateform" parameterType="java.lang.Integer" resultType="kr.co.moneybook.domain.Expense">
+	select price, type, cartegory, insert_date, eno
+	from expense
+	where eno = #{eno}
+</select>
+
+<!-- 지출내역 수정 --> 
+<update id="expense_update" parameterType="kr.co.moneybook.domain.Expense">
+	update expense
+  	set price = #{price}, type = #{type}, cartegory = #{cartegory}, insert_date = #{insert_date} 
+	where eno = #{eno}
+</update>
+
+</mapper>
