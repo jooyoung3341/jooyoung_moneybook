@@ -14,8 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import kr.co.moneybook.domain.Moneybook;
-import kr.co.moneybook.service.MoneybookService;
+import kr.co.moneybook.domain.user.Moneybook;
+import kr.co.moneybook.service.user.MoneybookService;
 
 @Configuration
 @EnableWebSecurity
