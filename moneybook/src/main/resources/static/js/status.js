@@ -1,6 +1,7 @@
-document.getElementById("status_date").valueAsDate = new Date();
+	
+	document.getElementById("status_date").valueAsDate = new Date();
 
-//지출 합계
+	//가계부현황 조회
 	function statusSelect(){
 		var status_date = $("#status_date").val();
 		$.ajax({
@@ -13,6 +14,7 @@ document.getElementById("status_date").valueAsDate = new Date();
 		})
 	}
 	
+	//가계부 현황 표
 	function getStatus(data){
 		var disp = "";
 		disp += "<ul class='list-group'>";
@@ -35,6 +37,7 @@ document.getElementById("status_date").valueAsDate = new Date();
 		document.getElementById("getStatus").innerHTML = disp;
 	} 
 	
+	//가계부 현황 페이지 리로드
 	function refresh(){
 		location.reload();
 	}

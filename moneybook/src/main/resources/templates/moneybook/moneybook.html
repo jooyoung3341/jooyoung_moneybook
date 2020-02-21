@@ -1,11 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 		 layout:decorate="~{layout/default}">
-	<!--     data-layout-decorator="~{layout/default}" -->
 <head>
-<style type="text/css">
-
-</style>
 <meta charset="UTF-8"/>
 <title>MoneyBook</title>
 </head>
@@ -29,12 +25,14 @@
 			<label class="col-form-label" for="inputDefault">날짜</label>
 			<input type="date" class="form-control" id="insert_date" name="insert_date" required="required"/>
 		</div>
+		
 		<div class="form-group">
 	    	<select class="custom-select" id="type">
 	      		<option value="cash">현금</option>
 	      		<option value="card">카드</option>
 	    	</select>
  		</div>
+ 		
  		<div class="form-group">
 			<label class="col-form-label" for="inputDefault">금액</label>
   			<input type="number" min="0" class="form-control"  id="price" name="price" required="required">
@@ -77,8 +75,6 @@
 	</div>
 </div>
 			
-
-
 </div>
 
 <th:block layout:fragment="script">
@@ -120,7 +116,6 @@
 						$("#expense_form")[0].reset();
 						document.getElementById("insert_date").valueAsDate = new Date();
 					}
-				
 			})
 		});
 	});
@@ -137,6 +132,7 @@
 				}
 		})
 	}
+ 	
  	//지출내역
 	function getExpense(data){
  		var type = '';
@@ -152,7 +148,6 @@
 		disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
 		disp += "</tr>";
 		$(data).each(function(idx, item){
-
 			if(item.type == 'cash'){
 				type = '현금';
 			}else if(item.type== 'card'){
@@ -168,7 +163,6 @@
 			disp += "<td width='150'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.eno+"'>";
 			disp += "<label class='custom-control-label' for='customCheck"+idx+"'></label></div></td>";
 			disp += "</tr>";
-			
 		}); 
 		disp += "</table>";
 		document.getElementById("getExpense").innerHTML = disp;
@@ -176,32 +170,30 @@
  	
 
  	//지출내역 삭제
- 	$(document).ready(function(){
- 		var delete_check  = false;
- 		$("#expense_delete").click(function(){
- 			var confirm_val = confirm("삭제 하시겠습니까?");
- 			if(confirm_val){
- 				var checkArr = new Array();
- 				//체크된 값 array에 넣기
- 				$("input[name=checkRow]:checked").each(function(){
- 					checkArr.push($(this).val())
- 					delete_check = true;
- 				});
- 			if(delete_check == true){
- 				$.ajax({
- 					url : "expense/delete",
- 					type : "post",
- 					data : {"checkArr" : checkArr},
- 					//배열값을 넘기기 위한 설정
- 					traditional : true,
- 					dateType : "json",
- 					success : function(){
- 						expenseSelect();
- 						}
- 				})
- 				}
+ 	var delete_check  = false;
+ 	$("#expense_delete").click(function(){
+ 		var confirm_val = confirm("삭제 하시겠습니까?");
+ 		if(confirm_val){
+ 			var checkArr = new Array();
+ 			//체크된 값 array에 넣기
+ 			$("input[name=checkRow]:checked").each(function(){
+ 				checkArr.push($(this).val())
+ 				delete_check = true;
+ 			});
+ 		if(delete_check == true){
+ 			$.ajax({
+ 				url : "expense/delete",
+ 				type : "post",
+ 				data : {"checkArr" : checkArr},
+ 				//배열값을 넘기기 위한 설정
+ 				traditional : true,
+ 				dateType : "json",
+ 				success : function(){
+ 					expenseSelect();
+ 					}
+ 			})
  			}
- 		})
+ 		}
  	})
  	
  	//지출내역 수정 모달
@@ -231,7 +223,6 @@
  	
  	
  	//지출내역 수정
- 	$(document).ready(function(){
 
  		$(document).on("click", "#update_expense",function(){
  			var confirm_val = confirm("수정 하시겠습니까?");
@@ -263,7 +254,6 @@
  			})
  			}
  		})
- 	}) 
 
  		
 </script>

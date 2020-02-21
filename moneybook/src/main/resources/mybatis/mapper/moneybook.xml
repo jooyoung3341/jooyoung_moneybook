@@ -12,20 +12,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 
 <!-- 가계부 등록 -->
-<insert id="moneybookRegister" parameterType="kr.co.moneybook.domain.Moneybook">
+<insert id="moneybookRegister" parameterType="Moneybook">
 	insert into moneybook(moneybook_name, moneybook_pw)
 						values(#{moneybook_name}, #{moneybook_pw})
 </insert>
 
 <!-- 사용자 권한 등록 -->
-<insert id="authorityRegister" parameterType="kr.co.moneybook.domain.Moneybook">
+<insert id="authorityRegister" parameterType="Moneybook">
 	insert into authority(moneybook_name, authority_name)
 						values(#{moneybook_name}, #{authority_name})
 </insert>
 
 
 <!-- 시큐리티 사용자 정보(권한포함) 가져오기 -->
-<select id="readMoneybook" parameterType="String" resultType="kr.co.moneybook.domain.Moneybook">
+<select id="readMoneybook" parameterType="String" resultType="Moneybook">
 	select m.moneybook_name, m.moneybook_pw, a.authority_name
     from moneybook as m 
 	       inner join authority as a on m.moneybook_name = a.moneybook_name

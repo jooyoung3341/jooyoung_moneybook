@@ -5,13 +5,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="kr.co.moneybook.mapper.ExpenseMapper">
 
 <!-- 지출내역 삽입 -->
-<insert id="expense_insert" parameterType="kr.co.moneybook.domain.Expense">
+<insert id="expense_insert" parameterType="Expense">
 	insert into expense(moneybook_name, price, type, cartegory, insert_date)
 						values(#{moneybook_name}, #{price}, #{type}, #{cartegory}, #{insert_date})
 </insert>
 
 <!-- 지출내역 목록 -->
-<select id="expense_select" parameterType="hashMap" resultType="hashMap">
+<select id="expense_select" parameterType="hashMap" resultType="Expense">
 	select price, type, cartegory, insert_date, eno
 	from expense
 	where insert_date like CONCAT('%',#{insert_date},'%') and moneybook_name = #{moneybook_name}
@@ -25,14 +25,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </delete>
 
 <!-- 지출내역 수정 폼 입력 값 가져오기 -->
-<select id="expense_updateform" parameterType="java.lang.Integer" resultType="kr.co.moneybook.domain.Expense">
+<select id="expense_updateform" parameterType="java.lang.Integer" resultType="Expense">
 	select price, type, cartegory, insert_date, eno
 	from expense
 	where eno = #{eno}
 </select>
 
 <!-- 지출내역 수정 --> 
-<update id="expense_update" parameterType="kr.co.moneybook.domain.Expense">
+<update id="expense_update" parameterType="Expense">
 	update expense
   	set price = #{price}, type = #{type}, cartegory = #{cartegory}, insert_date = #{insert_date} 
 	where eno = #{eno}

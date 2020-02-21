@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{layout/default}">
+<head>
+<th:block layout:fragment="css">
+</th:block>
+<meta charset="UTF-8">
+<title>가계부 이야기 등록</title>
+</head>
+<div layout:fragment="content">
+
+<form method="post">
+	<div class="form-group">
+		<label class="col-form-label" for="inputDefault">제목</label>
+		<input type="text" class="form-control" id="title">
+	</div>
+	
+	<div class="form-group">
+		<label class="col-form-label" for="inputDefault">가져올 가계부 날짜</label>
+		<input type="month" class="form-control" id="moneybook_date">
+		<button type="button">가계부 가져오기</button>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-form-label" for="inputDefault"></label>
+		<textarea class="form-control" rows="3"></textarea>
+	</div>
+</form>
+
+</div>
+<th:block layout:fragment="script">
+<script>
+
+</script>
+</th:block>
+</html>

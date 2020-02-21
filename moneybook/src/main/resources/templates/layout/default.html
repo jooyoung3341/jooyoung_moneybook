@@ -3,9 +3,12 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlans:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head th:replace="fragments/config :: configFragment">	
 </head> 
+<div style="height:70px;">
 <header th:replace="fragments/header :: headerFragment"></header>
+</div>
 <div class="row">
     <div class="col-md-2">
+    	<!-- 가계부 현황 -->
     	<th:block th:replace="fragments/status :: status"></th:block>
     </div>
     

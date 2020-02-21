@@ -27,7 +27,7 @@ public class DataSourceConfig {
 		final SqlSessionFactoryBean sessionFactory = new SqlSessionFactoryBean();
 		PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
 		sessionFactory.setDataSource(dataSource);
-		//sessionFactory.setTypeAliasesPackage("kr.co.moneybook.domain");
+		sessionFactory.setTypeAliasesPackage("kr.co.moneybook.domain");
 		//실제 Query문이 존재하는 xml파일들의 위치를 지정해 준다.
 		sessionFactory.setMapperLocations(resolver.getResources("classpath:mybatis/mapper/*.xml"));
 		return sessionFactory.getObject();

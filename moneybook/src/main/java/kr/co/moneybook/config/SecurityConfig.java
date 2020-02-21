@@ -14,8 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import kr.co.moneybook.domain.user.Moneybook;
-import kr.co.moneybook.service.user.MoneybookService;
+import kr.co.moneybook.domain.Moneybook;
+import kr.co.moneybook.service.MoneybookService;
 
 @Configuration
 @EnableWebSecurity
@@ -53,7 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.	authorizeRequests()
 		//페이지 권한 설정
 			.antMatchers("/admin/**").hasRole("ADMIN") // ADMIN 로그인된 사용자 접근 가능
-			.antMatchers("/moneybook/**","moneybook/**/**").hasRole("USER")//USER 로그인된 사용자 접근 가능
+			.antMatchers("/moneybook/**","/moneybook/**/**").hasRole("USER")//USER 로그인된 사용자 접근 가능
 			.antMatchers("/").permitAll() // 모든사용자 접근 가능
 		//	.anyRequest().permitAll()			
 		.and()

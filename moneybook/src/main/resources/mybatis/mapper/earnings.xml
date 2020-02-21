@@ -5,13 +5,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="kr.co.moneybook.mapper.EarningsMapper">
 
 <!-- 수입내역 삽입 -->
-<insert id="earnings_insert" parameterType="kr.co.moneybook.domain.Earnings">
+<insert id="earnings_insert" parameterType="Earnings">
 	insert into earnings(moneybook_name, price, cartegory, insert_date)
 						values(#{moneybook_name}, #{price}, #{cartegory}, #{insert_date})
 </insert>
 
 <!-- 수입내역 목록 -->
-<select id="earnings_select" parameterType="java.lang.String" resultType="kr.co.moneybook.domain.Earnings">
+<select id="earnings_select" parameterType="java.lang.String" resultType="Earnings">
 	select price, cartegory, insert_date, ino
 	from earnings
 	where insert_date like CONCAT('%',#{insert_date},'%') and moneybook_name = #{moneybook_name}
@@ -25,14 +25,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </delete>
 
 <!-- 수입내역 수정 폼 -->
-<select id="earnings_updateform" parameterType="java.lang.Integer" resultType="kr.co.moneybook.domain.Earnings">
+<select id="earnings_updateform" parameterType="java.lang.Integer" resultType="Earnings">
 	select price, cartegory, insert_date, ino
 	from earnings
 	where ino = #{ino}
 </select>
 
 <!-- 수입내역 수정 -->
-<update id="earnings_update" parameterType="kr.co.moneybook.domain.Earnings">
+<update id="earnings_update" parameterType="Earnings">
 	update earnings
 	set price = #{price}, cartegory = #{cartegory}, insert_date = #{insert_date}
 	where ino = #{ino}

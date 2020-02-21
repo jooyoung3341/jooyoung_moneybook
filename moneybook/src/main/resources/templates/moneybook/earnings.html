@@ -76,30 +76,28 @@ document.getElementById("insert_date").valueAsDate = new Date();
 document.getElementById("indate").valueAsDate = new Date()
 
 	//수입내역 등록
-	$(document).ready(function(){
-		$("#earnings_insert").click(function(){
-			var insert_date = $("#insert_date").val();
-			var cartegory = $("#cartegory").val();
-			var price = $("#price").val();
-			if(price == ""){
-				alert("금액을 입력하셔야 합니다.");
-			}else if(cartegory == ""){
-				alert("사용내역을 입력하셔야 합니다.");
-			}else
-			$.ajax({
-					url : "earnings/insert",
-					type : "post",
-					data : {
-							   "insert_date" : insert_date,
-							   "price" : price,
-							   "cartegory" : cartegory},
-					dateType : "json",
-					success : function(){
-						earningsSelect();
-						$("#earnings_form")[0].reset();
-						document.getElementById("insert_date").valueAsDate = new Date();
-					}
-			})
+	$("#earnings_insert").click(function(){
+		var insert_date = $("#insert_date").val();
+		var cartegory = $("#cartegory").val();
+		var price = $("#price").val();
+		if(price == ""){
+			alert("금액을 입력하셔야 합니다.");
+		}else if(cartegory == ""){
+			alert("사용내역을 입력하셔야 합니다.");
+		}else
+		$.ajax({
+				url : "earnings/insert",
+				type : "post",
+				data : {
+						   "insert_date" : insert_date,
+						   "price" : price,
+						   "cartegory" : cartegory},
+				dateType : "json",
+				success : function(){
+					earningsSelect();
+					$("#earnings_form")[0].reset();
+					document.getElementById("insert_date").valueAsDate = new Date();
+				}
 		})
 	})
 	
@@ -144,33 +142,31 @@ document.getElementById("indate").valueAsDate = new Date()
 	}
 	 
 	 //수입내역 삭제
-	 $(document).ready(function(){
-	  	var delete_check = false;
- 		$("#earnings_delete").click(function(){
- 			var confirm_val = confirm("삭제 하시겠습니까?");
- 			if(confirm_val){
- 				var checkArr = new Array();
- 				$("input[name=checkRow]:checked").each(function(){
- 					checkArr.push($(this).val())
- 					delete_check = true;
- 				});
- 			if(delete_check == true){
- 			$.ajax({
- 					url : "earnings/delete",
- 					type : "post",
- 					data : {"checkArr" : checkArr},
- 					//배열값을 넘기기 위한 설정
- 					traditional : true,
- 					dateType : "json",
- 					success : function(){
- 						earningsSelect();
- 					}
- 			})
- 			}
- 			}
+	var delete_check = false;
+ 	$("#earnings_delete").click(function(){
+ 		var confirm_val = confirm("삭제 하시겠습니까?");
+ 		if(confirm_val){
+ 			var checkArr = new Array();
+ 			$("input[name=checkRow]:checked").each(function(){
+ 				checkArr.push($(this).val())
+ 				delete_check = true;
+ 			});
+ 		if(delete_check == true){
+ 		$.ajax({
+ 				url : "earnings/delete",
+ 				type : "post",
+ 				data : {"checkArr" : checkArr},
+ 				//배열값을 넘기기 위한 설정
+ 				traditional : true,
+ 				dateType : "json",
+ 				success : function(){
+ 					earningsSelect();
+ 				}
  		})
- 	});
-	 
+ 		}
+ 		}
+ 	})
+
 	 //수입내역 수정 모달
 	 $(document).on("click","button[name=earnings_update_modal]",function(){
 		 var $update = $(this).attr("id");
@@ -190,32 +186,30 @@ document.getElementById("indate").valueAsDate = new Date()
 	 });
 	 
 	 //수입내역 수정
-	 $(document).ready(function(){
-		$(document).on("click", "#update_earnings", function(){
-			var confirm_val = confirm("수정 하시겠습니까?");
-			if(confirm_val){
-				var update_price = $("#update_price").val();
-	 			var update_cartegory = $("#update_cartegory").val();
-	 			var update_insert_date = $("#update_insert_date").val();
-	 			var update_ino = $("#update_ino").val();
-	 			$.ajax({
-	 				url : "earnings/update",
-	 				type : "post",
-	 				data : {"price" : update_price,
-	 						   "cartegory" : update_cartegory,
-	 						   "insert_date" : update_insert_date,
-	 						   "ino" : update_ino},
-	 				dataType : "text",
-	 				success : function(){
-	 					$("#earnings_modal").modal("hide"); 
-	 					alert("수정 완료!");
-	 					earningsSelect();
-	 				}
-	 			})
-			}
-		})
-	 })
-	 
+	$(document).on("click", "#update_earnings", function(){
+		var confirm_val = confirm("수정 하시겠습니까?");
+		if(confirm_val){
+			var update_price = $("#update_price").val();
+			var update_cartegory = $("#update_cartegory").val();
+			var update_insert_date = $("#update_insert_date").val();
+			var update_ino = $("#update_ino").val();
+			$.ajax({
+				url : "earnings/update",
+				type : "post",
+				data : {"price" : update_price,
+						   "cartegory" : update_cartegory,
+						   "insert_date" : update_insert_date,
+						   "ino" : update_ino},
+				dataType : "text",
+				success : function(){
+					$("#earnings_modal").modal("hide"); 
+					alert("수정 완료!");
+					earningsSelect();
+				}
+			})
+		}
+	})
+	
 </script>
 </th:block>
 </html>
