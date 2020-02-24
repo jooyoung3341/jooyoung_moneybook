@@ -7,6 +7,22 @@ public class Earnings {
     private int price;
     private String cartegory;
     private String insert_date;
+    private String moneybook_type;
+    private int price_sum;
+    
+    
+	public int getPrice_sum() {
+		return price_sum;
+	}
+	public void setPrice_sum(int price_sum) {
+		this.price_sum = price_sum;
+	}
+	public String getMoneybook_type() {
+		return moneybook_type;
+	}
+	public void setMoneybook_type(String moneybook_type) {
+		this.moneybook_type = moneybook_type;
+	}
 	public int getIno() {
 		return ino;
 	}

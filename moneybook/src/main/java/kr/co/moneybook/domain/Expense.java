@@ -7,6 +7,14 @@ public class Expense {
     private String type;
     private String cartegory;
     private String insert_date;
+    private String moneybook_type;
+
+	public String getMoneybook_type() {
+		return moneybook_type;
+	}
+	public void setMoneybook_type(String moneybook_type) {
+		this.moneybook_type = moneybook_type;
+	}
 	public int getEno() {
 		return eno;
 	}

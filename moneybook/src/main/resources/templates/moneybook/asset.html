@@ -187,6 +187,7 @@
 	function getAssetprice(data, ano){
 		var disp = "";
 		var form_disp = "";
+		var price_sum = 0;
 		form_disp += "<div class='alert alert-dismissible alert-light'>";
 		form_disp += "<form method='post'>";
 		form_disp += "<input type='hidden' id='hidden_ano' value='"+ano+"'>";
@@ -220,7 +221,12 @@
 			disp += "<td><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.pno+"' />"
 			disp += "<label class='custom-control-label' for='customCheck"+idx+"'></label></div></td>";
 			disp += "</tr>";
+			price_sum += item.price;
 		})
+			disp += "<td></td>";
+			disp += "<td align='right'>합계 :</td>";
+			disp += "<td>"+AddComma(Math.floor(price_sum))+"</td>";
+			disp += "<td></td>";
 		document.getElementById("getAssetprice").innerHTML = disp;
 		document.getElementById("getAssetprice_form").innerHTML = form_disp;
 		document.getElementById("insert_date").valueAsDate = new Date();

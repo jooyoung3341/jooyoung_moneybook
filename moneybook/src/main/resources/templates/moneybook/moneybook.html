@@ -21,6 +21,7 @@
 	<div class="col-md-3">
 	<div class="alert alert-dismissible alert-light">
 	<form method="post" id="expense_form">
+		<input type="hidden" id="moneybook_type" value="expense">
 		<div class="form-group">
 			<label class="col-form-label" for="inputDefault">날짜</label>
 			<input type="date" class="form-control" id="insert_date" name="insert_date" required="required"/>
@@ -97,7 +98,7 @@
 			var type = $("#type option:selected").val();
 			var price = $("#price").val();
 			var cartegory = $("#cartegory").val();
-
+			var moneybook_type = $("#moneybook_type").val();
 			if(price == ""){
 				alert("금액을 입력하셔야 합니다.");
 			}else if(cartegory == ""){
@@ -109,7 +110,8 @@
 					data : {"insert_date" : insert_date,
 							   "type" : type,
 							   "price" : price,
-							   "cartegory" : cartegory},
+							   "cartegory" : cartegory,
+							   "moneybook_type" : moneybook_type},
 					dateType : "json",
 					success : function(){
 						expenseSelect();
@@ -135,7 +137,8 @@
  	
  	//지출내역
 	function getExpense(data){
- 		var type = '';
+ 		var type = "";
+ 		var price_sum = 0;
 		disp = "";
 		disp += "<table class='table table-hover'>";
 		disp += "<tr>";
@@ -163,7 +166,14 @@
 			disp += "<td width='150'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.eno+"'>";
 			disp += "<label class='custom-control-label' for='customCheck"+idx+"'></label></div></td>";
 			disp += "</tr>";
-		}); 
+			price_sum += item.price;
+		});
+		disp += "<td></td>";
+		disp += "<td align='right'>합계 :</td>";
+		disp += "<td>"+AddComma(Math.floor(price_sum))+"</td>";
+		disp += "<td></td>";
+		disp += "<td></td>";
+		disp += "<td></td>";
 		disp += "</table>";
 		document.getElementById("getExpense").innerHTML = disp;
 	}

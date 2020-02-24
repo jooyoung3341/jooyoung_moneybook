@@ -6,8 +6,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- 지출내역 삽입 -->
 <insert id="expense_insert" parameterType="Expense">
-	insert into expense(moneybook_name, price, type, cartegory, insert_date)
-						values(#{moneybook_name}, #{price}, #{type}, #{cartegory}, #{insert_date})
+	insert into expense(moneybook_name, price, type, cartegory, insert_date, moneybook_type)
+						values(#{moneybook_name}, #{price}, #{type}, #{cartegory}, #{insert_date}, #{moneybook_type})
 </insert>
 
 <!-- 지출내역 목록 -->

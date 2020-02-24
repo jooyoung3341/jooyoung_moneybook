@@ -31,12 +31,14 @@ public class EarningsServiceImpl implements EarningsService {
 		String price = request.getParameter("price");
 		String cartegory = request.getParameter("cartegory");
 		String insert_date = request.getParameter("insert_date");
+		String moneybook_type = request.getParameter("moneybook_type");
 
 		Earnings earnings = new Earnings();
 		earnings.setMoneybook_name(moneybook_name);
 		earnings.setPrice(Integer.parseInt(price));
 		earnings.setCartegory(cartegory);
 		earnings.setInsert_date(insert_date);
+		earnings.setMoneybook_type(moneybook_type);
 		
 		earningsMapper.earnings_insert(earnings);
 		

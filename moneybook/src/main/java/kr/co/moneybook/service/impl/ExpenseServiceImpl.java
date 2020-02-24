@@ -31,6 +31,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 		String type = request.getParameter("type");
 		String cartegory = request.getParameter("cartegory");
 		String insert_date = request.getParameter("insert_date");
+		String moneybook_type = request.getParameter("moneybook_type");
 		
 		Expense expense = new Expense();
 		expense.setMoneybook_name(moneybook_name);
@@ -38,6 +39,7 @@ public class ExpenseServiceImpl implements ExpenseService {
 		expense.setType(type);
 		expense.setCartegory(cartegory);
 		expense.setInsert_date(insert_date);
+		expense.setMoneybook_type(moneybook_type);
 		
 		expenseMapper.expense_insert(expense);
 		

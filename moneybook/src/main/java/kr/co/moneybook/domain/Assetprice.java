@@ -5,7 +5,15 @@ public class Assetprice {
 	private int price;
 	private String insert_date;
 	private int ano;
+	private int price_sum;
 	
+	
+	public int getPrice_sum() {
+		return price_sum;
+	}
+	public void setPrice_sum(int price_sum) {
+		this.price_sum = price_sum;
+	}
 	public int getAno() {
 		return ano;
 	}
