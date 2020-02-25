@@ -8,13 +8,24 @@
 	width: 10%;
 	height:100px;
 	float: left;
-
-}
+	}
 .right {
 	width: 90%;
 	height:100px;
 	float: right;
-}
+	}
+#table {	
+	display: table; 
+	width: 100%;
+	}
+.row1 {
+	display: table-row;	
+	}
+.cell {
+	display: table-cell; 
+	padding: 4px; 
+	border-bottom: 1px solid #DDD;
+	}
 </style>
 	</th:block>
 	<!-- jQuery 설정 -->
@@ -43,15 +54,6 @@ function checkAll(){
 	}
 }
 	
-   /*  var nav = document.getElementById("navbarColor01");
-
-    window.onscroll = function sticky() {
-      if(window.pageYOffset > nav[0].offsetTop) {
-        nav[0].classList.add("nav");
-      } else {
-        nav[0].classList.remove("nav");
-      }
-    } */
 </script>
 
 </head>

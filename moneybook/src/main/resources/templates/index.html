@@ -58,7 +58,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form method="post" id="form" th:onsubmit="return moneybookcheck()">
+        <form method="post" id="moneybook_form" th:onsubmit="return moneybookcheck()">
 			<!-- 시큐리티에 넣기 위한 하이든  -->
 			<input type="hidden" name="authority_name" id="authority_name" value="ROLE_USER"/>
 			<div class="text-primary" id="name_div">가계부 이름 <br/><input type="text" class="form-control" id="name" name="name" onblur="confirmName()"></div>
@@ -90,7 +90,7 @@ $(document).ready(function(){
 		modal_name_div +=  "가계부 이름 <br/><input type='text' class='form-control' id='name' name='name' onblur='confirmName()''>"; 
 		$("#name_div").html(modal_name_div);
 		modal_name_div = '';
-		$("#moneybook_modal").find("#form")[0].reset();
+		$("#moneybook_modal").find("#moneybook_form")[0].reset();
 	});
 });
 

@@ -233,14 +233,13 @@
  	
  	
  	//지출내역 수정
-
- 		$(document).on("click", "#update_expense",function(){
- 			var confirm_val = confirm("수정 하시겠습니까?");
- 			if(confirm_val){
- 			var update_price = $("#update_price").val();
- 			var update_type = $("#update_type option:selected").val();
- 			var update_cartegory = $("#update_cartegory").val();
- 			var update_insert_date = $("#update_insert_date").val();
+	$(document).on("click", "#update_expense",function(){
+		var confirm_val = confirm("수정 하시겠습니까?");
+		if(confirm_val){
+			var update_price = $("#update_price").val();
+			var update_type = $("#update_type option:selected").val();
+			var update_cartegory = $("#update_cartegory").val();
+			var update_insert_date = $("#update_insert_date").val();
  			var update_eno = $("#update_eno").val();
  			$.ajax({
  				url : "expense/update",
@@ -262,8 +261,8 @@
  					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
  				}
  			})
- 			}
- 		})
+ 		}
+ 	})
 
  		
 </script>
