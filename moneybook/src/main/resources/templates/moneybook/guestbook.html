@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.na/thymeleaf/layout"
+	    layout:decorate="~{layout/default}">
+<head>
+<meta charset="UTF-8">
+<title>방명록</title>
+</head>
+<div layout:fragment="content">
+
+<button type="button" class="btn btn-primary" id="guestbook_modal_btn">Primary</button>
+<div id="getGuestbook"></div>
+<!-- Modal -->
+<div class="modal" id="guestbook_modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			  	<h5 class="modal-title">방명록</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" id="guestbook_form">
+					<input type="hidden" id="name" th:value="${moneybook_name}">
+					<div class="form-group">
+  						<textarea class="form-control" id="content" rows="3"></textarea>
+  					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="guestbook_insert">등록</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<th:block layout:fragment="script">
+<script>
+window.onload = function(){
+	guestbookSelect();
+
+}
+
+//방명록 등록 모달창 오픈
+$("#guestbook_modal_btn").click(function(){
+	$("#guestbook_modal").modal();
+});
+
+//방명록 등록 모달창 리셋
+$("#guestbook_modal").on("hide.bs.modal", function(){
+		$("#guestbook_modal").find("#guestbook_form")[0].reset();
+});
+
+//방명록 등록
+$("#guestbook_insert").click(function(){ 
+	var content = $("#content").val();
+	if(content == ""){
+		alert("내용을 입력하셔야 합니다.");
+	}else
+		$.ajax({
+			url : "guestbook/insert",
+			type : "post",
+			data : {"content" : content},
+			success : function(){
+				$("#guestbook_modal").modal("hide");
+				$("#guestbook_form")[0].reset();
+				alert("등록 완료!");
+				guestbookSelect();
+			},
+			error : function(request, error){
+				alert("에러!");
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		})
+})
+
+//방명록 목록
+function guestbookSelect(){
+	$.ajax({
+		url : "guestbook/select",
+		dataType : "json",
+		success : function(data){
+			getGuestbook(data)
+		}
+	})
+}
+
+
+//방명록 목록 disp
+function getGuestbook(data){
+	var moneybook_name = $("#name").val();
+	var i = 4;
+	var j = 4;
+	var disp = "";
+	disp += "<div id='table'>";
+	$(data).each(function(ids, item){
+		if(i%j == 0){
+			disp += "<p class='row1'>";
+		}
+		disp += "<span class='cell col1'>";
+		disp += "<span class='col-sm-6 col-md-4' style='width: 270px; height: 200px;'>";
+		disp += "<span class='thumbnail' style='height: 200px;'>";
+		disp += item.moneybook_name+"&emsp;&emsp;<smail>"+item.insert_date+"</smail><br/></br>";
+		disp += "</span>";
+		if(moneybook_name == item.moneybook_name){
+			disp += "<button>삭제/수정</button>"
+		}
+		disp += "<span class='caption'>";
+		disp += "<span>"+item.content+"</span>";
+		disp += "</span></span></span></span>";
+		
+		i += 1;
+		if(i%j == 0){
+			disp += "</p>";
+		}
+	})
+	disp += "</div>";
+	$("#getGuestbook").html(disp);
+}
+
+</script>
+</th:block>
+</html>

@@ -100,8 +100,11 @@ function confirmName(){
 	var name = document.getElementById("name");
 	var moneybook_name = $("#name").val()
 	var name_div = "";
-	if(name.value.indexOf(" ") >= 0){
+	/* if(name.value.indexOf(" ") >= 0){
 		alert("공백은 사용할 수 없습니다.");
+	} */
+	if(moneybook_name.search(/\s/) != -1){
+		alert("가계부 이름에 공백은 사용할 수 없습니다.");
 	}else{
 	$.ajax({
 			url : "moneybook_name_check",

@@ -7,6 +7,15 @@ public class Board_status {
 	private String moneybook_type;
 	private int price;
 	private String cartegory;
+	private String insert_date;
+	
+	
+	public String getInsert_date() {
+		return insert_date;
+	}
+	public void setInsert_date(String insert_date) {
+		this.insert_date = insert_date;
+	}
 	public int getBsno() {
 		return bsno;
 	}

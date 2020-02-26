@@ -8,35 +8,150 @@
 <title>가계부 이야기 등록</title>
 </head>
 <div layout:fragment="content">
+<div class="row">
+<div class="col-md-7">
 
-<form method="post">
+<form method="post" onsubmit="return check()">
 	<div class="form-group">
 		<label class="col-form-label" for="inputDefault">제목</label>
 		<input type="text" class="form-control" id="title">
 	</div>
+
+	<div class="form-group">
+		<label class="col-form-label" for="inputDefault"></label>
+		<textarea class="form-control" rows="3" id="content"></textarea>
+	</div>
+	
+	<button type="submit" class="btn btn-primary" id="board_register">등록</button>
+</form>
+</div>
+
+<div class="col-md-3">
 	
 	<div class="form-group">
 		<label class="col-form-label" for="inputDefault">가져올 가계부 날짜</label>
 		<input type="month" class="form-control" id="moneybook_date">
-		<button type="button" id="moneybook_status_import">가계부 가져오기</button>
-		<div id="moneybook_status_disp"></div>
-	</div>
-	
-	
-	<div class="form-group">
-		<label class="col-form-label" for="inputDefault"></label>
-		<textarea class="form-control" rows="3"></textarea>
-	</div>
-</form>
-
+		<button type="button" id="board_status_import">가계부 가져오기</button>
+		<button type="button" id="board_status">확인</button>
+			</div>
+			<div id="moneybook_status_disp"></div>
+</div>
+</div>
 </div>
 <th:block layout:fragment="script">
 <script>
 document.getElementById("moneybook_date").valueAsDate = new Date();
+var board_status_check = false;
 
-$("#moneybook_status_import").click(function(){
-	var moneybook_date = $("#moneybook_date").val();
+var moneybook_type_arr = new Array();
+var price_arr = new Array();
+var insert_date_arr = new Array();
+var cartegory_arr = new Array();
+
+function check(){
+	var title = $("#title").val();
+
+	if(title == ""){
+		alert("제목을 입력하셔야 합니다.");
+		return false;
+	}
+	if(title.search(/\s/) != -1){
+		alert("제목에 공백은 사용할 수 없습니다.")
+		return false;
+	}
+	
+	var content = $("#content").val();
+	if(content == ""){
+		alert("내용을 입력하셔야 합니다.");
+		return false;
+	}
+	if(content.search(/\s/) != -1){
+		alert("내용에 공백은 사용할 수 없습니다.");
+		return false;
+	}
+
+	if(board_status_check == false){
+		alert("가계부를 가져와야 합니다.");
+		return false;
+	}
+}
+
+
+$("#board_status").click(function(){
+	$("input[name=moneybook_type]").each(function(idx, item){
+		moneybook_type_arr.push($(item).val());	
+	})
+	$("input[name=insert_date]").each(function(idx, item){
+		price_arr.push($(item).val());	
+	})
+	$("input[name=price]").each(function(idx, item){
+		insert_date_arr.push($(item).val());	
+	})
+	$("input[name=cartegory]").each(function(idx, item){
+		cartegory_arr.push($(item).val());	
+	})
 })
+
+$("#board_status_import").click(function(){
+	var moneybook_date = $("#moneybook_date").val();
+	$.ajax({
+		url : "board/status",
+		data : {"insert_date" : moneybook_date},
+		dataType : "json",
+		success : function(data){
+			getBoard_status(data);
+			board_status_check = true;
+		}
+	})
+})
+
+function getBoard_status(data){
+	var disp = "";
+	disp += "<table class='table table-hover'>";
+	disp += "<tr>";
+	disp += "<th scope='row'>날짜</th>";
+	disp += "<th scope='row'>금액</th>";
+	disp += "<th scope='row'>내역</th>";
+	disp += "</tr>";
+	$(data).each(function(idx, item){
+		if(item.moneybook_type == "expense"){
+			disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
+			disp += "<input type='hidden' name='insert_date' value='"+item.insert_date+"'>";
+			disp += "<input type='hidden' name='price' value='"+item.price+"'>";
+			disp += "<input type='hidden' name='cartegory' value='"+item.cartegory+"'>";
+			disp += "</tr>";
+			disp += "<td>"+item.insert_date+"</td>";
+			disp += "<td>"+item.price+"</td>";
+			disp += "<td>"+item.cartegory+"</td>";
+			disp += "</tr>";
+		}
+	})
+	disp += "</table>";
+	disp += "<table class='table table-hover'>";
+	disp += "<tr>";
+	disp += "<th scope='row'>날짜</th>";
+	disp += "<th scope='row'>금액</th>";
+	disp += "<th scope='row'>내역</th>";
+	disp += "</tr>";
+	$(data).each(function(idx, item){
+		if(item.moneybook_type == "earnings"){
+			disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
+			disp += "<input type='hidden' name='insert_date' value='"+item.insert_date+"'>";
+			disp += "<input type='hidden' name='price' value='"+item.price+"'>";
+			disp += "<input type='hidden' name='cartegory' value='"+item.cartegory+"'>";
+			disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
+			disp += "</tr>";
+			disp += "<td name='insert_date'>"+item.insert_date+"</td>";
+			disp += "<td name='price'>"+item.price+"</td>";
+			disp += "<td name='cartegory'>"+item.cartegory+"</td>";
+			disp += "</tr>";
+		}
+	})
+		disp += "</table>";
+
+	document.getElementById("moneybook_status_disp").innerHTML = disp;
+}
+
 </script>
 </th:block>
 </html>
