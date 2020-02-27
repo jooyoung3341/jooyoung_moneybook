@@ -40,7 +40,7 @@ public class BoardController {
 	}
 	
 	//가계부이야기 등록하기
-	@RequestMapping(value="moneybook/board/board_register", method=RequestMethod.POST)
+	@RequestMapping(value="/board/board_register", method=RequestMethod.POST)
 	public String board_register(HttpServletRequest request, RedirectAttributes attr) {
 		boardService.board_register(request);
 		attr.addFlashAttribute("board_registermsg","게시판 등록 완료!");

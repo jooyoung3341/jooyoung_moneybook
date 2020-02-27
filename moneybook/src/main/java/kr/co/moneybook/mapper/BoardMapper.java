@@ -15,6 +15,8 @@ public interface BoardMapper {
 	public List<Board_status> board_status(Map<String, Object> hashBoard_status);
 	
 	//가계부이야기 등록하기
-	public void board_register(Board board);
+	public int board_register(Board board);
 	
+	//가계부이야기 status 삽입
+	public void board_status_insert(Board_status board_status);
 }

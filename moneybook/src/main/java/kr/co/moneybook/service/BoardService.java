@@ -12,5 +12,5 @@ public interface BoardService {
 	public List<Board_status> board_status(HttpServletRequest request);
 	
 	//가계부이야기 등록하기
-	public void board_register(HttpServletRequest request);
+	public boolean board_register(HttpServletRequest request);
 }

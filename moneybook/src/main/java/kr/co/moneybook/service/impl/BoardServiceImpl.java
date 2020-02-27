@@ -1,6 +1,7 @@
 package kr.co.moneybook.service.impl;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +42,8 @@ public class BoardServiceImpl implements BoardService {
 
 	//가계부이야기 등록하기
 	@Override
-	public void board_register(HttpServletRequest request) {
+	public boolean board_register(HttpServletRequest request) {
+		boolean result = false;
 		//현재날짜,시간 가져오기
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar time = Calendar.getInstance();
@@ -57,6 +59,27 @@ public class BoardServiceImpl implements BoardService {
 		board.setTitle(title);
 		board.setContent(content);
 		
-		boardMapper.board_register(board);		
+		int r = boardMapper.board_register(board);
+		
+		
+		String [] price1 = request.getParameterValues("price");
+		//스트림을 이용한 String 배열 -> int 배열로 형변환
+		int [] price = Arrays.stream(price1).mapToInt(Integer::parseInt).toArray();
+		String [] moneybook_type = request.getParameterValues("moneybook_type");
+		String [] cartegory = request.getParameterValues("cartegory");
+		String [] insert_date_status = request.getParameterValues("insert_date");
+		Board_status board_status = new Board_status();
+		if(r > 0)
+			for(String idx : price1) {
+				board_status.setCartegory(cartegory);
+				board_status.setInsert_date_status(insert_date_status);
+				board_status.setMoneybook_type(moneybook_type);
+				board_status.setPrice(price);
+				boardMapper.board_status_insert(board_status);
+			}
+			result = true;
+		return result;
+		
+
 	}
 }

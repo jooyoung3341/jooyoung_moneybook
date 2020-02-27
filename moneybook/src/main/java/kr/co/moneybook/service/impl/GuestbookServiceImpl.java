@@ -26,11 +26,11 @@ public class GuestbookServiceImpl implements GuestbookService {
 	public void guestbook_insert(HttpServletRequest request) {
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar time = Calendar.getInstance();
-		
+		String insert_date = format.format(time.getTime());
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String moneybook_name = user.getUsername();
 		String content = request.getParameter("content");
-		String insert_date = format.format(time.getTime());
+		
 		
 		Guestbook guestbook = new Guestbook();
 		guestbook.setContent(content);
