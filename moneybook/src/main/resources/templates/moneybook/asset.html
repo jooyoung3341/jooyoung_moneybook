@@ -15,7 +15,7 @@
  				    id="assetprice_span" th:value="${asset.ano}">
 				    <div class="d-flex w-100 justify-content-between">				   
 				      <small class="text-primary" th:text="${asset.type}" style="width:49%;"></small>
-				      																				<!-- 타임리프에서 제공하는  -->
+				      																				<!-- 타임리프에서 제공하는 / 콤마찍기  -->
 				      <span class="badge badge-light" id="asset_price" th:text="${#numbers.formatInteger(asset.asset_price,0,'COMMA')}"></span>
 				      <button type="button" class="close" data-dismiss="alert" th:id="${'asset_delete'+i.index}" name="asset_delete" th:value="${asset.ano}">&times;</button>
 				      <input type="hidden" id="delete_ano" th:value="${asset.ano}">

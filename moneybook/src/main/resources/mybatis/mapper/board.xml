@@ -5,7 +5,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="kr.co.moneybook.mapper.BoardMapper">
 
 <!-- 지출, 수입 가져오기 -->
-<select id="board_status" parameterType="hashMap" resultType="Board_status">
+<select id="board_status" parameterType="hashMap" resultType="Board">
 	select price, cartegory, insert_date, moneybook_type
 	from expense
 	where insert_date like CONCAT(#{insert_date},'%') and moneybook_name = #{moneybook_name}
@@ -22,11 +22,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </insert>
 
 <!-- 가계부이야기 status 등록 -->
-<insert id="board_status_insert" parameterType="Board_status">
+<insert id="board_status_insert" parameterType="Board">
 	<selectKey resultType="java.lang.Integer" keyProperty="bno" order="BEFORE">
-		select bno from board where insert_date desc limit 1
+		select bno from board order by insert_date desc limit 1
 	</selectKey>
-	insert into board_status(bno, moneybook_type, price, cartegory, insert_date)
-						   values(#{bno}, #{moneybook_type}, #{price}, #{cartegory}, #{insert_date})
+	insert into board_status(bno, moneybook_type, price, cartegory, board_date)
+						   values(#{bno}, #{moneybook_type}, #{price}, #{cartegory}, #{board_date})
 </insert>
+
+<!-- 가계부이야기 목록 -->
+<select id="board_selete" resultType="Board">
+	select bno, title, insert_tate, teadcnt, recommend
+	form board
+</select>
+
+<!-- 가계부이야기 상세보기 -->
+<select id="board_detail" parameterType="java.lang.Integer" resultType="Board">
+	select b.moneybook_name, b.bno, b.title, b.content, b.insert_date, b.readcnt, b.recommend, bs.moneybook_type, bs.price, bs.cartegory, bs.board_date
+	from board b
+		   inner join board_status bs on b.bno = bs.bno
+	where b.bno = #{bno}
+</select>
+
 </mapper>

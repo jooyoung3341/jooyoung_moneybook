@@ -9,6 +9,13 @@ public class Board {
 	private String moneybook_date;
 	private int readcnt;
 	private int recommend;
+	
+	//board_status
+	private int bsno;
+	private String  moneybook_type;
+	private int  price;
+	private String cartegory;
+	private String board_date;
 	public int getBno() {
 		return bno;
 	}
@@ -57,6 +64,40 @@ public class Board {
 	public void setRecommend(int recommend) {
 		this.recommend = recommend;
 	}
+	
+	//board_status
+	public int getBsno() {
+		return bsno;
+	}
+	public void setBsno(int bsno) {
+		this.bsno = bsno;
+	}
+	public String getMoneybook_type() {
+		return moneybook_type;
+	}
+	public void setMoneybook_type(String moneybook_type) {
+		this.moneybook_type = moneybook_type;
+	}
+	public int getPrice() {
+		return price;
+	}
+	public void setPrice(int price) {
+		this.price = price;
+	}
+	public String getCartegory() {
+		return cartegory;
+	}
+	public void setCartegory(String cartegory) {
+		this.cartegory = cartegory;
+	}
+	public String getBoard_date() {
+		return board_date;
+	}
+	public void setBoard_date(String board_date) {
+		this.board_date = board_date;
+	}
+	
+	
 	
 
 }

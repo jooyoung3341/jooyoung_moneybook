@@ -14,7 +14,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import kr.co.moneybook.domain.Board;
-import kr.co.moneybook.domain.Board_status;
 import kr.co.moneybook.domain.User;
 import kr.co.moneybook.mapper.BoardMapper;
 import kr.co.moneybook.service.BoardService;
@@ -28,7 +27,7 @@ public class BoardServiceImpl implements BoardService {
 
 	//지출, 수입 가져오기
 	@Override
-	public List<Board_status> board_status(HttpServletRequest request) {
+	public List<Board> board_status(HttpServletRequest request) {
 		User user =  (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String moneybook_name = user.getUsername();
 		String insert_date = request.getParameter("insert_date");
@@ -52,7 +51,7 @@ public class BoardServiceImpl implements BoardService {
 		String moneybook_name = user.getUsername();
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-		
+
 		Board board = new Board();
 		board.setInsert_date(insert_date);
 		board.setMoneybook_name(moneybook_name);
@@ -61,25 +60,49 @@ public class BoardServiceImpl implements BoardService {
 		
 		int r = boardMapper.board_register(board);
 		
-		
-		String [] price1 = request.getParameterValues("price");
+		//배열값 받기
+		String [] price_str = request.getParameterValues("price");
 		//스트림을 이용한 String 배열 -> int 배열로 형변환
-		int [] price = Arrays.stream(price1).mapToInt(Integer::parseInt).toArray();
-		String [] moneybook_type = request.getParameterValues("moneybook_type");
-		String [] cartegory = request.getParameterValues("cartegory");
-		String [] insert_date_status = request.getParameterValues("insert_date");
-		Board_status board_status = new Board_status();
+		int [] price_arr = Arrays.stream(price_str).mapToInt(Integer::parseInt).toArray();
+		String [] moneybook_type_arr = request.getParameterValues("moneybook_type");
+		String [] cartegory_arr = request.getParameterValues("cartegory");
+		String [] insert_date_status_arr = request.getParameterValues("board_date");
+		
+		/* Board board_status = new Board(); */
+		//for index 값
+		int index = 0;
+		//board insert 성공 시 board_status에 지출/수입 내역 삽입
 		if(r > 0)
-			for(String idx : price1) {
-				board_status.setCartegory(cartegory);
-				board_status.setInsert_date_status(insert_date_status);
-				board_status.setMoneybook_type(moneybook_type);
-				board_status.setPrice(price);
-				boardMapper.board_status_insert(board_status);
-			}
+				for(String idx : price_str) {
+					//배열값 하나하나씩 받아 mapper로 값 넘기기
+					String moneybook_type = moneybook_type_arr[index];
+					String cartegory = cartegory_arr[index];
+					int price= price_arr[index];
+					String board_date = insert_date_status_arr[index];
+					
+					board.setCartegory(cartegory);
+					board.setBoard_date(board_date);
+					board.setMoneybook_type(moneybook_type);
+					board.setPrice(price);
+					boardMapper.board_status_insert(board);
+					index += 1;
+				}
 			result = true;
 		return result;
 		
 
+	}
+
+	//가계부이야기 목록
+	@Override
+	public List<Board> board_select(HttpServletRequest request) {
+		return boardMapper.board_selete();
+	}
+
+	//가계부이야기 상세보기
+	@Override
+	public Board board_detail(HttpServletRequest request) {
+		String bno = request.getParameter("bno");
+		return boardMapper.board_detail(Integer.parseInt(bno));
 	}
 }

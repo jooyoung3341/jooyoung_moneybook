@@ -8,12 +8,42 @@
 <title>가계부 이야기</title>
 </head>
 <div layout:fragment="content">
-<a href="board_register">
-<button type="button" class="btn btn-primary">이야기 등록</button></a>
+<div class="row">
+	<div class="col-md-7">
+		<a href="board_register"><button type="button" class="btn btn-primary">이야기 등록</button></a>
+		<ul class="list-group">
+		<th:block th:each="board : ${board_list}">
+			<li class="list-group-item d-flex justify-content-between align-items-center">
+		    	<a href="board_detail?bno=${board.bno}">
+		    		<p class="text-primary" th:text="${board.title}"></p>
+		    		
+		    	</a>
+		    	<span class="badge badge-pill badge-dark" th:text="${board.recommend}"></span>
+		    	<span class="badge badge-primary badge-pill" th:text="${board.readcnt}"></span>
+		  </li>
+		</th:block>
+		
+		</ul>
+
+
+	</div>
+	<div class="col-md-3">
+	
+	</div>
+</div>
+
+<!-- 등록 완료 시 attribute 받기 -->
+<th:block th:if="${board_registermsg != null}">
+	<input type="hidden" id="board_registermsg" th:value="${board_registermsg}"> 
+</th:block> 
 </div>
 <th:block layout:fragment="script">
 <script>
-
+//게시판 등록 완료시 알림
+var board_register = $("#board_registermsg").val();
+if(board_register != null){
+	alert(board_register);
+}
 </script>
 </th:block>
 </html> 

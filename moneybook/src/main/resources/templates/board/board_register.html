@@ -12,18 +12,19 @@
 <div class="col-md-7">
 
 <form method="post" th:action="@{/board/board_register}" onsubmit="return check()">
+	<div id="status_disp"></div>
 	<div class="form-group">
 		<label class="col-form-label" for="inputDefault">제목</label>
-		<input type="text" class="form-control" id="title">
+		<input type="text" class="form-control" id="title" name="title">
 	</div>
 
 	<div class="form-group">
 		<label class="col-form-label" for="inputDefault"></label>
-		<textarea class="form-control" rows="3" id="content"></textarea>
+		<textarea class="form-control" rows="3" id="content" name="content"></textarea>
 	</div>
 	
 	<button type="submit" class="btn btn-primary" id="board_register">등록</button>
-
+</form>
 </div>
 
 <div class="col-md-3">
@@ -35,7 +36,7 @@
 		<button type="button" id="board_status">확인</button>
 			</div>
 			<div id="moneybook_status_disp"></div>
-</form>
+
 </div>
 </div>
 </div>
@@ -82,7 +83,7 @@ $("#board_status").click(function(){
 	$("input[name=moneybook_type]").each(function(idx, item){
 		moneybook_type_arr.push($(item).val());	
 	})
-	$("input[name=insert_date]").each(function(idx, item){
+	$("input[name=board_date]").each(function(idx, item){
 		price_arr.push($(item).val());	
 	})
 	$("input[name=price]").each(function(idx, item){
@@ -91,6 +92,7 @@ $("#board_status").click(function(){
 	$("input[name=cartegory]").each(function(idx, item){
 		cartegory_arr.push($(item).val());	
 	})
+	alert(price_arr);
 })
 
 $("#board_status_import").click(function(){
@@ -107,6 +109,7 @@ $("#board_status_import").click(function(){
 })
 
 function getBoard_status(data){
+	var status_disp = "";
 	var disp = "";
 	disp += "<table class='table table-hover'>";
 	disp += "<tr>";
@@ -116,10 +119,10 @@ function getBoard_status(data){
 	disp += "</tr>";
 	$(data).each(function(idx, item){
 		if(item.moneybook_type == "expense"){
-			disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
-			disp += "<input type='hidden' name='insert_date' value='"+item.insert_date+"'>";
-			disp += "<input type='hidden' name='price' value='"+item.price+"'>";
-			disp += "<input type='hidden' name='cartegory' value='"+item.cartegory+"'>";
+			status_disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
+			status_disp += "<input type='hidden' name='board_date' value='"+item.insert_date+"'>";
+			status_disp += "<input type='hidden' name='price' value='"+item.price+"'>";
+			status_disp += "<input type='hidden' name='cartegory' value='"+item.cartegory+"'>";
 			disp += "</tr>";
 			disp += "<td>"+item.insert_date+"</td>";
 			disp += "<td>"+item.price+"</td>";
@@ -136,21 +139,21 @@ function getBoard_status(data){
 	disp += "</tr>";
 	$(data).each(function(idx, item){
 		if(item.moneybook_type == "earnings"){
-			disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
-			disp += "<input type='hidden' name='insert_date' value='"+item.insert_date+"'>";
-			disp += "<input type='hidden' name='price' value='"+item.price+"'>";
-			disp += "<input type='hidden' name='cartegory' value='"+item.cartegory+"'>";
-			disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
+			status_disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
+			status_disp += "<input type='hidden' name='board_date' value='"+item.insert_date+"'>";
+			status_disp += "<input type='hidden' name='price' value='"+item.price+"'>";
+			status_disp += "<input type='hidden' name='cartegory' value='"+item.cartegory+"'>";
 			disp += "</tr>";
-			disp += "<td name='insert_date'>"+item.insert_date+"</td>";
-			disp += "<td name='price'>"+item.price+"</td>";
-			disp += "<td name='cartegory'>"+item.cartegory+"</td>";
+			disp += "<td>"+item.insert_date+"</td>";
+			disp += "<td>"+item.price+"</td>";
+			disp += "<td>"+item.cartegory+"</td>";
 			disp += "</tr>";
 		}
 	})
 		disp += "</table>";
 
 	document.getElementById("moneybook_status_disp").innerHTML = disp;
+	document.getElementById("status_disp").innerHTML = status_disp;
 }
 
 </script>
