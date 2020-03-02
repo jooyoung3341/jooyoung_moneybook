@@ -22,6 +22,9 @@ public interface BoardMapper {
 	//가계부이야기 목록
 	public List<Board> board_selete();
 	
-	//가계부이야기 상세보기
-	public Board board_detail(int bno);
+	//가계부이야기 폼 가져오기
+	public Board board_form(int bno);
+	
+	//가계부이야기 status 가져오기
+	public List<Board> board_status_select(int bno);
 }

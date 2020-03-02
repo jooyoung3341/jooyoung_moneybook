@@ -7,8 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -51,10 +53,16 @@ public class BoardController {
 	}
 	
 	//가계부이야기 상세보기
-	@RequestMapping(value="board/board_detail", method=RequestMethod.GET)
+	@RequestMapping(value="moneybook/board_detail", method= RequestMethod.GET)
 	public String board_detail(HttpServletRequest request, Model model) {
-		Board board = boardService.board_detail(request);
+		Board board = boardService.board_form(request);
+		List<Board> board_status = boardService.board_status_select(request);
+		
 		model.addAttribute("board", board);
+		model.addAttribute("board_status", board_status);
 		return "board/board_detail";
 	}
 }
+
+
+

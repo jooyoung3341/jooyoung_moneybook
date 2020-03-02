@@ -19,7 +19,7 @@ public class Board {
 	public int getBno() {
 		return bno;
 	}
-	public void setBno(int bno) {
+	public void setBno(int bno) { 
 		this.bno = bno;
 	}
 	public String getMoneybook_name() {

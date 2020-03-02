@@ -18,5 +18,8 @@ public interface BoardService {
 	public List<Board> board_select(HttpServletRequest request);
 	
 	//가계부이야기 상세보기
-	public Board board_detail(HttpServletRequest request);
+	public Board board_form(HttpServletRequest request);
+	
+	//가계부이야기 status 가져오기
+	public List<Board> board_status_select(HttpServletRequest request);
 }

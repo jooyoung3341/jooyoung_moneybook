@@ -99,10 +99,17 @@ public class BoardServiceImpl implements BoardService {
 		return boardMapper.board_selete();
 	}
 
-	//가계부이야기 상세보기
+	//가계부이야기 폼 가져오기
 	@Override
-	public Board board_detail(HttpServletRequest request) {
+	public Board board_form(HttpServletRequest request) {
 		String bno = request.getParameter("bno");
-		return boardMapper.board_detail(Integer.parseInt(bno));
+		return boardMapper.board_form(Integer.parseInt(bno));
 	}
+	
+	//가계부이야기 status 가져오기
+	public List<Board> board_status_select(HttpServletRequest request){
+		String bno = request.getParameter("bno");
+		return boardMapper.board_status_select(Integer.parseInt(bno));
+	}
+	
 }

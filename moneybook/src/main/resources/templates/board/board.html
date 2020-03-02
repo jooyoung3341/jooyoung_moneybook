@@ -13,14 +13,18 @@
 		<a href="board_register"><button type="button" class="btn btn-primary">이야기 등록</button></a>
 		<ul class="list-group">
 		<th:block th:each="board : ${board_list}">
+		<form method="post">
 			<li class="list-group-item d-flex justify-content-between align-items-center">
-		    	<a href="board_detail?bno=${board.bno}">
+				<!-- 타임리프는 URL 파라미터값 전달방식 조금 다름 -->
+				<input type="hidden" name="title" value="${board.title}">
+		    	<a th:href="@{board_detail(bno=${board.bno})}">
 		    		<p class="text-primary" th:text="${board.title}"></p>
 		    		
 		    	</a>
 		    	<span class="badge badge-pill badge-dark" th:text="${board.recommend}"></span>
 		    	<span class="badge badge-primary badge-pill" th:text="${board.readcnt}"></span>
 		  </li>
+		  </form>
 		</th:block>
 		
 		</ul>
