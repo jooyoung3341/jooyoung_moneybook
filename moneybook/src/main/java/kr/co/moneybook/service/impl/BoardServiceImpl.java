@@ -111,5 +111,28 @@ public class BoardServiceImpl implements BoardService {
 		String bno = request.getParameter("bno");
 		return boardMapper.board_status_select(Integer.parseInt(bno));
 	}
+
+	//가계부이야기 삭제
+	@Override
+	public void board_delete(HttpServletRequest request) {
+		String bno = request.getParameter("bno");
+		boardMapper.board_delete(Integer.parseInt(bno));		
+	}
+
+	//가계부이야기 수정
+	@Override
+	public void board_update(HttpServletRequest request) {
+		String bno = request.getParameter("bno");
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		
+		Board board = new Board();
+		board.setBno(Integer.parseInt(bno));
+		board.setTitle(title);
+		board.setContent(content);
+		
+		boardMapper.board_update(board);
+		
+	}
 	
 }

@@ -22,4 +22,10 @@ public interface BoardService {
 	
 	//가계부이야기 status 가져오기
 	public List<Board> board_status_select(HttpServletRequest request);
+	
+	//가계부이야기 삭제하기
+	public void board_delete(HttpServletRequest request);
+	
+	//가계부이야기 수정
+	public void board_update(HttpServletRequest request);
 }

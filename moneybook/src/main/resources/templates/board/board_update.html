@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{layout/default}">
+<head>
+<th:block layout:fragment="css">
+</th:block>
+<meta charset="UTF-8">
+<title>가계부 이야기 - 수정</title>
+</head>
+<div layout:fragment="content">
+<div class="row">
+	<div class="col-md-7">
+		<form method="post" th:action="@{/board/board_update}">
+			<input type="hidden" name="bno" th:value="${board.bno}">
+			<div class="form-group">
+				<label class="col-form-label" for="inputDefault">제목</label>
+				<input tpye="text" class="form-control" id="title" name="title" th:value="${board.title}">
+			</div>
+			
+			<div class="form-group">
+				<label class="col-form-label" for="inputDefault"></label>
+				<textarea class="form-control" rows="3" id="content" name="content" th:text="${board.content}"></textarea>
+			</div>
+			
+			<button type="submit" class="btn btn-primary" id="board_update">수정</button>
+		</form>
+	</div>
+	
+	<div class="col-md-3">
+	</div>
+</div>
+
+</div>
+<th:block layout:fragment="script">
+<script>
+
+</script>
+</th:block>
+</html> 

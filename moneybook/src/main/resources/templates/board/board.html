@@ -15,8 +15,8 @@
 		<th:block th:each="board : ${board_list}">
 		<form method="post">
 			<li class="list-group-item d-flex justify-content-between align-items-center">
-				<!-- 타임리프는 URL 파라미터값 전달방식 조금 다름 -->
 				<input type="hidden" name="title" value="${board.title}">
+							<!-- 타임리프는 URL 파라미터값 전달방식 조금 다름 -->
 		    	<a th:href="@{board_detail(bno=${board.bno})}">
 		    		<p class="text-primary" th:text="${board.title}"></p>
 		    		
@@ -26,20 +26,25 @@
 		  </li>
 		  </form>
 		</th:block>
-		
 		</ul>
-
-
 	</div>
 	<div class="col-md-3">
 	
 	</div>
 </div>
 
-<!-- 등록 완료 시 attribute 받기 -->
+<!-- 등록 완료시 attribute 받기 -->
 <th:block th:if="${board_registermsg != null}">
 	<input type="hidden" id="board_registermsg" th:value="${board_registermsg}"> 
 </th:block> 
+<!-- 삭제 완료시 attribute 받기 -->
+<th:block th:if="${board_deletemsg != null}">				   
+	<input type="hidden" id="board_deletemsg" th:value="${board_deletemsg}">
+</th:block>
+<!-- 수정 완료시 attribute 받기 -->
+<th:bloak th:if="${board_updatemsg != null}">
+	<input tpye="hidden" id="board_updatemsg" th:value="${board_updatemsg}">
+</th:bloac>
 </div>
 <th:block layout:fragment="script">
 <script>
@@ -47,6 +52,16 @@
 var board_register = $("#board_registermsg").val();
 if(board_register != null){
 	alert(board_register);
+}
+//삭제 완료시 알림
+var board_delete = $("#board_deletemsg").val();
+if(board_delete != null){
+	alert(board_delete);
+}
+//수정 완료시 알림
+var board_update = $("#board_updatemsg").val();
+if(board_update != null){
+	alert(board_update);
 }
 </script>
 </th:block>

@@ -20,7 +20,18 @@
 		<div class="alert alert-dismissible alert-light">
 		 	<p th:text="${board.content}"></p>
 		</div>
+		
 
+		<th:block th:if="${board.moneybook_name == #authentication.principal.username}">
+		<button type="button" id="board_delete" class="btn btn-outline-danger" th:value="${board.bno}">삭제</button>
+		<button type="button" id="board_update" class="btn btn-outline-primary" th:value="${board.bno}">수정</button>
+		</th:block>
+		<!-- 
+				<sec:authorize access="isAuthenticated()">
+		</sec:authorize> -->
+					<!-- 시큐리티타임리프 로그인 사용자 이름 가져오기 -->
+		<!-- <span sec:authentication="principal.username"> -->
+			
 	</div>
 	<div class="col-md-3">
 		<table class="table table-hover">
@@ -58,6 +69,20 @@
 </div>
 <th:block layout:fragment="script">
 <script>
+
+$("#board_delete").click(function(){
+	var bno = $("#board_delete").val();
+	var confirm_val = confirm("삭제 하시겠습니까?");
+	if(confirm_val){
+			location.href="board_delete?bno="+bno;
+		}
+	})
+	
+$("#board_update").click(function(){
+	var bno = $("#board_delete").val();
+	location.href="board_update?bno="+bno;
+})
+
 
 </script>
 </th:block>

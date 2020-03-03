@@ -64,6 +64,8 @@ public class MoneybookServiceImpl implements MoneybookService {
 		  throw new UsernameNotFoundException(moneybook_name);
 	  }
 		 //UsernameNotFoundException
+
+	  
 		return new User(moneybook); 
 	}
 
