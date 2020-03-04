@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import kr.co.moneybook.domain.Board;
+import kr.co.moneybook.domain.Criteria;
+import kr.co.moneybook.domain.PageMaker;
 import kr.co.moneybook.domain.User;
 import kr.co.moneybook.mapper.BoardMapper;
 import kr.co.moneybook.service.BoardService;
@@ -95,15 +97,30 @@ public class BoardServiceImpl implements BoardService {
 
 	//가계부이야기 목록
 	@Override
-	public List<Board> board_select(HttpServletRequest request) {
-		return boardMapper.board_selete();
+	public Map<String, Object> board_select(Criteria criteria) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		
+		List<Board> board_list = boardMapper.board_selete(criteria);
+		//map에 게시글 리스트 추가
+		map.put("board_list", board_list);
+		
+		PageMaker pageMaker = new PageMaker();
+		//Criteria(출력 중인 번호, 출력할 데이터 개수, 출력될 데이터의 시작 번호 ) pageMaker에 set
+		pageMaker.setCriteria(criteria);
+		//전체 게시글 set
+		pageMaker.setTotalCount(boardMapper.board_totalcount());
+		//map에 추가
+		map.put("pageMaker", pageMaker);
+		return map;
 	}
 
-	//가계부이야기 폼 가져오기
+	//가계부이야기 상세보기
 	@Override
-	public Board board_form(HttpServletRequest request) {
+	public Board board_detail(HttpServletRequest request) {
 		String bno = request.getParameter("bno");
-		return boardMapper.board_form(Integer.parseInt(bno));
+		
+		boardMapper.board_readcnt(Integer.parseInt(bno));
+		return boardMapper.board_detail(Integer.parseInt(bno));
 	}
 	
 	//가계부이야기 status 가져오기
@@ -125,14 +142,25 @@ public class BoardServiceImpl implements BoardService {
 		String bno = request.getParameter("bno");
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Calendar time = Calendar.getInstance();
+		String insert_date = format.format(time.getTime());
 		
 		Board board = new Board();
 		board.setBno(Integer.parseInt(bno));
 		board.setTitle(title);
 		board.setContent(content);
+		board.setInsert_date(insert_date);
 		
 		boardMapper.board_update(board);
 		
+	}
+
+	//가계부이야기 수정 폼
+	@Override
+	public Board board_updateform(HttpServletRequest request) {
+		String bno = request.getParameter("bno");
+		return boardMapper.board_updateform(Integer.parseInt(bno));
 	}
 	
 }

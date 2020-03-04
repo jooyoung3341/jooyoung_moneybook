@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.moneybook.domain.Board;
+import kr.co.moneybook.domain.Criteria;
 
 @Mapper
 public interface BoardMapper {
@@ -20,16 +21,25 @@ public interface BoardMapper {
 	public void board_status_insert(Board board_status);
 	
 	//가계부이야기 목록
-	public List<Board> board_selete();
+	public List<Board> board_selete(Criteria criteria);
+	
+	//가계부이야기 전체 가져오기
+	public int board_totalcount();
 	
 	//가계부이야기 폼 가져오기
-	public Board board_form(int bno);
+	public Board board_detail(int bno);
+	
+	//가계부이야기 조회수
+	public void board_readcnt(int bno);
 	
 	//가계부이야기 status 가져오기
 	public List<Board> board_status_select(int bno);
 	
 	//가계부이야기 삭제
 	public void board_delete(int bno);
+	
+	//가계부이야기 수정 폼
+	public Board board_updateform(int bno);
 	
 	//가계부이야기 수정
 	public void board_update(Board board);

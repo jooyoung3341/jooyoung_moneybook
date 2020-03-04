@@ -14,29 +14,29 @@ public class PageMaker {
 	private boolean next;
 	
 	//페이지 번호 출력 개수
-	private int displayPageNum = 10;
+	private int displayPageNum = 5;
 	
 	//이전에 설정된 옵션 값을 저장하기 위한 변수
 	private Criteria criteria;
 	
 	//접근자 메소드
-	private int getTotalCount() {
+	public int getTotalCount() {
 		return totalCount;
 	}
 	
 	//
 	/*
 	 * 전체 데이터 개수를 알고 현재 페이지번호(criteria.page)와
-	 * 출력할 페이지 개수(displayPageNum)를 알면 나머지를 번부 계산 할 수 있다.
+	 * 출력할 페이지 개수(displayPageNum)를 알면 나머지를 전부 계산 할 수 있다.
 	*/
 	public void setTotalCount(int totalCount) {
 		this.totalCount = totalCount;
 		//Math.ceil 함수는 올림함수
-		//											현제 페이지 번호          한번에 보여질 페이지 번호
+		//											현재 페이지 번호          한번에 보여질 페이지 번호
 		endPage = (int)(Math.ceil(criteria.getPage()/(double)displayPageNum)) * displayPageNum;
 		//시작 페이지 번호
 		startPage = endPage - displayPageNum + 1;
-		//이전 페이지 링크 여부
+		//이전 페이지 링크 여부 시작페이지가 1이면 false 아니면 true
 		prev = startPage == 1 ? false : true;
 		
 		//전체 데이터의 페이지 개수로 설정

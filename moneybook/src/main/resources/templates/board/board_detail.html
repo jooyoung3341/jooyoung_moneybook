@@ -31,7 +31,14 @@
 		</sec:authorize> -->
 					<!-- 시큐리티타임리프 로그인 사용자 이름 가져오기 -->
 		<!-- <span sec:authentication="principal.username"> -->
-			
+		<div class="form-group">
+		
+			   <span sec:authentication="principal.username"> </span>
+		
+			<textarea class="form-control" rows="3" id="content"></textarea>
+			<button type="button" id="replay_insert" class="btn btn-outline-primary">댓글 등록</button>
+		</div>
+		
 	</div>
 	<div class="col-md-3">
 		<table class="table table-hover">

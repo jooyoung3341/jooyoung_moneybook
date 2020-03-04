@@ -41,8 +41,8 @@ public class Criteria {
 
 	//특정 페이지의 게시글 시작 번호, 게시글 시작 행 번호
 	public int getPageStart() {
-		
-		pageStart = (page - 1) * perPageNum + 1;
+		//11, 21, 31 로 시작 하게끔??
+		pageStart = (page - 1) * perPageNum;
 		return pageStart;
 	}
 

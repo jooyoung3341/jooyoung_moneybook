@@ -1,6 +1,7 @@
 package kr.co.moneybook.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.moneybook.domain.Board;
+import kr.co.moneybook.domain.Criteria;
 import kr.co.moneybook.service.BoardService;
 
 @Controller
@@ -25,9 +27,10 @@ public class BoardController {
 	
 	//게시판 이동
 	@RequestMapping(value="moneybook/board", method=RequestMethod.GET)
-	public String board(HttpServletRequest request, Model model) {
-		List<Board> board_list = boardService.board_select(request);
-		model.addAttribute("board_list", board_list);
+	public String board(Model model, Criteria criteria) {
+		Map<String, Object> map = boardService.board_select(criteria);
+		//map에는 board_list, pageMaker 가 들어 있음
+		model.addAttribute("map", map);
 		return "board/board";
 	}
 	
@@ -55,7 +58,7 @@ public class BoardController {
 	//가계부이야기 상세보기
 	@RequestMapping(value="moneybook/board_detail", method= RequestMethod.GET)
 	public String board_detail(HttpServletRequest request, Model model) {
-		Board board = boardService.board_form(request);
+		Board board = boardService.board_detail(request);
 		List<Board> board_status = boardService.board_status_select(request);
 		
 		model.addAttribute("board", board);
@@ -74,7 +77,7 @@ public class BoardController {
 	//가계부이야기 수정 폼
 	@RequestMapping(value="moneybook/board_update", method=RequestMethod.GET)
 	public String board_update(HttpServletRequest request, Model model) {
-		Board board = boardService.board_form(request);
+		Board board = boardService.board_updateform(request);
 		model.addAttribute("board", board);
 		return "board/board_update";
 	}
@@ -83,7 +86,7 @@ public class BoardController {
 	@RequestMapping(value="board/board_update", method=RequestMethod.POST)
 	public String board_update(HttpServletRequest request, RedirectAttributes attr) {
 		boardService.board_update(request);
-		attr.addAttribute("board_updatemsg", "수정 완료!");
+		attr.addFlashAttribute("board_updatemsg", "수정 완료!");
 		return "redirect:/moneybook/board";
 	}
 }
