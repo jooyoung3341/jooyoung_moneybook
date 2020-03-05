@@ -22,4 +22,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	delete from reply
 	where rno = #{rno}
 </delete>
+
+<!-- 댓글 수정 폼 -->
+<select id="reply_update_form" parameterType="java.lang.Integer" resultType="Reply">
+	select conten, rno
+	from reply
+	where rno = #{rno}
+</select>
 </mapper>
