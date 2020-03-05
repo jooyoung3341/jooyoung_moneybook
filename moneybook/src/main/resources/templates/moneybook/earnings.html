@@ -120,7 +120,7 @@ document.getElementById("indate").valueAsDate = new Date()
 	//수입내역
 	function getEarnings(data){
 		var price_sum = 0;
-		disp = "";
+		var disp = "";
 		disp += "<table class='table table-hover'>";
 		disp += "<tr>";
 		disp += "<th scope='row' width='100'></th>";
@@ -163,7 +163,6 @@ document.getElementById("indate").valueAsDate = new Date()
  		if(delete_check == true){
  		$.ajax({
  				url : "earnings/delete",
- 				type : "post",
  				data : {"checkArr" : checkArr},
  				//배열값을 넘기기 위한 설정
  				traditional : true,

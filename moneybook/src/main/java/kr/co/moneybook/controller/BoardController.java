@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.moneybook.domain.Board;
 import kr.co.moneybook.domain.Criteria;
+import kr.co.moneybook.domain.User;
 import kr.co.moneybook.service.BoardService;
 
 @Controller
@@ -60,7 +62,8 @@ public class BoardController {
 	public String board_detail(HttpServletRequest request, Model model) {
 		Board board = boardService.board_detail(request);
 		List<Board> board_status = boardService.board_status_select(request);
-		
+		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("moneybook_name", user.getUsername());
 		model.addAttribute("board", board);
 		model.addAttribute("board_status", board_status);
 		return "board/board_detail";

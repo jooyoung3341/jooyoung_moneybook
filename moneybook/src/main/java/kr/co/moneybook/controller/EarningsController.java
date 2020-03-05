@@ -41,7 +41,7 @@ public class EarningsController {
 	}
 	
 	//수입내역 삭제
-	@RequestMapping(value="moneybook/earnings/delete", method=RequestMethod.POST)
+	@RequestMapping(value="moneybook/earnings/delete", method=RequestMethod.GET)
 	@ResponseBody
 	public void earnings_delete(HttpServletRequest request){
 		earningsService.earnings_delete(request);

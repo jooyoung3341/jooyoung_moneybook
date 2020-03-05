@@ -63,7 +63,7 @@
 					<div class="form-group" id="modal_insert_date"></div>
 					<div class="form-group" id="modal_price"></div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" id="update_assetprice">수정</button>
+						<button type="button" class="btn btn-primary" id="assetprice_update">수정</button>
 						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
 					</div>
 				</form>
@@ -105,7 +105,6 @@
 		if(confirm_val){
 			$.ajax({
 				url : "asset/delete",
-				type : "post",
 				data : {"ano" : ano},
 				dataType : "text",
 				success : function(){
@@ -251,7 +250,7 @@
 	});
 	
 	//자산내역 수정
-	$(document).on("click", "#update_assetprice", function(){
+	$(document).on("click", "#assetprice_update", function(){
 		var confirm_val = confirm("수정 하시겠습니까?");
 		if(confirm_val){
 			var ano = $("#update_ano").val();
@@ -289,7 +288,6 @@
 				if(delete_check == true){
 				$.ajax({
 						url : "assetprice/delete",
-						type : "post",
 						data : {"checkArr" : checkArr},
 						traditional : true,
 						success : function(){

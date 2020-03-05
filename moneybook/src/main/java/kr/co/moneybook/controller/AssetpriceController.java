@@ -35,7 +35,7 @@ public class AssetpriceController {
 	}
 	
 	//자산내역 삭제
-	@RequestMapping(value="moneybook/assetprice/delete", method=RequestMethod.POST)
+	@RequestMapping(value="moneybook/assetprice/delete", method=RequestMethod.GET)
 	@ResponseBody
 	public void assetprice_delete(HttpServletRequest request) {
 		assetpriceService.assetprice_delete(request);

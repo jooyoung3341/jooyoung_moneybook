@@ -9,9 +9,9 @@
 </head>
 <div layout:fragment="content">
 <div class="row">
+<input type="hidden" th:value="${board.bno}" id="bno">
+<input type="hidden" th:value="${moneybook_name}" id="moneybook_name">
 	<div class="col-md-7">
-
-
 	    <label class="control-label" for="readOnlyInput">제목</label>
 	    <input class="form-control" type="text" th:placeholder="${board.title}" readonly="">
 		
@@ -23,8 +23,8 @@
 		
 
 		<th:block th:if="${board.moneybook_name == #authentication.principal.username}">
-		<button type="button" id="board_delete" class="btn btn-outline-danger" th:value="${board.bno}">삭제</button>
-		<button type="button" id="board_update" class="btn btn-outline-primary" th:value="${board.bno}">수정</button>
+		<button type="button" id="board_delete" class="btn btn-outline-danger" >삭제</button>
+		<button type="button" id="board_update" class="btn btn-outline-primary">수정</button>
 		</th:block>
 		<!-- 
 				<sec:authorize access="isAuthenticated()">
@@ -32,12 +32,11 @@
 					<!-- 시큐리티타임리프 로그인 사용자 이름 가져오기 -->
 		<!-- <span sec:authentication="principal.username"> -->
 		<div class="form-group">
-		
-			   <span sec:authentication="principal.username"> </span>
-		
+			<span sec:authentication="principal.username" id="moneyname" sec:value="principal.username"> </span>
 			<textarea class="form-control" rows="3" id="content"></textarea>
-			<button type="button" id="replay_insert" class="btn btn-outline-primary">댓글 등록</button>
+			<button type="button" id="replay_insert" class="btn btn-outline-primary" th:value="${board.bno}">댓글 등록</button>
 		</div>
+		<div id="getReply"></div>
 		
 	</div>
 	<div class="col-md-3">
@@ -73,24 +72,153 @@
 	</div>
 
 </div>
+
+<!-- Modal -->
+<div class="modal" id="reply_modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			  	<h5 class="modal-title">댓글 수정</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" id="reply_form">
+					<span sec:authentication="principal.username" id="moneyname" sec:value="principal.username"> </span>
+					<div id="modal_rno"></div>
+					<div class="form-group" id="modal_content"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="reply_update">등록</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 </div>
 <th:block layout:fragment="script">
 <script>
-
+window.onload = function(){
+	replySelect();
+}
+var bno = $("#bno").val();
+var moneybook_name = $("#moneybook_name").val();
+//가계부이야기 삭제
 $("#board_delete").click(function(){
-	var bno = $("#board_delete").val();
+
 	var confirm_val = confirm("삭제 하시겠습니까?");
 	if(confirm_val){
 			location.href="board_delete?bno="+bno;
 		}
 	})
 	
+//가계부이야기 수정
 $("#board_update").click(function(){
-	var bno = $("#board_delete").val();
+
 	location.href="board_update?bno="+bno;
 })
 
+//댓글 삽입
+$("#replay_insert").click(function(){
+	alert(moneybook_name);
+	var content = $("#content").val();
+	if(content == ""){
+		alert("댓글을 입력하셔야 합니다.");
+	}else
+		$.ajax({
+			url : "reply/insert",
+			type : "post",
+			data : {
+					"content" : content,
+					"bno" : bno
+			},
+			success : function(){
+				replySelect();
+			}
+		})
+})
 
+//댓글 목록 
+function replySelect(){
+	$.ajax({
+			url : "reply/select",
+			data : {"bno" : bno},
+			dataType : "json",
+			success : function(data){
+				getReply(data);
+			}
+	})
+}
+
+//댓글 목록 disp
+function getReply(data){
+	var disp = "";
+	$(data).each(function(idx, item){
+		disp += "<div class='alert alert-dismissible alert-primary'>";
+		disp += "<p class='text-primary'>"+item.moneybook_name+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+		disp += "<span class='badge badge-light'>"+item.insert_date+"</span></p><br/>";
+		disp += "<p class='text-muted'>"+item.content+"</p>";
+		if(moneybook_name == item.moneybook_name){
+			disp += "<button type='button' class='btn btn-secondary disabled' id='"+idx+item.rno"' name='reply_update_modal'>수정</button>";
+			disp += "<button type='button' class='btn btn-outline-danger' id='"+idx+item.rno"' name='reply_delete'>삭제</button>"
+		}
+		disp += "</div>"; 
+	})
+	document.getElementById("getReply").innerHTML = disp;
+}
+
+//댓글 삭제
+$(document).on("click","button[name=reply_delete]",function(){
+	var confirm_val = confirm("삭제 하시겠습니까?");
+	if(confirm_val){
+		var $delete = $(this).attr("id");
+		var rno = $("#"+$delete).attr("value");
+		$.ajax({
+			url : "reply/delete",
+			data : {"rno" : rno},
+			success : function(){
+				replySelect();
+			}
+		})
+	}
+})
+
+//댓글 수정 폼(모달) 
+$(document).on("click","button[name=reply_update_modal]",function(){
+	var $update = $(this).attr("id");
+	var rno = $("#"+$update).attr("value");
+	$.ajax({
+		url : "reply/update_form",
+		data : {"rno" : rno},
+		dataType : "json",
+		success : function(data){
+			$("#modal_rno").html("<input type='hidden' id='update_rno' value='"+data.rno"'>");
+			$("#modal_content").html<"<textarea class='form-control' id='update_content' rows='3'>"+data.content+"</textarea>"
+			$("#reply_modal").modal();
+		}
+	})
+})
+
+$(document).on("click", "#reply_update", function(){
+	var confirm_val = confirm("수정 하시겠습니까?");
+	if(confirm_val){
+		var rno = $("#update_rno").val();
+		var content = $("#update_content").val();
+		$.ajax({
+			url : "reply/update",
+			type : "post",
+			data : {"rno" : rno,
+					   "content" : content},
+			success : function(){
+				$("#reply_modal").modal();
+				alert("수정 완료!");
+				replySelect();
+			}
+		})
+	}
+})
 </script>
 </th:block>
 </html> 

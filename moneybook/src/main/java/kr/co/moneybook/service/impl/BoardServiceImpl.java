@@ -118,7 +118,6 @@ public class BoardServiceImpl implements BoardService {
 	@Override
 	public Board board_detail(HttpServletRequest request) {
 		String bno = request.getParameter("bno");
-		
 		boardMapper.board_readcnt(Integer.parseInt(bno));
 		return boardMapper.board_detail(Integer.parseInt(bno));
 	}

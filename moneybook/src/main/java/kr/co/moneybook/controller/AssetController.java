@@ -43,7 +43,7 @@ public class AssetController {
 	}
 	
 	//자산 삭제
-	@RequestMapping(value="moneybook/asset/delete")
+	@RequestMapping(value="moneybook/asset/delete", method=RequestMethod.GET)
 	@ResponseBody
 	public void asset_delete(HttpServletRequest request){
 		assetService.asset_delete(request);

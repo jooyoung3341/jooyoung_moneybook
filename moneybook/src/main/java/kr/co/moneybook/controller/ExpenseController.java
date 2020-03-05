@@ -35,7 +35,7 @@ public class ExpenseController {
 	}
 	
 	//지출내역 삭제
-	@RequestMapping(value="moneybook/expense/delete", method=RequestMethod.POST)
+	@RequestMapping(value="moneybook/expense/delete", method=RequestMethod.GET)
 	@ResponseBody
 	public void expense_delete(HttpServletRequest request){
 		expenseService.expense_delete(request);
