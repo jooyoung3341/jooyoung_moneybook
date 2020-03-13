@@ -11,7 +11,9 @@
 <div class="row">
 <input type="hidden" th:value="${board.bno}" id="bno">
 <input type="hidden" th:value="${moneybook_name}" id="moneybook_name">
+
 	<div class="col-md-7">
+
 	    <label class="control-label" for="readOnlyInput">제목</label>
 	    <input class="form-control" type="text" th:placeholder="${board.title}" readonly="">
 		
@@ -24,6 +26,7 @@
 
 		<th:block th:if="${board.moneybook_name == #authentication.principal.username}">
 		<button type="button" id="board_delete" class="btn btn-outline-danger" >삭제</button>
+											
 		<button type="button" id="board_update" class="btn btn-outline-primary">수정</button>
 		</th:block>
 		<!-- 
@@ -102,12 +105,13 @@
 <script>
 window.onload = function(){
 	replySelect();
+	statusSelect();
 }
 var bno = $("#bno").val();
 var moneybook_name = $("#moneybook_name").val();
+
 //가계부이야기 삭제
 $("#board_delete").click(function(){
-
 	var confirm_val = confirm("삭제 하시겠습니까?");
 	if(confirm_val){
 			location.href="board_delete?bno="+bno;
@@ -116,13 +120,11 @@ $("#board_delete").click(function(){
 	
 //가계부이야기 수정
 $("#board_update").click(function(){
-
 	location.href="board_update?bno="+bno;
 })
 
 //댓글 삽입
 $("#replay_insert").click(function(){
-	alert(moneybook_name);
 	var content = $("#content").val();
 	if(content == ""){
 		alert("댓글을 입력하셔야 합니다.");
@@ -161,13 +163,14 @@ function getReply(data){
 		disp += "<span class='badge badge-light'>"+item.insert_date+"</span></p><br/>";
 		disp += "<p class='text-muted'>"+item.content+"</p>";
 		if(moneybook_name == item.moneybook_name){
-			disp += "<button type='button' class='btn btn-secondary disabled' id='"+idx+item.rno"' name='reply_update_modal'>수정</button>";
-			disp += "<button type='button' class='btn btn-outline-danger' id='"+idx+item.rno"' name='reply_delete'>삭제</button>"
+			disp += "<button type='button' class='btn btn-secondary disabled' id='"+item.rno+"' name='reply_update_modal' value='"+item.rno+"'>수정</button>";
+			disp += "<button type='button' class='btn btn-outline-danger' id='"+idx+item.rno+"' name='reply_delete' value='"+item.rno+"'>삭제</button>"
 		}
 		disp += "</div>"; 
-	})
-	document.getElementById("getReply").innerHTML = disp;
+	});
+	$("#getReply").html(disp);
 }
+
 
 //댓글 삭제
 $(document).on("click","button[name=reply_delete]",function(){
@@ -185,7 +188,7 @@ $(document).on("click","button[name=reply_delete]",function(){
 	}
 })
 
-//댓글 수정 폼(모달) zz
+//댓글 수정 폼(모달) 
 $(document).on("click","button[name=reply_update_modal]",function(){
 	var $update = $(this).attr("id");
 	var rno = $("#"+$update).attr("value");
@@ -194,14 +197,14 @@ $(document).on("click","button[name=reply_update_modal]",function(){
 		data : {"rno" : rno},
 		dataType : "json",
 		success : function(data){
-			$("#modal_rno").html("<input type='hidden' id='update_rno' value='"+data.rno"'>");
-			$("#modal_content").html<"<textarea class='form-control' id='update_content' rows='3'>"+data.content+"</textarea>"
+			$("#modal_rno").html("<input type='hidden' id='update_rno' value='"+data.rno+"'>");
+			$("#modal_content").html("<textarea class='form-control' id='update_content' rows='3'>"+data.content+"</textarea>");
 			$("#reply_modal").modal();
 		}
 	})
-})
+});
 
-
+//댓글 수정
 $(document).on("click", "#reply_update", function(){
 	var confirm_val = confirm("수정 하시겠습니까?");
 	if(confirm_val){
@@ -210,10 +213,10 @@ $(document).on("click", "#reply_update", function(){
 		$.ajax({
 			url : "reply/update",
 			type : "post",
-			data : {"rno" : rno,
+			data : {"rno" : rno, 
 					   "content" : content},
 			success : function(){
-				$("#reply_modal").modal();
+				$("#reply_modal").modal("hide");
 				alert("수정 완료!");
 				replySelect();
 			}

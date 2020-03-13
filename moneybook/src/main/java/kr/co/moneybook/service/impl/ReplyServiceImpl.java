@@ -61,6 +61,23 @@ public class ReplyServiceImpl implements ReplyService {
 		String rno = request.getParameter("rno");
 		return replyMapper.reply_update_form(Integer.parseInt(rno));
 	}
+
+	//댓글 수정
+	@Override
+	public void reply_update(HttpServletRequest request) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Calendar time = Calendar.getInstance();
+		String insert_date = format.format(time.getTime());
+		String rno = request.getParameter("rno");
+		String content = request.getParameter("content");
+		
+		Reply reply = new Reply();
+		reply.setRno(Integer.parseInt(rno));
+		reply.setContent(content);
+		reply.setInsert_date(insert_date);
+		
+		replyMapper.reply_update(reply);
+	}
 	
 	
 

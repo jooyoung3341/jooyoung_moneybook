@@ -97,13 +97,17 @@ $(document).ready(function(){
 //가계부 이름 중복 확인
 var namecheck = false;
 function confirmName(){
-	var name = document.getElementById("name");
-	var moneybook_name = $("#name").val()
+	var moneybook_name = $("#name").val();
 	var name_div = "";
+
 	/* if(name.value.indexOf(" ") >= 0){
 		alert("공백은 사용할 수 없습니다.");
 	} */
-	if(moneybook_name.search(/\s/) != -1){
+	 if(moneybook_name.length < 1){
+		 /* name_div +=  "가계부 이름 <br/><input type='text' class='form-control' id='name' name='name' onblur='confirmName()''>"; 
+		$("#name_div").html(modal_name_div); */
+	 }
+	else if(moneybook_name.search(/\s/) != -1){
 		alert("가계부 이름에 공백은 사용할 수 없습니다.");
 	}else{
 	$.ajax({
@@ -131,21 +135,20 @@ $(document).ready(function(){
 		var moneybook_name = $("#name").val();
 		var moneybook_pw = $("#pw").val();
 		var authority_name = $("#authority_name").val();
-		 var name = document.getElementById("name");
-		var pw = document.getElementById("pw"); 
+		alert(moneybook_name.value.length)
 		if(namecheck == false || name.value.length < 1){
 			alert("가계부 이름을 입력해야 합니다.");
-		}else if(pw.value.length < 1){
+		}else if(moneybook_pw.value.length < 1){
 			alert("패스워드를 입력하셔야 합니다.");
-		}else if(pw.value.length < 5){
+		}else if(moneybook_pw.value.length < 5){
 			alert("패스워드는 5자이상 이여야 합니다.");
 			
-		}else if(pw.value != confirmpw.value){
+		}else if(moneybook_pw.value != confirmpw.value){
 			alert("패스워드와 패스워드확인이 일치하지 않습니다.");
 		}else
 		$.ajax({
 			url : "moneybookRegister",
-			type : "POST",
+			type : "post", 
 			data : {"name" : moneybook_name,
 					   "pw"    : moneybook_pw,
 					   "authority_name" : authority_name},

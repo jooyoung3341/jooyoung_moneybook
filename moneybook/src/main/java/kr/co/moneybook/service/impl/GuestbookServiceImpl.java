@@ -45,4 +45,31 @@ public class GuestbookServiceImpl implements GuestbookService {
 	public List<Guestbook> guestbook_select() {
 		return guestbookMapper.guestbook_select();
 	}
+
+	//방명록 삭제
+	@Override
+	public void guestbook_delete(HttpServletRequest request) {
+		String gno = request.getParameter("gno");
+		guestbookMapper.guestbook_delete(Integer.parseInt(gno));
+	}
+
+	//방명록 수정 폼 
+	@Override
+	public Guestbook guestbook_update_form(HttpServletRequest request) {
+		String gno = request.getParameter("gno");
+		return guestbookMapper.guestbook_update_form(Integer.parseInt(gno));
+	}
+
+	//방명록 수정
+	@Override
+	public void guestbook_update(HttpServletRequest request) {
+		String gno = request.getParameter("gno");
+		String content = request.getParameter("content");
+		
+		Guestbook guestbook = new Guestbook();
+		guestbook.setContent(content);
+		guestbook.setGno(Integer.parseInt(gno));
+		
+		guestbookMapper.guestbook_update(guestbook);
+	}
 }

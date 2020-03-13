@@ -71,7 +71,10 @@
 </th:bloac>
 </div>
 <th:block layout:fragment="script">
+
 <script>
+window.onload = function(){
+	statusSelect();
 //게시판 등록 완료시 알림
 var board_register = $("#board_registermsg").val();
 if(board_register != null){

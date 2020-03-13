@@ -42,6 +42,9 @@
 </div>
 <th:block layout:fragment="script">
 <script>
+window.onload = function(){
+	statusSelect();
+}
 document.getElementById("moneybook_date").valueAsDate = new Date();
 var board_status_check = false;
 

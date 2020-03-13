@@ -46,4 +46,11 @@ public class ReplyController {
 	public Reply reply_update_form(HttpServletRequest request) {
 		return replyService.reply_update_form(request);
 	}
+	
+	//댓글 수정
+	@RequestMapping(value="moneybook/reply/update", method=RequestMethod.POST)
+	@ResponseBody
+	public void reply_update(HttpServletRequest request) {
+		replyService.reply_update(request);
+	}
 }

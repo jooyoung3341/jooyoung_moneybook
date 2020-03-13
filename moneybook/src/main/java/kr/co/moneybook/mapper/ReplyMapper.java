@@ -20,4 +20,7 @@ public interface ReplyMapper {
 	
 	//댓글 수정 폼
 	public Reply reply_update_form(int rno);
+	
+	//댓글 수정
+	public void reply_update(Reply reply);
 }

@@ -25,8 +25,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- 댓글 수정 폼 -->
 <select id="reply_update_form" parameterType="java.lang.Integer" resultType="Reply">
-	select conten, rno
+	select content, rno
 	from reply
 	where rno = #{rno}
 </select>
+
+<!-- 댓글 수정 -->
+<update id="reply_update" parameterType="Reply">
+	update reply
+	set content = #{content}
+	where rno = #{rno}
+</update>
 </mapper>

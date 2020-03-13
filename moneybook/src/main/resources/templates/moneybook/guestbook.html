@@ -3,10 +3,26 @@
 	    layout:decorate="~{layout/default}">
 <head>
 <meta charset="UTF-8">
+<th:block layout:fragment="css">
+<style type="text/css">
+	#table {	
+		display: table; 
+		width: 100%;
+	}
+	.row1 {
+		display: table-row;	
+	}
+	#cell {
+		display: table-cell; 
+		padding: 4px; 
+		border-bottom: 1px solid #DDD;
+	}
+</style>
+</th:block>
 <title>방명록</title>
 </head>
 <div layout:fragment="content">
-
+<input type="hidden" id="name" th:value="${moneybook_name}">
 <button type="button" class="btn btn-primary" id="guestbook_modal_btn">Primary</button>
 <div id="getGuestbook"></div>
 <!-- Modal -->
@@ -21,12 +37,34 @@
 			</div>
 			<div class="modal-body">
 				<form method="post" id="guestbook_form">
-					<input type="hidden" id="name" th:value="${moneybook_name}">
 					<div class="form-group">
   						<textarea class="form-control" id="content" rows="3"></textarea>
   					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary" id="guestbook_insert">등록</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal" id="guestbook_update_modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			  	<h5 class="modal-title">방명록 수정</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post">
+					<div id="modal_gno"></div>
+					<div class="form-group" id="modal_content"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="guestbook_update">등록</button>
 						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
 					</div>
 				</form>
@@ -40,7 +78,7 @@
 <script>
 window.onload = function(){
 	guestbookSelect();
-
+	statusSelect();
 }
 
 //방명록 등록 모달창 오픈
@@ -95,31 +133,80 @@ function getGuestbook(data){
 	var j = 4;
 	var disp = "";
 	disp += "<div id='table'>";
-	$(data).each(function(ids, item){
+	$(data).each(function(idx, item){
 		if(i%j == 0){
-			disp += "<p class='row1'>";
+			disp += "<span class='row1'>";
 		}
-		disp += "<span class='cell col1'>";
-		disp += "<span class='col-sm-6 col-md-4' style='width: 270px; height: 200px;'>";
-		disp += "<span class='thumbnail' style='height: 200px;'>";
-		disp += item.moneybook_name+"&emsp;&emsp;<smail>"+item.insert_date+"</smail><br/></br>";
-		disp += "</span>";
+		disp += "<p class='alert alert-dismissible alert-danger' id='cell'>";
+		disp += "<strong>";
+		disp += item.moneybook_name+"&emsp;&emsp;<smail>"+item.insert_date+"</smail>";
+		disp += "</strong><br/></br>";
 		if(moneybook_name == item.moneybook_name){
-			disp += "<button>삭제/수정</button>"
-		}
-		disp += "<span class='caption'>";
-		disp += "<span>"+item.content+"</span>";
-		disp += "</span></span></span></span>";
+			disp += "<button type='button' class='btn btn-outline-primary' id='"+idx+"' name='guestbook_update' value='"+item.gno+"'>수정</button>";
+			disp += "<button type='button' class='btn btn-outline-primary' id='"+idx+item.gno+"' name='guestbook_delete' value='"+item.gno+"'>삭제</button>";
+		} 
+		disp += "</p>";
 		
 		i += 1;
 		if(i%j == 0){
-			disp += "</p>";
+			disp += "</span>";
 		}
 	})
 	disp += "</div>";
 	$("#getGuestbook").html(disp);
 }
 
+//방명록 삭제
+$(document).on("click", "button[name=guestbook_delete]",function(){
+	var confirm_val = confirm("삭제 하시겠습니까?");
+	if(confirm_val){
+		var $delete = $(this).attr("id");
+		var gno = $("#"+$delete).attr("value");
+		
+		$.ajax({
+			url : "guestbook/delete",
+			data : {"gno" : gno},
+			success : function(){
+				guestbookSelect();
+			}
+		})
+	}
+})
+
+//방명록 수정 폼
+$(document).on("click", "button[name=guestbook_update]", function(){
+	var $update = $(this).attr("id");
+	var gno = $("#"+$update).attr("value");
+		$.ajax({
+			url : "guestbook/update_form",
+			data : {"gno" : gno},
+			dataType : "json",
+			success : function(data){
+				$("#modal_content").html("<textarea class='form-control' id='update_content' rows='3'>"+data.content+"</textarea>");
+				$("#modal_gno").html("<input type='hidden' id='update_gno' value='"+data.gno+"'>");
+				$("#guestbook_update_modal").modal();
+			}
+		})
+})
+
+$(document).on("vlick", "#guestbook_update", function(){
+	var confirm_val = confirm("수정 하시겠습니까?");
+	if(confirm_val){
+		var gno = $("#update_gno").val();
+		var content = $("#update_content").val();
+		$.ajax({
+			url : "guestbook/update",
+			type : "post",
+			data : {"gno" : gno,
+					   "content" : content},
+			success : function(){
+				$("#guestbook_update_modal").modal();
+				alert("수정 완료!");
+				guestbookSelect();
+			}
+		})
+	}
+})
 </script>
 </th:block>
 </html>

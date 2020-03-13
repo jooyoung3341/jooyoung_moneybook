@@ -19,4 +19,7 @@ public interface ReplyService {
 	
 	//댓글 수정 폼
 	public Reply reply_update_form(HttpServletRequest request);
+	
+	//댓글 수정
+	public void reply_update(HttpServletRequest request);
 }

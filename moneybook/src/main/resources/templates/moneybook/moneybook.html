@@ -87,7 +87,6 @@
 		statusSelect();
 	}
 
-	
 	document.getElementById("insert_date").valueAsDate = new Date();
  	document.getElementById("indate").valueAsDate = new Date()
 	
@@ -175,7 +174,7 @@
 		disp += "<td></td>";
 		disp += "<td></td>";
 		disp += "</table>";
-		document.getElementById("getExpense").innerHTML = disp;
+		$("#getExpense").html(disp);
 	}
  	
 

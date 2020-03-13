@@ -142,7 +142,7 @@
 			
 		}) 
 		disp += "</ul>";
-		document.getElementById("getAsset").innerHTML = disp;
+		$("#getAsset").html(disp);
 	} 
 
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -226,8 +226,8 @@
 			disp += "<td align='right'>합계 :</td>";
 			disp += "<td>"+AddComma(Math.floor(price_sum))+"</td>";
 			disp += "<td></td>";
-		document.getElementById("getAssetprice").innerHTML = disp;
-		document.getElementById("getAssetprice_form").innerHTML = form_disp;
+		$("#getAssetprice").html(disp);
+		$("#getAssetprice_form").html(form_disp);
 		document.getElementById("insert_date").valueAsDate = new Date();
 	} 
 	

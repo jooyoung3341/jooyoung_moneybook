@@ -44,4 +44,25 @@ public class GuestbookController {
 	public List<Guestbook> guestbook_select(){
 		return guestbookService.guestbook_select();
 	}
+	
+	//방명록 삭제 
+	@RequestMapping(value="moneybook/guestbook/delete", method=RequestMethod.GET)
+	@ResponseBody
+	public void guestbook_delete(HttpServletRequest request) {
+		guestbookService.guestbook_delete(request);
+	}
+	
+	//방명록 수정 폼
+	@RequestMapping(value="moneybook/guestbook/update_form", method=RequestMethod.GET)
+	@ResponseBody
+	public Guestbook guestbook_update_form(HttpServletRequest request) {
+		return guestbookService.guestbook_update_form(request);
+	}
+	
+	//방명록 수정
+	@RequestMapping(value="moneybook/guestbook/update", method=RequestMethod.POST)
+	@ResponseBody
+	public void guestbook_update(HttpServletRequest request) {
+		guestbookService.guestbook_update(request);
+	}
 }
