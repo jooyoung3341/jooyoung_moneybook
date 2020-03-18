@@ -16,6 +16,7 @@ public interface ExpenseMapper {
 	
 	//지출내역 목록
 	public List<Expense> expense_select(Map<String, Object> hashExpense);
+	public List<Expense> expense_select1(String moneybook_name);
 	
 	//지출내역 삭제
 	public void expense_delete(@Param("eno") int eno);

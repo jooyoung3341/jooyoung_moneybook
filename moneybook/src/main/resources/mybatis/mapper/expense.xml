@@ -18,6 +18,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	order by insert_date desc, eno desc
 </select>
 
+<select id="expense_select1" parameterType="String" resultType="Expense">
+	select price, type, cartegory, insert_date, eno
+	from expense
+	where moneybook_name = #{moneybook_name}
+	order by insert_date desc, eno desc
+</select>
 <!-- 지출내역 삭제 -->
 <delete id="expense_delete" parameterType="java.lang.Integer">
 	delete from expense

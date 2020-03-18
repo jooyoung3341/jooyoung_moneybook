@@ -1,6 +1,10 @@
 	
 	document.getElementById("status_date").valueAsDate = new Date();
-
+	
+	$("#excel").click(function(){
+		var status_date = $("#status_date").val();
+		location.href="excel?status_date="+status_date;
+	})
 	//가계부현황 조회
 	function statusSelect(){
 		var status_date = $("#status_date").val();

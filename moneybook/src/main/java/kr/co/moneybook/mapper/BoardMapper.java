@@ -35,6 +35,8 @@ public interface BoardMapper {
 	//가계부이야기 status 가져오기
 	public List<Board> board_status_select(int bno);
 	
+	public Board board_test();
+	
 	//가계부이야기 삭제
 	public void board_delete(int bno);
 	

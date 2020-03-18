@@ -140,6 +140,7 @@ function getGuestbook(data){
 		disp += "<p class='alert alert-dismissible alert-danger' id='cell'>";
 		disp += "<strong>";
 		disp += item.moneybook_name+"&emsp;&emsp;<smail>"+item.insert_date+"</smail>";
+		disp += "<br/>"+item.content;
 		disp += "</strong><br/></br>";
 		if(moneybook_name == item.moneybook_name){
 			disp += "<button type='button' class='btn btn-outline-primary' id='"+idx+"' name='guestbook_update' value='"+item.gno+"'>수정</button>";
@@ -189,7 +190,8 @@ $(document).on("click", "button[name=guestbook_update]", function(){
 		})
 })
 
-$(document).on("vlick", "#guestbook_update", function(){
+//방명록 수정
+$(document).on("click", "#guestbook_update", function(){
 	var confirm_val = confirm("수정 하시겠습니까?");
 	if(confirm_val){
 		var gno = $("#update_gno").val();
@@ -200,7 +202,7 @@ $(document).on("vlick", "#guestbook_update", function(){
 			data : {"gno" : gno,
 					   "content" : content},
 			success : function(){
-				$("#guestbook_update_modal").modal();
+				$("#guestbook_update_modal").modal("hide");
 				alert("수정 완료!");
 				guestbookSelect();
 			}

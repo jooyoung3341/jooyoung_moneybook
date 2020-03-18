@@ -59,6 +59,13 @@ public class ExpenseServiceImpl implements ExpenseService {
 	
 		return expenseMapper.expense_select(hashExpense);
 	}
+	@Override
+	public List<Expense> expense_select1(HttpServletRequest request) {
+		User user =  (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String moneybook_name = user.getUsername();
+	
+		return expenseMapper.expense_select1(moneybook_name);
+	}
 
 	//지출내역 삭제
 	@Override
