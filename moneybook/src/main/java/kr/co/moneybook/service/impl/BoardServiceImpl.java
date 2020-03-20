@@ -104,9 +104,6 @@ public class BoardServiceImpl implements BoardService {
 		List<Board> board_list = boardMapper.board_selete(criteria);
 		//map에 게시글 리스트 추가
 		map.put("board_list", board_list);
-		for (Board board : board_list) {
-			System.out.println(board.getTitle());
-		}
 		
 		PageMaker pageMaker = new PageMaker();
 		//Criteria(출력 중인 번호, 출력할 데이터 개수, 출력될 데이터의 시작 번호 ) pageMaker에 set
