@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import kr.co.moneybook.domain.Board;
 import kr.co.moneybook.domain.Criteria;
+import kr.co.moneybook.domain.SearchCriteria;
 import kr.co.moneybook.domain.User;
 import kr.co.moneybook.service.BoardService;
 
@@ -29,7 +30,7 @@ public class BoardController {
 	
 	//게시판 이동
 	@RequestMapping(value="moneybook/board", method=RequestMethod.GET)
-	public String board(Model model, Criteria criteria) {
+	public String board(Model model, SearchCriteria criteria) {
 		Map<String, Object> map = boardService.board_select(criteria);
 		//map에는 board_list, pageMaker 가 들어 있음
 		model.addAttribute("map", map);

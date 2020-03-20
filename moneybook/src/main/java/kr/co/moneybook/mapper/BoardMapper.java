@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import kr.co.moneybook.domain.Board;
 import kr.co.moneybook.domain.Criteria;
+import kr.co.moneybook.domain.SearchCriteria;
 
 @Mapper
 public interface BoardMapper {
@@ -21,10 +22,10 @@ public interface BoardMapper {
 	public void board_status_insert(Board board_status);
 	
 	//가계부이야기 목록
-	public List<Board> board_selete(Criteria criteria);
+	public List<Board> board_selete(SearchCriteria criteria);
 	
 	//가계부이야기 전체 가져오기
-	public int board_totalcount();
+	public int board_totalcount(SearchCriteria criteria);
 	
 	//가계부이야기 폼 가져오기
 	public Board board_detail(int bno);

@@ -12,51 +12,56 @@
 	<div class="col-md-7">
 		<a href="board_register"><button type="button" class="btn btn-primary">이야기 등록</button></a>
 		<ul class="list-group">
+		<!-- 게시판 목록 -->
 		<th:block th:each="board : ${map.board_list}">
-		<form method="post">
 			<li class="list-group-item d-flex justify-content-between align-items-center">
 				<input type="hidden" name="title" value="${board.title}">
 							<!-- 타임리프는 URL 파라미터값 전달방식 조금 다름 -->
-		    	<a th:href="@{board_detail(bno=${board.bno})}">
+		    	<a th:href="@{board_detail(bno=${board.bno},page=${map.pageMaker.criteria.page},perPageNum=${map.pageMaker.criteria.perPageNum},keyword=${map.pageMaker.criteria.keyword})}">
 		    		<p class="text-primary" th:text="${board.title}"></p>
-		    		
 		    	</a>
 		    	<span class="badge badge-pill badge-dark" th:text="${board.recommend}"></span>
 		    	<span class="badge badge-primary badgeㅁ-pill" th:text="${board.readcnt}"></span>
 		  </li>
-		  </form>
+		  
 		</th:block>
 		</ul>
 		
+		<!-- 페이지 번호 출력 -->
 		<div>
 		  <ul class="pagination">				
 			  <th:block th:if="${map.pageMaker.totalCount > 0}">
+			  <!-- 이전 링크 -->
 			  	<th:block th:if="${map.pageMaker.prev}">
 			    <li class="page-item">
-			      <a class="page-link" th:href="@{board(page=${map.pageMaker.startPage-1}, perPageNum=${map.pageMaker.criteria.perPageNum})}">&laquo;</a>
+			      <a class="page-link" th:href="@{board(page=${map.pageMaker.startPage-1}, perPageNum=${map.pageMaker.criteria.perPageNum},keyword=${map.pageMaker.criteria.keyword})}">&laquo;</a>
 			    </li>
 			  	</th:block>
+			  <!-- 페이지 번호 -->
 			  <th:block th:each="num, idx : ${#numbers.sequence(map.pageMaker.startPage, map.pageMaker.endPage)}">
 			    <li class="page-item active">
-			      <a class="page-link" th:href="@{board(page=${idx.current},perPageNum=${map.pageMaker.criteria.perPageNum})}" th:text="${idx.current}"></a>
+			      <a class="page-link" th:href="@{board(page=${idx.current},perPageNum=${map.pageMaker.criteria.perPageNum},keyword=${map.pageMaker.criteria.keyword})}" th:text="${idx.current}"></a>
 			    </li>
 			  </th:block>
+			  <!-- 다음 링크 -->
 			  <th:block th:if="${map.pageMaker.next}">
 			    <li class="page-item">
-			      <a class="page-link" th:href="@{board(page=${map.pageMaker.endPage+1}, perPageNum=${map.pageMaker.criteria.perPageNum})}">&raquo;</a>
+			      <a class="page-link" th:href="@{board(page=${map.pageMaker.endPage+1}, perPageNum=${map.pageMaker.criteria.perPageNum},keyword=${map.pageMaker.criteria.keyword})}">&raquo;</a>
 			    </li>
 			  </th:block>
 		  </th:block>
 		  </ul>
 		</div>
-		
-		
+		<!-- 검색 창 -->
+   		<input class="form-control mr-sm-2" type="text" id="keyword" name="keyword" placeholder="Search" th:value="${map.pageMaker.criteria.keyword}">
+      	<button class="btn btn-secondary my-2 my-sm-0" type="button" id="search">Search</button>		
 	</div>
 	<div class="col-md-3">
 	
 	</div>
 </div>
 
+<input type="hidden" id="perpagenum" th:value="${map.pageMaker.criteria.perPageNum}">
 <!-- 등록 완료시 attribute 받기 -->
 <th:block th:if="${board_registermsg != null}">
 	<input type="hidden" id="board_registermsg" th:value="${board_registermsg}"> 
@@ -71,10 +76,10 @@
 </th:bloac>
 </div>
 <th:block layout:fragment="script">
-
 <script>
 window.onload = function(){
 	statusSelect();
+}
 //게시판 등록 완료시 알림
 var board_register = $("#board_registermsg").val();
 if(board_register != null){
@@ -90,6 +95,13 @@ var board_update = $("#board_updatemsg").val();
 if(board_update != null){
 	alert(board_update);
 }
+
+$("#search").click(function(){
+	var perPageNum = $("#perpagenum").val()
+		var keyword = $("#keyword").val();
+		location.href="board?page=1&perPageNum="+perPageNum+"&keyword="+keyword;
+	})
+
 </script>
 </th:block>
 </html> 

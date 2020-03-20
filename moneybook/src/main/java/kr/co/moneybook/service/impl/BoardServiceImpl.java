@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import kr.co.moneybook.domain.Board;
 import kr.co.moneybook.domain.Criteria;
 import kr.co.moneybook.domain.PageMaker;
+import kr.co.moneybook.domain.SearchCriteria;
 import kr.co.moneybook.domain.User;
 import kr.co.moneybook.mapper.BoardMapper;
 import kr.co.moneybook.service.BoardService;
@@ -97,18 +98,21 @@ public class BoardServiceImpl implements BoardService {
 
 	//가계부이야기 목록
 	@Override
-	public Map<String, Object> board_select(Criteria criteria) {
+	public Map<String, Object> board_select(SearchCriteria criteria) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		
 		List<Board> board_list = boardMapper.board_selete(criteria);
 		//map에 게시글 리스트 추가
 		map.put("board_list", board_list);
+		for (Board board : board_list) {
+			System.out.println(board.getTitle());
+		}
 		
 		PageMaker pageMaker = new PageMaker();
 		//Criteria(출력 중인 번호, 출력할 데이터 개수, 출력될 데이터의 시작 번호 ) pageMaker에 set
 		pageMaker.setCriteria(criteria);
 		//전체 게시글 set
-		pageMaker.setTotalCount(boardMapper.board_totalcount());
+		pageMaker.setTotalCount(boardMapper.board_totalcount(criteria));
 		//map에 추가
 		map.put("pageMaker", pageMaker);
 		return map;

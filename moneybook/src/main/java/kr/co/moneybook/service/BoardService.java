@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import kr.co.moneybook.domain.Board;
 import kr.co.moneybook.domain.Criteria;
+import kr.co.moneybook.domain.SearchCriteria;
 
 public interface BoardService {
 
@@ -17,7 +18,7 @@ public interface BoardService {
 	public boolean board_register(HttpServletRequest request);
 	
 	//가계부이야기 목록 
-	public Map<String, Object> board_select(Criteria criteria);
+	public Map<String, Object> board_select(SearchCriteria criteria);
 	
 	//가계부이야기 상세보기
 	public Board board_detail(HttpServletRequest request);
