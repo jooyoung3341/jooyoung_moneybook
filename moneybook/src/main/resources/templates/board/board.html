@@ -20,8 +20,9 @@
 		    	<a th:href="@{board_detail(bno=${board.bno},page=${map.pageMaker.criteria.page},perPageNum=${map.pageMaker.criteria.perPageNum},keyword=${map.pageMaker.criteria.keyword})}">
 		    		<p class="text-primary" th:text="${board.title}"></p>
 		    	</a><!-- badge badge-pill badge-dark -->
-		    	<div>아이콘 제작자 <a href="https://www.flaticon.com/kr/authors/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/kr/" title="Flaticon">www.flaticon.com</a></div>
-		    	<span class="glyphicon glyphicon-glass" th:text="${board.recommend}"></span>
+				
+				<i class="ri-thumb-up-line"><span class="badge badge-pill badge-light" th:text="${board.recommend}"></span></i>
+				<i class="ri-chat-1-line"><span class="badge badge-pill badge-light" th:text="${board.reply}"></span></i>
 		    	<span class="badge badge-primary badge-pill" th:text="${board.readcnt}"></span>
 		  </li>
 		  

@@ -9,6 +9,7 @@ public class Board {
 	private String moneybook_date;
 	private int readcnt;
 	private int recommend;
+	private int reply;
 	
 	//board_status
 	private int bsno;
@@ -16,6 +17,7 @@ public class Board {
 	private int  price;
 	private String cartegory;
 	private String board_date;
+	
 	public int getBno() {
 		return bno;
 	}
@@ -63,6 +65,12 @@ public class Board {
 	}
 	public void setRecommend(int recommend) {
 		this.recommend = recommend;
+	}
+	public int getReply() {
+		return reply;
+	}
+	public void setReply(int reply) {
+		this.reply = reply;
 	}
 	
 	//board_status

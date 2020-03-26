@@ -23,7 +23,12 @@
 		 	<p th:text="${board.content}"></p>
 		</div>
 		
-
+		<div id="getRecommend" style="text-align:center">
+			<span>
+				<a href="#"><i class="ri-thumb-up-line ri-xl" id="recommend_up" value="up"></i></a>&emsp;&emsp;&emsp;&emsp;
+				<a href="#"><i class="ri-thumb-down-line ri-xl" id="recommend_down" value="down"></i></a>
+			</span>
+		</div>
 		<th:block th:if="${board.moneybook_name == #authentication.principal.username}">
 		<button type="button" id="board_delete" class="btn btn-outline-danger" >삭제</button>
 											
@@ -180,7 +185,8 @@ $(document).on("click","button[name=reply_delete]",function(){
 		var rno = $("#"+$delete).attr("value");
 		$.ajax({
 			url : "reply/delete",
-			data : {"rno" : rno},
+			data : {"rno" : rno,
+					   "bno" : bno},
 			success : function(){
 				replySelect();
 			}
@@ -224,6 +230,21 @@ $(document).on("click", "#reply_update", function(){
 	}
 })
 
-</script>
+$(document).on("click","button[name=reply_update_modal]",function(){
+//추천 up
+$("#recommend_up").click(function(){
+	var status = $("#recommend_up").val();
+	$.ajax({
+		url : "recommend/insert",
+		data : {"bno" : bno,
+				   "status" : status,
+				   "moneybook_name" : moneybook_name},
+		dataType : "json",
+		success : function(){
+			
+		}
+	})
+})
+<script>
 </th:block>
 </html> 

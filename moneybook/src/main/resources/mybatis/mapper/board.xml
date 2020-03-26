@@ -40,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- 가계부이야기 목록 -->
 <select id="board_selete" resultType="Board" parameterType="Criteria">
-	select bno, title, insert_date, readcnt, recommend
+	select bno, title, insert_date, readcnt, recommend, reply
 	from board
 		<include refid="search"></include>
 	limit #{pageStart}, #{perPageNum}
@@ -75,6 +75,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where bno = #{bno}
 </update>
 
+<!-- 가계부 이야기 댓글 -->
+<update id="board_reply" parameterType="java.lang.Integer">
+	update board
+	set reply = reply + 1
+	where bno = #{bno}
+</update>
+
+<!-- 가계부 이야기 댓글 삭제-->
+<update id="board_reply_delete" parameterType="java.lang.Integer">
+	update board
+	set reply = reply - 1
+	where bno = #{bno}
+</update>
+
 <!-- 가계부 이야기 삭제 -->
 <delete id="board_delete" parameterType="java.lang.Integer">
 	delete 
@@ -95,5 +109,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	set title = #{title}, content = #{content}, insert_date = #{insert_date}
 	where bno = #{bno}
 </update>
+
+
 
 </mapper>

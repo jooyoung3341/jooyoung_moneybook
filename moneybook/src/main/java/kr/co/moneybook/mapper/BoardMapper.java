@@ -33,10 +33,14 @@ public interface BoardMapper {
 	//가계부이야기 조회수
 	public void board_readcnt(int bno);
 	
+	//가계부이야기 댓글 
+	public void board_reply(int bno);
+	
+	//가계부이야기 댓글 삭제
+	public void board_reply_delete(int bno);
+	
 	//가계부이야기 status 가져오기
 	public List<Board> board_status_select(int bno);
-	
-	public Board board_test();
 	
 	//가계부이야기 삭제
 	public void board_delete(int bno);
