@@ -27,8 +27,8 @@ public interface BoardMapper {
 	//가계부이야기 전체 가져오기
 	public int board_totalcount(SearchCriteria criteria);
 	
-	//가계부이야기 폼 가져오기
-	public Board board_detail(int bno);
+	//가계부이야기 상세보기
+	public Board board_detail(Map<String, Object> hashBoard);
 	
 	//가계부이야기 조회수
 	public void board_readcnt(int bno);
@@ -50,4 +50,7 @@ public interface BoardMapper {
 	
 	//가계부이야기 수정
 	public void board_update(Board board);
+	
+	//가계부이야기 추천
+	public void board_recommend(Map<String, Object> hashRecommend);
 }

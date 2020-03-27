@@ -55,10 +55,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 </select>
 
 <!-- 가계부이야기 상세보기 -->
-<select id="board_detail" parameterType="java.lang.Integer" resultType="Board">
-	select moneybook_name, title, content, insert_date, readcnt, recommend, bno
-	from board
-	where bno = #{bno}
+<select id="board_detail" parameterType="hashMap" resultType="Board">
+	select b.moneybook_name, b.title, b.content, b.insert_date, b.readcnt, b.recommend, b.bno,
+		<!-- 추천 타입찾기 -->
+		(select r.status
+	 	from recommend r
+	 	where r.bno = #{bno} and r.moneybook_name = #{moneybook_name})as recommend_status,
+	  		<!-- 추천 기본키 값 찾기 -->
+	  		(select r.reno
+             from recommend r
+             where r.bno = #{bno} and r.moneybook_name = #{moneybook_name})as reno
+	from board b
+	where b.bno = #{bno}
 </select>
 
 <!-- 가계부이야기 상세보기_status -->
@@ -110,6 +118,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where bno = #{bno}
 </update>
 
-
+<!-- 가계부이야기 추천  -->
+<update id="board_recommend" parameterType="hashMap">
+	update board
+	<if test="status == 'up'">
+		set recommend = recommend + 1
+	</if>
+	<if test="status == 'down'">
+		set recommend = recommend - 1
+	</if>
+	where bno = #{bno}
+</update>
 
 </mapper>

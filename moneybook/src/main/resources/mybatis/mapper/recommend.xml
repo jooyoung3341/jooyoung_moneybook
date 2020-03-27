@@ -5,34 +5,25 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="kr.co.moneybook.mapper.RecommendMapper">
 
 <!-- 추천 등록 -->
-<insert id="recommend_insert" parameterType="Recommend">
+<insert id="recommend" parameterType="Recommend">
+	<!-- insert 후 auto_increment 된 값 가져오기 -->
+	<selectKey resultType="java.lang.Integer" keyProperty="reno" order="AFTER">
+		select LAST_INSERT_ID()
+	</selectKey>
 	insert into recommend(moneybook_name, status, bno)
 						 value(#{moneybook_name}, #{status}, #{bno})
 </insert>
 
-<!-- 방명록 목록 -->
-<select id="guestbook_select" parameterType="Guestbook" resultType="Guestbook">
-	select *
-	from guestbook
-</select>
-
-<!-- 방명록 삭제 -->
-<delete id="guestbook_delete" parameterType="java.lang.Integer">
-	delete from guestbook
-	where gno = #{gno}
+<!-- 추천 삭제 -->
+<delete id="recommend_cancel" parameterType="java.lang.Integer">
+	delete from recommend
+	where reno = #{reno}
 </delete>
 
-<!-- 방명록 수정 폼 -->
-<select id="guestbook_update_form" parameterType="java.lang.Integer" resultType="Guestbook">
-	select *
-	from guestbook
-	where gno = #{gno}
+<!-- 게시글에 해당하는 추천이 있는지 조회 확인 -->
+<select id="recommend_select" parameterType="hashMap" resultType="Recommend">
+	select reno
+	from recommend
+	where bno = #{bno} and moneybook_name = #{moneybook_name}
 </select>
-
-<!-- 방명록 수정 -->
-<update id="guestbook_update" parameterType="Guestbook">
-	update guestbook
-	set content = #{content}
-	where gno = #{gno}
-</update>
 </mapper>

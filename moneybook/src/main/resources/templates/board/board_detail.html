@@ -23,12 +23,37 @@
 		 	<p th:text="${board.content}"></p>
 		</div>
 		
+		<!-- 추천을 안 누른 게시물일 경우에만 보임 -->
+		<th:block th:if="${board.recommend_status == null}">
 		<div id="getRecommend" style="text-align:center">
 			<span>
-				<a href="#"><i class="ri-thumb-up-line ri-xl" id="recommend_up" value="up"></i></a>&emsp;&emsp;&emsp;&emsp;
-				<a href="#"><i class="ri-thumb-down-line ri-xl" id="recommend_down" value="down"></i></a>
+				<a href="#"><i class="ri-thumb-up-line ri-xl" id="up" name="recommend"></i></a>&emsp;&emsp;&emsp;&emsp;
+				<a href="#"><i class="ri-thumb-down-line ri-xl" id="down" name="recommend"></i></a>
 			</span>
 		</div>
+		</th:block>
+		
+		<!-- 추천 up한 게시물일 떄 보임 -->
+		<th:block th:if="${board.recommend_status == 'up'}">
+		<div id="getRecommendUp" style="text-align:center">
+			<span>
+				<a href='#'><i class="ri-thumb-up-fill ri-xl" name="recommend_cancel" id="up"></i></a>
+			</span>
+		</div>
+		</th:block>
+		
+
+		<input type="hidden" name="reno" th:value="${board.reno}">
+
+		<!-- 추천 down한 게시물일 떄 보임 -->
+		<th:block th:if="${board.recommend_status == 'down'}">
+		<div id="getRecommendDown" style="text-align:center">
+			<span>
+				<a href='#'><i class="ri-thumb-down-fill ri-xl" name="recommend_cancel" id="down"></i></a>
+			</span>
+		</div>
+		</th:block>
+		
 		<th:block th:if="${board.moneybook_name == #authentication.principal.username}">
 		<button type="button" id="board_delete" class="btn btn-outline-danger" >삭제</button>
 											
@@ -114,6 +139,7 @@ window.onload = function(){
 }
 var bno = $("#bno").val();
 var moneybook_name = $("#moneybook_name").val();
+var recommend_status = null;
 
 //가계부이야기 삭제
 $("#board_delete").click(function(){
@@ -173,7 +199,7 @@ function getReply(data){
 		}
 		disp += "</div>"; 
 	});
-	$("#getReply").html(disp);
+	$("#getReply").html(disp); 
 }
 
 
@@ -230,21 +256,74 @@ $(document).on("click", "#reply_update", function(){
 	}
 })
 
-$(document).on("click","button[name=reply_update_modal]",function(){
-//추천 up
-$("#recommend_up").click(function(){
-	var status = $("#recommend_up").val();
+//추천
+$("i[name=recommend]").click(function(){
+	recommend_status = $(this).attr("id");
 	$.ajax({
-		url : "recommend/insert",
+		url : "recommend",
 		data : {"bno" : bno,
-				   "status" : status,
-				   "moneybook_name" : moneybook_name},
+				   "status" : recommend_status,
+				   "moneybook_name" : moneybook_name
+				},
 		dataType : "json",
-		success : function(){
-			
+		success : function(reno){																												
+			var disp = "";
+			disp += "<a href='#'><i class='ri-thumb-"+recommend_status+"-fill ri-xl' id='"+recommend_status+"' name='recommend_cancel'></i></a>";
+			disp += "<input type='hidden' name='reno' value='"+reno+"'>";
+			$("#getRecommend").html(disp);
 		}
 	})
 })
-<script>
+
+
+function getRecommend(){
+	$.ajax({
+		url : "recommend/select",
+		data : {"bno" : bno,
+				   "moneybok_name" : moneybook_name},
+		dataType : "json",
+		success : function(data){
+			var disp = "";
+			
+
+		}
+	})
+}
+
+
+ 
+//추천 취소
+$(document).on("click","i[name=recommend_cancel]",function(){
+	recommend_status = $(this).attr("id");
+	var reno = $("input[name=reno]").val();
+	
+	var status_type = "";
+	if(recommend_status == "up"){
+		status_type = "getRecommendUp";
+	}else if(recommend_status == "down"){
+		status_type = "getRecommendDown";
+	}
+
+	$.ajax({
+		url : "recommend/cancel",
+		data : {"bno" : bno,
+				   "status" : recommend_status,
+				   "reno" : reno},
+		success : function(){
+			var disp = "";
+			disp += "<span>";
+			disp += "<a href='#'><i class='ri-thumb-up-line ri-xl' id='up' name='recommend'></i></a>&emsp;&emsp;&emsp;&emsp;";
+			disp += "<a href='#'><i class='ri-thumb-down-line ri-xl' id='down' name='recommend'></i></a>";
+			disp += "</span>"
+			$("#"+status_type).html(disp);
+		}
+	})
+})
+
+	
+
+
+
+</script>
 </th:block>
 </html> 

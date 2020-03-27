@@ -18,6 +18,10 @@ public class Board {
 	private String cartegory;
 	private String board_date;
 	
+	//recommend
+	private String recommend_status;
+	private String reno;
+	
 	public int getBno() {
 		return bno;
 	}
@@ -104,7 +108,20 @@ public class Board {
 	public void setBoard_date(String board_date) {
 		this.board_date = board_date;
 	}
-	
+
+	//recommend
+	public String getRecommend_status() {
+		return recommend_status;
+	}
+	public void setRecommend_status(String recommend_status) {
+		this.recommend_status = recommend_status;
+	}
+	public String getReno() {
+		return reno;
+	}
+	public void setReno(String reno) {
+		this.reno = reno;
+	}
 	
 	
 

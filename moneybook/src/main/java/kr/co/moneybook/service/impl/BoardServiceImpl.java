@@ -118,9 +118,14 @@ public class BoardServiceImpl implements BoardService {
 	//가계부이야기 상세보기
 	@Override
 	public Board board_detail(HttpServletRequest request) {
+		User user =  (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String moneybook_name = user.getUsername();
 		String bno = request.getParameter("bno");
-		boardMapper.board_readcnt(Integer.parseInt(bno));
-		return boardMapper.board_detail(Integer.parseInt(bno));
+		
+		Map<String, Object> hashBoard = new HashMap<String, Object>();
+		hashBoard.put("bno", Integer.parseInt(bno));
+		hashBoard.put("moneybook_name", moneybook_name);
+		return boardMapper.board_detail(hashBoard);
 	}
 	
 	//가계부이야기 status 가져오기
