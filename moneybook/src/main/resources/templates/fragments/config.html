@@ -29,10 +29,13 @@
 <script>
 //3자리숫자마다 콤마넣어주는 정규식
 function AddComma(num)	{
-	var regexp = /\B(?=(\d{3})+(?!\d))/g;
-	return num.toString().replace(regexp, ',');
+		var regexp = /\B(?=(\d{3})+(?!\d))/g;
+		return num.toString().replace(regexp, ',');
 }
+ 
 
+/* 
+ */
 	/* 
 	.attr() : element가 가지는 속성값이나 정보를 조회하거나 세팅하는 형식의 업무
 	.prop() : element가 가지는 실제적인 상태(활성화, 체크, 선택여부 등)를 제어하는 업무

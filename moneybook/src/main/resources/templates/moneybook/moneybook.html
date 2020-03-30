@@ -20,7 +20,7 @@
 	
 	<div class="col-md-3">
 	<div class="alert alert-dismissible alert-light">
-	<form method="post" id="expense_form">
+	<form method="post" id="expense_form"  name="form">
 		<input type="hidden" id="moneybook_type" value="expense">
 		<div class="form-group">
 			<label class="col-form-label" for="inputDefault">날짜</label>
@@ -36,7 +36,7 @@
  		
  		<div class="form-group">
 			<label class="col-form-label" for="inputDefault">금액</label>
-  			<input type="number" min="0" class="form-control"  id="price" name="price" required="required">
+  			<input type="text" class="form-control"  id="price" name="price" required="required">
 		</div>
 
 		<div class="form-group">
@@ -60,7 +60,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form method="post">
+				<form method="post" name="modal_form">
 					<div id="modal_eno"></div>
 					<div class="form-group" id="modal_insert_date"></div>
 					<div class="form-group" id="modal_type"></div>
@@ -220,9 +220,12 @@
  						$("#modal_type").html("<select class='custom-select' id='update_type'><option value='cash' selected=''>현금</option><option value='card'>카드</option></select>");
  					
  					$("#modal_eno").html("<input type='hidden' value='"+data.eno+"'>");			
- 					$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label><br/><input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'>");
- 					$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label><br/> <input type='number' min='0' class='form-control' id='update_price' value='"+AddComma(Math.floor(data.price))+"' >");
- 					$("#modal_cartegory").html("<label class='col-form-label' for='inputDefault'>사용내역</label><br/> <input tpye='text' class='form-control' id='update_cartegory' value='"+data.cartegory+"'>");
+ 					$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label><br/>"
+ 															+"<input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'>");
+ 					$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label><br/> "
+ 													+"<input type='text' class='form-control' id='update_price' name='modal_price' value='"+AddComma(Math.floor(data.price))+"' >");
+ 					$("#modal_cartegory").html("<label class='col-form-label' for='inputDefault'>사용내역</label><br/>"
+ 															+"<input tpye='text' class='form-control' id='update_cartegory' value='"+data.cartegory+"'>");
  					$("#expense_modal").modal();
  				}
  		})

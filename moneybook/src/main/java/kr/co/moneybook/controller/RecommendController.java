@@ -24,12 +24,9 @@ public class RecommendController {
 	@RequestMapping(value="moneybook/recommend", method=RequestMethod.GET)
 	@ResponseBody
 	public String recommend_up(HttpServletRequest request) {
+		//추천을 바로 취소 할 수 있게 추천 기본키값을 service에서 받아 리턴
 		String reno= recommendService.recommend(request);
-		
-
-		return reno;
-		
-		
+		return reno;	
 	}
 
 	//추천 취소
@@ -39,10 +36,4 @@ public class RecommendController {
 		recommendService.recommend_cancel(request);
 	}
 	
-	//게시글에 해당하는 추천이 있는지 조회 확인 
-	@RequestMapping(value="moneybook/recommend/select", method=RequestMethod.GET)
-	@ResponseBody
-	public Recommend recommend_select(HttpServletRequest request) {
-		return recommendService.recommend_select(request);
-	}
 }

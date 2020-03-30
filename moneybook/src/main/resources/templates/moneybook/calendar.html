@@ -112,9 +112,11 @@ function initDate(){
 
 //calendar 날짜표시
 function drawDays(calendarList){
+	//달력 상단에 년과 월 지정
     $("#cal_top_year").text(year);
     $("#cal_top_month").text(month);
-
+    
+	//일자 표시
     for(var i = firstDay.getDay(); i < firstDay.getDay() + lastDay.getDate(); i++){
     	var schedule = ""
         tdDay.eq(i).text(++dayCount);     
@@ -122,9 +124,13 @@ function drawDays(calendarList){
 
     //달력에 지출, 수입내역 작성
 	$(calendarList).each(function (idx, item){
+		//0
 		var num = firstDay.getDay()
-		var calnum = Number(item.day) + Number(num);
-
+		//1일부터 시작 할 위치 지정
+		// 달력 일 칸 마다 id값이 일자와 동일하게 되 있으므로 시작할 아이디 일자를 정함
+		var calnum = parseInt(item.day) + parseInt(num-1);
+		
+		//수입과 지출 색을 다르게 지정
  		if(item.moneybook_type == "earnings"){
  			$("#cal_moneybook"+calnum).append("<p class='text-info' style='line-height: 10px;'>"+item.cartegory+"</p>"); 
  		}else if(item.moneybook_type == "expense"){
@@ -132,6 +138,7 @@ function drawDays(calendarList){
  		}
 		
 	});
+    //토요일, 일요일 색 지정
     for(var i=0; i<42; i+=7){
         tdDay.eq(i).css("color","red");
     }

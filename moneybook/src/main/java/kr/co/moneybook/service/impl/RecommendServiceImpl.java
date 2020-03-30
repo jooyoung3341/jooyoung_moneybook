@@ -28,19 +28,19 @@ public class RecommendServiceImpl implements RecommendService {
 		String bno = request.getParameter("bno");
 		String status = request.getParameter("status");
 		String moneybook_name = request.getParameter("moneybook_name");
-		
 
 		Recommend recommend = new Recommend();
 		recommend.setBno(Integer.parseInt(bno));
 		recommend.setStatus(status);
 		recommend.setMoneybook_name(moneybook_name);
 		
-		
 		Map<String, Object> hashRecommend = new HashMap<>();
 		hashRecommend.put("bno", Integer.parseInt(bno));
 		hashRecommend .put("status", status);
 		boardMapper.board_recommend(hashRecommend);
 		recommendMapper.recommend(recommend);
+		
+		//추천을 하고 바로 취소를 할 수 있게 추천기본키 값을 controller에 보냄
 		String reno = Integer.toString(recommend.getReno());
 		return reno;
 
@@ -51,30 +51,20 @@ public class RecommendServiceImpl implements RecommendService {
 	public void recommend_cancel(HttpServletRequest request) {
 		String reno = request.getParameter("reno");
 		String status = request.getParameter("status");
-		if(status == "up") {
+		String bno = request.getParameter("bno");
+		
+		//추천 up되있는 추천을 취소하면 -1, down되있는 추천을 취소하면 +1
+		if(status.equals("up")){
 			status = "down";
-		}else if(status == "down") {
+		}else if(status.equals("down")) {
 			status = "up";
 		}
-		
 		Map<String, Object> hashRecommend = new HashMap<>();
 		hashRecommend.put("status", status);
-		hashRecommend.put("reno", Integer.parseInt(reno));
+		hashRecommend.put("bno", Integer.parseInt(bno));
+		//추천을 취소 시 게시글 추천 수 변경
 		boardMapper.board_recommend(hashRecommend);
 		recommendMapper.recommend_cancel(Integer.parseInt(reno));
-		
-	}
-
-	//게시글에 해당하는 추천이 있는지 조회 확인 
-	@Override
-	public Recommend recommend_select(HttpServletRequest request) {
-		String bno = request.getParameter("bno");
-		String moneybook_name = request.getParameter("moneybook_name");
-		
-		Map<String, Object> hashRecommend = new HashMap<>();
-		hashRecommend.put("bno", Integer.parseInt(bno));
-		hashRecommend.put("moneybook_name", moneybook_name);
-		return recommendMapper.recommend_select(hashRecommend);
 		
 	}
 

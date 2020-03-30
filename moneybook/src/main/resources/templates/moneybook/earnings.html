@@ -18,7 +18,7 @@
 	
 	<div class="col-md-3">
 	<div class="alert alert-dismissible alert-light">
-		<form method="post" id="earnings_form">
+		<form method="post" id="earnings_form" name="form">
 			<input type="hidden" id="moneybook_type" value="earnings">
 			<div class="form-group">
 				<label class="col-form-label" for="inputDefault">날짜</label>
@@ -26,7 +26,7 @@
 			</div>
 			<div class="form-group">
 				<label class="col-form-label" for="inputDefault">금액</label>
-				<input type="number" class="form-control" min="0" id="price" name="price">
+				<input type="text" class="form-control" id="price" name="price">
 			</div>
 			<div class="form-group">
 				<label class="col-form-label" for="inputDefault">수입처</label>
@@ -50,7 +50,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form method="post">
+				<form method="post" name="form">
 					<div id="modal_ino"></div>
 					<div class="form-group" id="modal_insert_date"></div>
 					<div class="form-group" id="modal_price"></div>
@@ -76,6 +76,9 @@ window.onload = function(){
 document.getElementById("insert_date").valueAsDate = new Date();
 document.getElementById("indate").valueAsDate = new Date()
 
+
+
+
 	//수입내역 등록
 	$("#earnings_insert").click(function(){
 		var insert_date = $("#insert_date").val();
@@ -98,6 +101,7 @@ document.getElementById("indate").valueAsDate = new Date()
 				dateType : "json",
 				success : function(){
 					earningsSelect();
+					//등록 한 후 등록 폼 리셋
 					$("#earnings_form")[0].reset();
 					document.getElementById("insert_date").valueAsDate = new Date();
 				}
@@ -186,13 +190,16 @@ document.getElementById("indate").valueAsDate = new Date()
 				success : function(data){
 					$("#modal_ino").html("<input type='hidden' id='update_ino' value='"+data.ino+"'>");
 					$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label><input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'/>");
-					$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label> <input type='number' min='0' class='form-control' id='update_price' value='"+AddComma(Math.floor(data.price))+"' />")
+					$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label> <input type='text' class='form-control' id='update_price' nane='price' value='"+AddComma(Math.floor(data.price))+"' />")
 					$("#modal_cartegory").html("<label class='col-form-label' for='inputDefault'>사용내역</label> <input tpye='text' class='form-control' id='update_cartegory' value='"+data.cartegory+"'/>");
 					$("#earnings_modal").modal();
 				}
 		 })
 	 });
-	 
+ 	
+
+
+
 	 //수입내역 수정
 	$(document).on("click", "#update_earnings", function(){
 		var confirm_val = confirm("수정 하시겠습니까?");

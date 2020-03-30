@@ -46,3 +46,35 @@
 		location.reload();
 	}
 	
+	
+	 var price_comma = $("form[name='form']").find("input[name='price']");
+	 price_comma.on("keyup", function(event){
+	 	    // 입력 된 값을 price_comma에 넣어준다
+	         var $this = $( this );
+	         var price_comma= $this.val();
+	         //특수문자, 공백 등 제거하는 정규식
+	         var price_comma = price_comma.replace(/[\D\s\._\-]+/g, "");
+	         //text를 정수로 변환한다. parseInt함수를 사용하여 Number 타입으로 변환
+	         price_comma = price_comma ? parseInt( price_comma, 10 ) : 0;
+	         // 1,000 단위별로 comma를 추가하기 위해 toLocaleString 함수 적용
+	         //
+	         $this.val( function() {
+	             return ( price_comma == 0 ) ? "" : price_comma.toLocaleString( "en-US" );
+	         });
+	 })
+	 
+	  var modal_comma = $("form[name='modal_form']").find("input[name='modal_price']");
+	 modal_comma.on("keyup", function(event){
+	 	    // 입력 된 값을 price_comma에 넣어준다
+	         var $this = $( this );
+	         var modal_comma= $this.val();
+	         //특수문자, 공백 등 제거하는 정규식
+	         var modal_comma = modal_comma.replace(/[\D\s\._\-]+/g, "");
+	         //text를 정수로 변환한다. parseInt함수를 사용하여 Number 타입으로 변환
+	         modal_comma = modal_comma ? parseInt( modal_comma, 10 ) : 0;
+	         // 1,000 단위별로 comma를 추가하기 위해 toLocaleString 함수 적용
+	         //
+	         $this.val( function() {
+	             return ( modal_comma == 0 ) ? "" : modal_comma.toLocaleString( "en-US" );
+	         });
+	 })

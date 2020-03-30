@@ -23,6 +23,7 @@
 		 	<p th:text="${board.content}"></p>
 		</div>
 		
+		<input type="hidden" id="recommend_flag" th:value="${board.recommend_status}">
 		<!-- 추천을 안 누른 게시물일 경우에만 보임 -->
 		<th:block th:if="${board.recommend_status == null}">
 		<div id="getRecommend" style="text-align:center">
@@ -42,7 +43,6 @@
 		</div>
 		</th:block>
 		
-
 		<input type="hidden" name="reno" th:value="${board.reno}">
 
 		<!-- 추천 down한 게시물일 떄 보임 -->
@@ -257,8 +257,12 @@ $(document).on("click", "#reply_update", function(){
 })
 
 //추천
-$("i[name=recommend]").click(function(){
+$(document).on("click","i[name=recommend]",function(){
 	recommend_status = $(this).attr("id");
+	var recommend_flag = $("#recommend_flag").val();
+	if(recommend_flag == recommend_status){
+		alert("이미 추천 하셨습니다.")
+	}else
 	$.ajax({
 		url : "recommend",
 		data : {"bno" : bno,
@@ -268,29 +272,12 @@ $("i[name=recommend]").click(function(){
 		dataType : "json",
 		success : function(reno){																												
 			var disp = "";
-			disp += "<a href='#'><i class='ri-thumb-"+recommend_status+"-fill ri-xl' id='"+recommend_status+"' name='recommend_cancel'></i></a>";
-			disp += "<input type='hidden' name='reno' value='"+reno+"'>";
+			disp += "<span><a href='#'><i class='ri-thumb-"+recommend_status+"-fill ri-xl' id='"+recommend_status+"' name='recommend_cancel'></i></a>";
+			disp += "<input type='hidden' name='reno' value='"+reno+"'></span>";
 			$("#getRecommend").html(disp);
 		}
 	})
 })
-
-
-function getRecommend(){
-	$.ajax({
-		url : "recommend/select",
-		data : {"bno" : bno,
-				   "moneybok_name" : moneybook_name},
-		dataType : "json",
-		success : function(data){
-			var disp = "";
-			
-
-		}
-	})
-}
-
-
  
 //추천 취소
 $(document).on("click","i[name=recommend_cancel]",function(){
@@ -303,7 +290,6 @@ $(document).on("click","i[name=recommend_cancel]",function(){
 	}else if(recommend_status == "down"){
 		status_type = "getRecommendDown";
 	}
-
 	$.ajax({
 		url : "recommend/cancel",
 		data : {"bno" : bno,
@@ -316,6 +302,7 @@ $(document).on("click","i[name=recommend_cancel]",function(){
 			disp += "<a href='#'><i class='ri-thumb-down-line ri-xl' id='down' name='recommend'></i></a>";
 			disp += "</span>"
 			$("#"+status_type).html(disp);
+			$("#getRecommend").html(disp);
 		}
 	})
 })
