@@ -122,6 +122,7 @@ public class BoardServiceImpl implements BoardService {
 		String moneybook_name = user.getUsername();
 		String bno = request.getParameter("bno");
 		
+		boardMapper.board_readcnt(Integer.parseInt(bno));
 		Map<String, Object> hashBoard = new HashMap<String, Object>();
 		hashBoard.put("bno", Integer.parseInt(bno));
 		hashBoard.put("moneybook_name", moneybook_name);

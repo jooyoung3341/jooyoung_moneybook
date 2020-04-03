@@ -17,13 +17,16 @@
 		padding: 4px; 
 		border-bottom: 1px solid #DDD;
 	}
+	p{
+	width:350px;
+	}
 </style>
 </th:block>
 <title>방명록</title>
 </head>
 <div layout:fragment="content">
 <input type="hidden" id="name" th:value="${moneybook_name}">
-<button type="button" class="btn btn-primary" id="guestbook_modal_btn">Primary</button>
+<button type="button" class="btn btn-primary" id="guestbook_modal_btn">방명록 쓰기</button>
 <div id="getGuestbook"></div>
 <!-- Modal -->
 <div class="modal" id="guestbook_modal">
@@ -144,13 +147,13 @@ function getGuestbook(data){
 		disp += "</strong><br/></br>";
 		if(moneybook_name == item.moneybook_name){
 			disp += "<button type='button' class='btn btn-outline-primary' id='"+idx+"' name='guestbook_update' value='"+item.gno+"'>수정</button>";
-			disp += "<button type='button' class='btn btn-outline-primary' id='"+idx+item.gno+"' name='guestbook_delete' value='"+item.gno+"'>삭제</button>";
+			disp += "<button type='button' class='btn btn-outline-danger' id='"+idx+item.gno+"' name='guestbook_delete' value='"+item.gno+"'>삭제</button>";
 		} 
-		disp += "</p>";
+		disp += "</p>&nbsp;&nbsp;&nbsp;";
 		
 		i += 1;
 		if(i%j == 0){
-			disp += "</span>";
+			disp += "</span><br/>";
 		}
 	})
 	disp += "</div>";

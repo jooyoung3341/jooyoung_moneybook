@@ -60,10 +60,13 @@ public class BoardController {
 	
 	//가계부이야기 상세보기
 	@RequestMapping(value="moneybook/board_detail", method= RequestMethod.GET)
-	public String board_detail(HttpServletRequest request, Model model) {
+	public String board_detail(SearchCriteria criteria, HttpServletRequest request, Model model) {
 		Board board = boardService.board_detail(request);
 		List<Board> board_status = boardService.board_status_select(request);
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		model.addAttribute("keyword", criteria.getKeyword());
+		model.addAttribute("page", criteria.getPage());		
+		model.addAttribute("perPageNum",criteria.getPerPageNum());
 		model.addAttribute("moneybook_name", user.getUsername());
 		model.addAttribute("board", board);
 		model.addAttribute("board_status", board_status);
@@ -80,8 +83,10 @@ public class BoardController {
 	
 	//가계부이야기 수정 폼
 	@RequestMapping(value="moneybook/board_update", method=RequestMethod.GET)
-	public String board_update(HttpServletRequest request, Model model) {
+	public String board_update(HttpServletRequest request, Model model, SearchCriteria criteria) {
 		Board board = boardService.board_updateform(request);
+		model.addAttribute("page", criteria.getPage());
+		model.addAttribute("keyword", criteria.getKeyword());
 		model.addAttribute("board", board);
 		return "board/board_update";
 	}

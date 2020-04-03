@@ -26,7 +26,7 @@
 			</div>
 			<div class="form-group">
 				<label class="col-form-label" for="inputDefault">금액</label>
-				<input type="text" class="form-control" id="price" name="price">
+				<input type="text" class="form-control" id="price" name="price" maxlength="12">
 			</div>
 			<div class="form-group">
 				<label class="col-form-label" for="inputDefault">수입처</label>
@@ -76,14 +76,13 @@ window.onload = function(){
 document.getElementById("insert_date").valueAsDate = new Date();
 document.getElementById("indate").valueAsDate = new Date()
 
-
-
+comma();
 
 	//수입내역 등록
 	$("#earnings_insert").click(function(){
+		var price = $("#price").val();		
 		var insert_date = $("#insert_date").val();
 		var cartegory = $("#cartegory").val();
-		var price = $("#price").val();
 		var moneybook_type = $("#moneybook_type").val();
 		if(price == ""){
 			alert("금액을 입력하셔야 합니다.");
@@ -95,7 +94,7 @@ document.getElementById("indate").valueAsDate = new Date()
 				type : "post",
 				data : {
 						   "insert_date" : insert_date,
-						   "price" : price,
+						   "price" : uncomma(price),
 						   "cartegory" : cartegory,
 						   "moneybook_type" : moneybook_type},
 				dateType : "json",
@@ -138,7 +137,7 @@ document.getElementById("indate").valueAsDate = new Date()
 			disp += "<tr>";
 			disp += "<td><button type='button' class='btn btn-outline-primary' id='"+idx+item.ino+"' name='earnings_update_modal' value='"+item.ino+"'>수정</button>";
 			disp += "<td>"+item.insert_date+"</td>";
-			disp += "<td>"+AddComma(Math.floor(item.price))+"</td>";
+			disp += "<td>"+Number(item.price).toLocaleString('en')+"</td>";
 			disp += "<td>"+item.cartegory+"</td>";
 			disp += "<td><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.ino+"'>"
 			disp += "<label class='custom-control-label' for='customCheck"+idx+"'></label></div></td>";
@@ -147,7 +146,7 @@ document.getElementById("indate").valueAsDate = new Date()
 		});
 		disp += "<td></td>";
 		disp += "<td align='right'>합계 :</td>";
-		disp += "<td>"+AddComma(Math.floor(price_sum))+"</td>";
+		disp += "<td>"+Number(price_sum).toLocaleString('en')+"</td>";
 		disp += "<td></td>";
 		disp += "<td></td>"
 		disp += "</table>";
@@ -189,10 +188,14 @@ document.getElementById("indate").valueAsDate = new Date()
 				dataType : "json",
 				success : function(data){
 					$("#modal_ino").html("<input type='hidden' id='update_ino' value='"+data.ino+"'>");
-					$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label><input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'/>");
-					$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label> <input type='text' class='form-control' id='update_price' nane='price' value='"+AddComma(Math.floor(data.price))+"' />")
-					$("#modal_cartegory").html("<label class='col-form-label' for='inputDefault'>사용내역</label> <input tpye='text' class='form-control' id='update_cartegory' value='"+data.cartegory+"'/>");
+					$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label>"
+														  +"<input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'/>");
+					$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label> "
+												  +"<input type='text' class='form-control' id='update_price' name='price' value='"+Number(data.price).toLocaleString('en')+"' maxlength='10'/>")
+					$("#modal_cartegory").html("<label class='col-form-label' for='inputDefault'>사용내역</label>"
+														+"<input tpye='text' class='form-control' id='update_cartegory' value='"+data.cartegory+"'/>");
 					$("#earnings_modal").modal();
+					comma();
 				}
 		 })
 	 });
@@ -211,7 +214,7 @@ document.getElementById("indate").valueAsDate = new Date()
 			$.ajax({
 				url : "earnings/update",
 				type : "post",
-				data : {"price" : update_price,
+				data : {"price" : uncomma(update_price),
 						   "cartegory" : update_cartegory,
 						   "insert_date" : update_insert_date,
 						   "ino" : update_ino},

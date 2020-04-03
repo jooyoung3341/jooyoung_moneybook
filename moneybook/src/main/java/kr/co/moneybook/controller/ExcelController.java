@@ -42,17 +42,28 @@ public class ExcelController {
 		List<Asset> asset_list = excelService.asset_excel(request);
 		List<Expense> expense_list = excelService.expense_excel(request);
 		List<Earnings> earnings_list = excelService.earnings_excel(request);
-		
+		//row create 하기 위해 리스트 중 가장 긴 리스트를 찾아서 생성
+		int listMax;
+		if(asset_list.size() >= earnings_list.size() && asset_list.size() >= expense_list.size()) {
+			listMax = asset_list.size();
+		}else if(earnings_list.size() > expense_list.size() && earnings_list.size() >= asset_list.size()) {
+			listMax = earnings_list.size();
+		}else {
+			listMax = expense_list.size();
+		}
 		//워크북 생성
 		Workbook workbook = new HSSFWorkbook();
 		Sheet sheet = workbook.createSheet("가계부");
+		//열
 		Row row = null;
-		Row arow = null;
-		
+
 		Cell cell = null;
-		Cell acell = null;
+
 		int rowNo = 0;
-		int arowNo = 1;
+
+		for (int i = 0; i < listMax + 2; i++) {
+			row = sheet.createRow(i);
+		}
 		
 		//각 합계를 저장할 변수 
 		int expense_max = 0;
@@ -66,8 +77,8 @@ public class ExcelController {
 		headStyle.setBorderBottom(BorderStyle.THIN);
 		headStyle.setBorderLeft(BorderStyle.THIN);
 		headStyle.setBorderRight(BorderStyle.THIN);
-		// 배경은 노란색
-		headStyle.setFillForegroundColor(HSSFColorPredefined.YELLOW.getIndex());
+		// 배경색 지정
+		headStyle.setFillForegroundColor(HSSFColorPredefined.PALE_BLUE.getIndex());
 		headStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 		// 데이터는 가운데 정렬
 		headStyle.setAlignment(HorizontalAlignment.CENTER);
@@ -80,7 +91,7 @@ public class ExcelController {
 		bodyStyle.setBorderRight(BorderStyle.THIN);
 		
 		//헤더 생성
-		row = sheet.createRow(rowNo++);
+		row = sheet.getRow(rowNo++);
 		cell = row.createCell(0);
 		cell.setCellStyle(headStyle);
 		cell.setCellValue("날짜");
@@ -101,6 +112,7 @@ public class ExcelController {
 		cell.setCellStyle(headStyle);
 		cell.setCellValue("사용 내역");
 		
+		//셸 병합
 		sheet.addMergedRegion(new CellRangeAddress(0,0,8,9));
 		cell = row.createCell(8);
 		cell.setCellStyle(headStyle);
@@ -109,7 +121,7 @@ public class ExcelController {
 		
 		//지출 데이터 부분 생성
 		for (Expense expense : expense_list) {
-			row = sheet.createRow(rowNo++);
+			row = sheet.getRow(rowNo++);
 			cell = row.createCell(0);
 			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(expense.getInsert_date());
@@ -121,7 +133,7 @@ public class ExcelController {
 			cell.setCellValue(expense.getCartegory());
 			expense_max = expense_max + expense.getPrice();
 		}
-		row = sheet.createRow(rowNo++);
+		row = sheet.getRow(rowNo++);
 		cell = row.createCell(0);
 		cell.setCellValue("합계 : ");
 		cell = row.createCell(1);
@@ -151,8 +163,9 @@ public class ExcelController {
 		rowNo = 1;
 		//자산 데이터 부분 생성
 		for (Asset asset : asset_list) {
-			row = sheet.getRow(rowNo++); 
-			cell = row.createCell(8); cell.setCellStyle(bodyStyle);
+			row = sheet.getRow(rowNo++);
+			cell = row.createCell(8);
+			cell.setCellStyle(bodyStyle);
 			cell.setCellValue(asset.getType()+" : "); cell = row.createCell(9);
 			cell.setCellStyle(bodyStyle); cell.setCellValue(asset.getAsset_price());
 			asset_max = asset_max + asset.getAsset_price(); 

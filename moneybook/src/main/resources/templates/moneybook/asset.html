@@ -57,7 +57,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form method="post">
+				<form method="post" name="form">
 					<div id="modal_ano"></div>
 					<div id="modal_pno"></div>
 					<div class="form-group" id="modal_insert_date"></div>
@@ -77,6 +77,7 @@
 	 window.onload = function(){
 		 statusSelect();
 	} 
+	
 
 	//자산 추가
 	$("#asset_insert").click(function(){
@@ -136,7 +137,7 @@
 			disp += "<a href='#' class='list-group-item list-group-item-action flex-column align-items-start' id='assetprice_span' value='"+item.ano+"'>";
 			disp += "<div class='d-flex w-100 justify-content-between'>";
 			disp += "<small class='text-primary' style='width:49%;'>"+item.type+"</small>";
-			disp += "<span class='badge badge-light' id='asset_price'>"+AddComma(Math.floor(item.asset_price))+"</span>";
+			disp += "<span class='badge badge-light' id='asset_price'>"+Number(item.asset_price).toLocaleString('en')+"</span>";
 			disp += "<button type='button' class='close' data-dismiss='alert' id='asset_delete"+idx+"' name='asset_delete' value='"+item.ano+"'>&times;</button>";
 			disp += "</div></a>";
 			
@@ -159,7 +160,7 @@
 				url : "assetprice/insert",
 				type : "post",
 				data : {"ano" : ano,
-						   "price" : price,
+						   "price" : uncomma(price),
 						   "insert_date" : insert_date},
 				dateType : "json",
 				success : function(){
@@ -177,7 +178,8 @@
 				data : {"ano" : ano},
 				dataType : "json",
 				success : function(data){
-					getAssetprice(data, ano)
+					getAssetprice(data, ano);
+					
 				}
 			});
 		}); 
@@ -188,7 +190,7 @@
 		var form_disp = "";
 		var price_sum = 0;
 		form_disp += "<div class='alert alert-dismissible alert-light'>";
-		form_disp += "<form method='post'>";
+		form_disp += "<form method='post' name='form'>";
 		form_disp += "<input type='hidden' id='hidden_ano' value='"+ano+"'>";
 		form_disp += "<div class='form-group'>";
 		form_disp += "<label class='col-form-label' for='inputDefault'>날짜</label>";
@@ -197,7 +199,7 @@
 		
 		form_disp += "<div class='form-group'>";
 		form_disp += "<label class='col-form-label' for='inputDefault'>금액</label>";
-		form_disp += "<input type='text' class='form-control' name='price' id='price'>";
+		form_disp += "<input type='text' class='form-control' name='price' id='price' maxlength='12'>";
 		form_disp += "</div>";
 		form_disp += "<button type='button' class='btn btn-primary' id='assetprice_insert'>등록</button>";
 		form_disp += "</form>";
@@ -210,31 +212,34 @@
 		disp += "<th scope='row'></th>";
 		disp += "<th scope='row'>날짜</th>";
 		disp += "<th scope='row'>금액</th>";
-		disp += "<th scope='row'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'/>";
+		disp += "<th scope='row'><div class='custom-control custom-checkbox'>"
+		disp += "<input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'/>";
 		disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
 		$(data).each(function(idx, item){
 			disp += "<tr>";																									  
 			disp += "<td><button type='button' class='btn btn-outline-primary' id='"+idx+item.pno+"' name='assetprice_update_modal' value='"+item.pno+"'>수정</button>";
 			disp += "<td>"+item.insert_date+"</td>";
-			disp += "<td>"+AddComma(Math.floor(item.price))+"</td>";
-			disp += "<td><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.pno+"' />"
+			disp += "<td>"+Number(item.price).toLocaleString('en')+"</td>";
+			disp += "<td><div class='custom-control custom-checkbox'>"
+			disp += "<input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.pno+"' />"
 			disp += "<label class='custom-control-label' for='customCheck"+idx+"'></label></div></td>";
 			disp += "</tr>";
 			price_sum += item.price;
 		})
 			disp += "<td></td>";
 			disp += "<td align='right'>합계 :</td>";
-			disp += "<td>"+AddComma(Math.floor(price_sum))+"</td>";
+			disp += "<td>"+Number(price_sum).toLocaleString('en')+"</td>";
 			disp += "<td></td>";
 		$("#getAssetprice").html(disp);
 		$("#getAssetprice_form").html(form_disp);
 		document.getElementById("insert_date").valueAsDate = new Date();
+		 comma();
 	} 
 	
 	//자산내역 수정 모달
 	$(document).on("click","button[name=assetprice_update_modal]",function(){
-		var $update =$(this).attr("id");
-		var pno = $("#"+$update).attr("value");
+		var update =$(this).attr("id");
+		var pno = $("#"+update).attr("value");
 		$.ajax({
 			url : "assetprice/updateform",
 			data : {"pno" : pno},
@@ -242,9 +247,12 @@
 			success : function(data){
 				$("#modal_ano").html("<input type='hidden' id='update_ano' value='"+data.ano+"'>");
 				$("#modal_pno").html("<input type='hidden' id='update_pno' value='"+data.pno+"'>");
-				$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label><input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'>");
-				$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label> <input type='number' min='0' class='form-control' id='update_price' value='"+data.price+"'>")
+				$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label>"
+													  +"<input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'>");
+				$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label>"
+											 +"<input type='text' class='form-control' id='update_price' name='price' value='"+Number(data.price).toLocaleString('en')+"' maxlength='12'>")
 				$("#assetprice_modal").modal();
+				comma();
 			}
 		})
 	});
@@ -309,6 +317,7 @@
 			}
 		})
 	}
+
 
 </script>
 </th:block>

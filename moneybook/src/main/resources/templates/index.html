@@ -28,17 +28,20 @@
 		<div class="col-md-6">
 			<div class="alert alert-dismissible alert-light">
      			<form method="post" th:action="@{/login}">
+     				<div id="getAuto">
      					<div class="form-group">
   							<p class="text-primary">가계부 이름</p>
   							<input type="text" class="form-control" placeholder="Default input" id="moneybook_name" name="moneybook_name"/><br/>
   							<p class="text-primary">패스워드</p>
   							<input type="password" class="form-control" placeholder="Default input" id="moneybook_pw" name="moneybook_pw"/><br/>
-
 						</div>
+					</div>
+						<div id="getError"></div>
 						<button type="submit" class="btn btn-primary">들어가기</button>
-						<button type="button" class="btn btn-primary" id="bookregister">가계부 등록</button>
+						<button type="button" class="btn btn-primary" id="bookregister">가계부 등록</button>&nbsp;&nbsp;&nbsp;
+						<button type="button" class="btn btn-danger" id="autoregister">가계부 자동 생성</button>
 					</form>
-		
+				
 			</div>
 </div>
 <div class="col-md-3"></div>
@@ -81,6 +84,9 @@
 	</script>
 </th:block>
 <script>
+window.onload = function(){
+	errorLogin();
+}
 $(document).ready(function(){
 	var modal_name_div = ''
 	$("#bookregister").click(function(){
@@ -94,6 +100,8 @@ $(document).ready(function(){
 		$("#moneybook_modal").find("#moneybook_form")[0].reset();
 	});
 });
+
+
 
 //가계부 이름 중복 확인
 var namecheck = false;
@@ -125,6 +133,36 @@ function confirmName(){
 		})	
 	}
 }
+
+//가계부 자동으로 등록
+$("#autoregister").click(function(){
+	var id = "";
+	var pw = "";
+	var authority_name = $("#authority_name").val();
+	 var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+	 for( var i=0; i < 10; i++ ){
+	        id += possible.charAt(Math.floor(Math.random() * possible.length));
+	 		pw += possible.charAt(Math.floor(Math.random() * possible.length));
+	 }
+	$.ajax({
+			url : "moneybookRegister",
+			type : "post",
+			data : {"name" : id,
+					   "pw" : pw,
+					   "authority_name" : authority_name},
+			success : function(){
+				disp = "";
+				disp += "<p class='text-primary'>가계부 이름</p>";
+				disp += "<input type='text' class='form-control' placeholder='Default input' id='moneybook_name' name='moneybook_name' value='"+id+"'/><br/>";
+				disp += "<p class='text-primary'>패스워드</p>";
+				disp += "<input type='password' class='form-control' placeholder='Default input' id='moneybook_pw' name='moneybook_pw' value='"+pw+"'/><br/>";
+				$("#getAuto").html(disp);
+				alert("가계부 이름, 패스워드 는 랜덤으로 임의로 생성했습니다.");
+			}
+			
+	})
+})
 
 //가계부 등록
 $(document).ready(function(){
@@ -159,6 +197,19 @@ $(document).ready(function(){
 		})
 	})
 })
+
+//로그인 실패 시 메시지
+function errorLogin(){
+	var error = location.search
+	var disp = "";
+	if(error == "?error"){
+		disp += "<font color='red'>";
+		disp += "<p>아이디 비밀번호 틀림</p>";
+		disp += "</font>";
+		$("#getError").html(disp);
+	}
+}
+
 
 </script>
 </body>

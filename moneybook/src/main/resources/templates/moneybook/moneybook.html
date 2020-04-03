@@ -36,7 +36,7 @@
  		
  		<div class="form-group">
 			<label class="col-form-label" for="inputDefault">금액</label>
-  			<input type="text" class="form-control"  id="price" name="price" required="required">
+  			<input type="text" class="form-control"  id="price" name="price" required="required" maxlength="12">
 		</div>
 
 		<div class="form-group">
@@ -60,7 +60,7 @@
 				</button>
 			</div>
 			<div class="modal-body">
-				<form method="post" name="modal_form">
+				<form method="post" name="form">
 					<div id="modal_eno"></div>
 					<div class="form-group" id="modal_insert_date"></div>
 					<div class="form-group" id="modal_type"></div>
@@ -85,8 +85,9 @@
 	window.onload = function(){
 		expenseSelect();
 		statusSelect();
+		
 	}
-
+	comma();
 	document.getElementById("insert_date").valueAsDate = new Date();
  	document.getElementById("indate").valueAsDate = new Date()
 	
@@ -108,7 +109,7 @@
 					type : "POST",
 					data : {"insert_date" : insert_date,
 							   "type" : type,
-							   "price" : price,
+							   "price" : uncomma(price),
 							   "cartegory" : cartegory,
 							   "moneybook_type" : moneybook_type},
 					dateType : "json",
@@ -159,7 +160,7 @@
 			disp += "<tr>";
 			disp += "<td width='100'><button type='button' class='btn btn-outline-primary' id='"+idx+item.eno+"' name='expense_update_modal' value='"+item.eno+"'>수정</button>";
 			disp += "<td>"+item.insert_date+"</td>";
-			disp += "<td>"+AddComma(Math.floor(item.price))+"</td>";
+			disp += "<td>"+Number(item.price).toLocaleString('en')+"</td>";
 			disp += "<td>"+type+"</td>";
 			disp += "<td>"+item.cartegory+"</td>";
 			disp += "<td width='150'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.eno+"'>";
@@ -169,7 +170,7 @@
 		});
 		disp += "<td></td>";
 		disp += "<td align='right'>합계 :</td>";
-		disp += "<td>"+AddComma(Math.floor(price_sum))+"</td>";
+		disp += "<td>"+Number(price_sum).toLocaleString('en')+"</td>";
 		disp += "<td></td>";
 		disp += "<td></td>";
 		disp += "<td></td>";
@@ -207,8 +208,8 @@
  	//지출내역 수정 모달
  	$(document).on("click","button[name=expense_update_modal]",function(){
  		var modaldisp = "";
- 		var $update = $(this).attr("id");
- 		var eno = $("#"+$update).attr("value");
+ 		var update = $(this).attr("id");
+ 		var eno = $("#"+update).attr("value");
  		$.ajax({
  				url: "expense/updateform",
  				data : {"eno" : eno},
@@ -223,15 +224,16 @@
  					$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label><br/>"
  															+"<input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'>");
  					$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label><br/> "
- 													+"<input type='text' class='form-control' id='update_price' name='modal_price' value='"+AddComma(Math.floor(data.price))+"' >");
+ 													+"<input type='text' class='form-control' id='update_price' name='price' value='"+Number(data.price).toLocaleString('en')+"' maxlength='12'>");
  					$("#modal_cartegory").html("<label class='col-form-label' for='inputDefault'>사용내역</label><br/>"
  															+"<input tpye='text' class='form-control' id='update_cartegory' value='"+data.cartegory+"'>");
  					$("#expense_modal").modal();
- 				}
+ 					comma();
+ 				}//AddComma(Math.floor(data.price))  / 
  		})
  	}); 
 	
- 	
+
  	
  	//지출내역 수정
 	$(document).on("click", "#update_expense",function(){
@@ -245,7 +247,7 @@
  			$.ajax({
  				url : "expense/update",
  				type : "POST",
- 				data : {"price" : update_price,
+ 				data : {"price" : uncomma(update_price),
  						   "type" : update_type,
  						   "cartegory" : update_cartegory,
  						   "insert_date" : update_insert_date,

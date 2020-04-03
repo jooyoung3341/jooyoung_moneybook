@@ -14,6 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <select id="guestbook_select" parameterType="Guestbook" resultType="Guestbook">
 	select *
 	from guestbook
+	order by insert_date desc
 </select>
 
 <!-- 방명록 삭제 -->

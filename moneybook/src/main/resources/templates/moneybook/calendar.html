@@ -50,6 +50,7 @@ table.calendar td{
 <th:block layout:fragment="script">
 <script>
 window.onload = function(){
+	statusSelect();
 	calendar();
 	initDate();
 	setData(year, month);
