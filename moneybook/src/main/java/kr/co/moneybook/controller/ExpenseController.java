@@ -34,6 +34,14 @@ public class ExpenseController {
 		return expenseService.expense_select(request);
 	}
 	
+	//정렬된 지출 내역 목록
+	@RequestMapping(value="moneybook/expense/select_sort", method=RequestMethod.GET)
+	@ResponseBody
+	public List<Expense> expense_select_sort(HttpServletRequest request){
+		return expenseService.expense_select_sort(request);
+	}
+	
+	
 	//지출내역 삭제
 	@RequestMapping(value="moneybook/expense/delete", method=RequestMethod.GET)
 	@ResponseBody

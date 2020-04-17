@@ -7,17 +7,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 자산 추가-->
 <insert id="asset_insert" parameterType="Asset">
 	insert into asset(moneybook_name, type)
-					 values(#{moneybook_name}, #{type})
+				 values(#{moneybook_name}, #{type})
 </insert>
 
 <!-- 자산 목록 -->
 <select id="asset_select" parameterType="java.lang.String" resultType="Asset">
 	select a.type, a.ano,(
 								 select sum(price)
-								 from assetprice ap
+								 from assetprice as ap
 								 where a.ano = ap.ano
 								 ) as asset_price
-	from asset a
+	from asset as a
 	where moneybook_name = #{moneybook_name}
 </select>
 

@@ -13,8 +13,9 @@ public interface ExpenseService {
 	
 	//지출내역 목록
 	public List<Expense> expense_select(HttpServletRequest request);
-
-	public List<Expense> expense_select1(HttpServletRequest request);
+	
+	//정렬된 지출내역 목록
+	public List<Expense> expense_select_sort(HttpServletRequest request);
 	
 	//지출내역 삭제
 	public void expense_delete(HttpServletRequest request);

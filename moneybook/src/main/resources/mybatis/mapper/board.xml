@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 가계부이야기 등록하기 -->
 <insert id="board_register" parameterType="Board">
 	insert into board(moneybook_name, title, content, insert_date)
-				  values(#{moneybook_name}, #{title}, #{content}, #{insert_date})
+				 values(#{moneybook_name}, #{title}, #{content}, #{insert_date})
 </insert>
 
 <!-- 가계부이야기 status 등록 -->
@@ -42,7 +42,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <select id="board_selete" resultType="Board" parameterType="Criteria">
 	select bno, title, insert_date, readcnt, recommend, reply
 	from board
-		<include refid="search"></include>
+	<!-- 검색어 -->
+	<include refid="search"></include>
 	limit #{pageStart}, #{perPageNum}
 </select>
 
@@ -59,13 +60,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	select b.moneybook_name, b.title, b.content, b.insert_date, b.readcnt, b.recommend, b.bno,
 		<!-- 추천 타입찾기 -->
 		(select r.status
-	 	from recommend r
+	 	from recommend as r
 	 	where r.bno = #{bno} and r.moneybook_name = #{moneybook_name})as recommend_status,
 	  		<!-- 추천 기본키 값 찾기 -->
 	  		(select r.reno
-             from recommend r
+             from recommend as r
              where r.bno = #{bno} and r.moneybook_name = #{moneybook_name})as reno
-	from board b
+	from board as b
 	where b.bno = #{bno}
 </select>
 

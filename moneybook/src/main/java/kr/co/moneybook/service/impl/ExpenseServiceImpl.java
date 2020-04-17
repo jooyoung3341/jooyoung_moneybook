@@ -51,21 +51,39 @@ public class ExpenseServiceImpl implements ExpenseService {
 		User user =  (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String moneybook_name = user.getUsername();
 		String insert_date = request.getParameter("indate");
-		
+
 		//parameter값이 2개이상 맵으로 값을 넘긴다.
 		Map<String, Object> hashExpense = new HashMap<String, Object>();
 		hashExpense.put("insert_date", insert_date);
 		hashExpense.put("moneybook_name", moneybook_name);
-	
+
 		return expenseMapper.expense_select(hashExpense);
 	}
-	@Override
-	public List<Expense> expense_select1(HttpServletRequest request) {
-		User user =  (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-		String moneybook_name = user.getUsername();
 	
-		return expenseMapper.expense_select1(moneybook_name);
-	}
+	
+	  //지출내역 목록
+	  
+	  @Override public List<Expense> expense_select_sort(HttpServletRequest request) {
+	  User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	  String moneybook_name = user.getUsername(); 
+	  String insert_date = request.getParameter("indate"); 
+	  String sort_sub = request.getParameter("sort");
+	  String sort_flag = request.getParameter("sort_flag"); 
+	  String sort = sort_sub.replace("_sort", "");
+	  System.out.println(sort); 
+	  System.out.println(sort_flag);
+	  
+	  //parameter값이 2개이상 맵으로 값을 넘긴다.
+	  Map<String, Object> hashExpense1 = new HashMap<String, Object>();
+	  hashExpense1.put("insert_date", insert_date);
+	  hashExpense1.put("moneybook_name", moneybook_name);
+	  hashExpense1.put("sort", sort); 
+	  hashExpense1.put("sort_flag", sort_flag);
+	  
+	  return expenseMapper.expense_select_sort(hashExpense1);
+	  }
+	 
+	
 
 	//지출내역 삭제
 	@Override

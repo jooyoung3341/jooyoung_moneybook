@@ -14,13 +14,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 가계부 등록 -->
 <insert id="moneybookRegister" parameterType="Moneybook">
 	insert into moneybook(moneybook_name, moneybook_pw)
-						values(#{moneybook_name}, #{moneybook_pw})
+						 values(#{moneybook_name}, #{moneybook_pw})
 </insert>
 
 <!-- 사용자 권한 등록 -->
 <insert id="authorityRegister" parameterType="Moneybook">
 	insert into authority(moneybook_name, authority_name)
-						values(#{moneybook_name}, #{authority_name})
+		              values(#{moneybook_name}, #{authority_name})
 </insert>
 
 

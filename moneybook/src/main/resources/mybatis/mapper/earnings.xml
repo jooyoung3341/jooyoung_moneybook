@@ -7,7 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 수입내역 삽입 -->
 <insert id="earnings_insert" parameterType="Earnings">
 	insert into earnings(moneybook_name, price, cartegory, insert_date, moneybook_type)
-						values(#{moneybook_name}, #{price}, #{cartegory}, #{insert_date}, #{moneybook_type})
+					 values(#{moneybook_name}, #{price}, #{cartegory}, #{insert_date}, #{moneybook_type})
 </insert>
 
 <!-- 수입내역 목록 -->

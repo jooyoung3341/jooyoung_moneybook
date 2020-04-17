@@ -10,10 +10,13 @@
 
 <div class="row">
 	<div class="col-md-9">
+
 		<input type="month" id="indate" onchange="expenseSelect(this)"/>
+
 		<div align="right" style="width: 92%">
 			<button type="button" class="btn btn-outline-danger" id="expense_delete">선택 삭제</button>
 		</div>
+	
 		<!-- 자바스크립트 disp 영역 -->
 		<div id="getExpense"></div>
 	</div>
@@ -122,6 +125,47 @@
 		});
 	});
  	
+ 	var sort_flag = "up";
+ 	var sort = ""
+ 	$(document).on("click","th[name=sort]",function(){
+ 		sort = $(this).attr("id");
+ 		if(sort_flag == "up"){
+ 			sort_flag = "down";
+ 		}else if(sort_flag == "down"){
+ 			sort_flag = "up";
+ 		}
+
+ 		switch(sort){
+ 		case "insert_date_sort":
+ 			expenseSelectSort(sort, sort_flag);
+ 			break;
+ 		case "price_sort":
+ 			break;
+ 		case "type_sort":
+ 			break;
+ 		case "cartegory_sort":
+ 			break;
+ 		default :
+ 			break;
+ 		}
+ 	})
+ 	
+ 	//정렬된 지출내역 목록
+ 	function expenseSelectSort(sort, sort_flag){
+		var indate = $("#indate").val();
+		$.ajax({
+				url : "expense/select_sort",
+				data : {"indate" : indate,
+						   "sort" : sort,
+						   "sort_flag" : sort_flag},
+				dataType : "json",
+				success : function(data){
+					getExpense(data);
+				}	
+		})
+	}
+
+ 	
  	//지출내역 목록
 	function expenseSelect(){
 		var indate = $("#indate").val();
@@ -133,6 +177,7 @@
 					getExpense(data);
 				}
 		})
+
 	}
  	
  	//지출내역
@@ -143,10 +188,10 @@
 		disp += "<table class='table table-hover'>";
 		disp += "<tr>";
 		disp += "<th scope='row'></th>";
-		disp += "<th scope='row'>날짜<span><a href='#'><i class='ri-travesti-line'></i></a></span>'</th>";
-		disp += "<th scope='row'>금액</th>";
-		disp += "<th scope='row'>분류</th>";
-		disp += "<th scopt='row'>사용 내역</th>";
+		disp += "<th scope='row' name='sort' id='insert_date_sort'><a href='#'>날짜</a></th>";
+		disp += "<th scope='row' name='sort' id='price_sort'><a href='#'>금액</a></th>";
+		disp += "<th scope='row' name='sort' id='type_sort'><a href='#'>분류</a></th>";
+		disp += "<th scopt='row' name='sort' id='cartegory_sort'><a href='#'>사용 내역</a></th>";
 		disp += "<th scope='row'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'>";
 		disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
 		disp += "</tr>";
@@ -177,6 +222,7 @@
 		disp += "</table>";
 		$("#getExpense").html(disp);
 	}
+ 	
  	
 
  	//지출내역 삭제

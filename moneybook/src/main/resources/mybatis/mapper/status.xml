@@ -18,9 +18,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where insert_date like CONCAT(#{insert_date},'%') and moneybook_name = #{moneybook_name}   
 	union all
 	select ifnull(sum(p.price), 0) 
-	from assetprice p,(select ano 
-		                         from asset
-						         where moneybook_name = #{moneybook_name}) a
+	from assetprice as p,(select ano 
+		                     from asset
+						     where moneybook_name = #{moneybook_name})as a
 	where p.ano = a.ano
 </select>
 </mapper>
