@@ -107,12 +107,34 @@ comma();
 		})
 	})
 	
+	var sort_flag = "up";
+	var sort = ""
+	//수입내역 목록 정렬
+ 	$(document).on("click","th[name=sort]",function(){
+ 	 	
+ 		sort = $(this).attr("id");
+ 		if(sort_flag == "up"){
+ 			sort_flag = "down";
+ 		}else if(sort_flag == "down"){
+ 			sort_flag = "up";
+ 		}
+ 		earningsSelect(sort, sort_flag);
+ 	})
+ 	
+ 	
 	//수입내역 목록
-	function earningsSelect(){
+	function earningsSelect(sort, sort_flag){
+		//정렬 클릭 안했을 경우 정렬변수는 null로 값을 보냄
+ 		if(sort == null && sort_flag == null){
+ 			sort = null;
+ 			sort_flag = null;
+ 		} 
 		var indate = $("#indate").val();
 		$.ajax({
 				url : "earnings/select",
-				data : {"indate" : indate},
+				data : {"indate" : indate,
+					   	   "sort" : sort,
+					   	   "sort_flag" : sort_flag},
 				dataType : "json",
 				success : function(data){
 					getEarnings(data);
@@ -127,9 +149,9 @@ comma();
 		disp += "<table class='table table-hover'>";
 		disp += "<tr>";
 		disp += "<th scope='row' width='100'></th>";
-		disp += "<th scope='row' width='200'>날짜</th>";
-		disp += "<th scope='row'>금액</th>";
-		disp += "<th scope='row'>수입처</th>";
+		disp += "<th scope='row' width='200' name='sort' id='insert_date_sort'><a href='#'>날짜</a></th>";
+		disp += "<th scope='row' name='sort' id='price_sort'><a href='#'>금액</a></th>";
+		disp += "<th scope='row' name='sort' id='cartegory_sort'><a href='#'>수입처</a></th>";
 		disp += "<th scope='row'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'>"
 		disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
 		disp += "</tr>";

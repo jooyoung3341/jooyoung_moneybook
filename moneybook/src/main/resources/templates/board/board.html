@@ -11,6 +11,12 @@
 <div class="row">
 	<div class="col-md-7">
 		<a href="board_register"><button type="button" class="btn btn-primary">이야기 등록</button></a>
+		<ol class="breadcrumb">
+  <li class="breadcrumb-item" name="sort" id="insert_date"><a href="#">최신순</a></li>
+  <li class="breadcrumb-item" name="sort" id="recommend"><a href="#">추천순</a></li>
+  <li class="breadcrumb-item" name="sort" id="reply"><a href="#">댓글순</a></li>
+  <li class="breadcrumb-item" name="sort" id="readcnt"><a href="#">조회순</a></li>
+</ol>
 		<ul class="list-group">
 		<!-- 게시판 목록 -->
 		<th:block th:each="board : ${map.board_list}">
@@ -20,10 +26,18 @@
 		    	<a th:href="@{board_detail(bno=${board.bno},page=${map.pageMaker.criteria.page},perPageNum=${map.pageMaker.criteria.perPageNum},keyword=${map.pageMaker.criteria.keyword})}">
 		    		<p class="text-primary" th:text="${board.title}"></p>
 		    	</a><!-- badge badge-pill badge-dark -->
-				
-				<i class="ri-thumb-up-line"><span class="badge badge-pill badge-light" th:text="${board.recommend}"></span></i>
-				<i class="ri-chat-1-line"><span class="badge badge-pill badge-light" th:text="${board.reply}"></span></i>
+				<div >
+				<i class="ri-thumb-up-line" align="right"><span class="badge badge-pill badge-light" th:text="${board.recommend}"></span></i>
+				<i class="ri-chat-1-line" align="right"><span class="badge badge-pill badge-light" th:text="${board.reply}"></span></i>
 		    	<span class="badge badge-primary badge-pill" th:text="${board.readcnt}"></span>
+		    	&emsp;&emsp;
+		    
+		    	<span class="mb-0" th:text="${board.moneybook_name}"></span>
+		 	  	<footer class="blockquote-footer" th:text="${board.insert_date}"></footer>
+
+		  		<!-- <span th:text="${board.moneybook_name}"></span>
+		    	<small th:text="${board.insert_date}"></small> -->
+		    	</div>
 		  </li>
 		  
 		</th:block>
@@ -57,7 +71,7 @@
 		<form>
 		<!-- 검색 창 -->
    		<input class="form-control mr-sm-2" type="text" id="keyword" name="keyword" placeholder="Search" th:value="${map.pageMaker.criteria.keyword}">
-      	<button class="btn btn-secondary my-2 my-sm-0" type="button" id="search">Search</button>		
+      	<button class="btn btn-secondary my-2 my-sm-0" type="button" id="search">검색</button>		
 		</form>
 	
 	<div class="col-md-3">
@@ -100,11 +114,18 @@ if(board_update != null){
 	alert(board_update);
 }
 
+ //가계부 이야기 정렬
+$(document).on("click","li[name=sort]",function(){
+	var sort = $(this).attr("id");
+	location.href="board?sort="+sort;
+})
+
+//검색
 $("#search").click(function(){
 	var perPageNum = $("#perpagenum").val()
-		var keyword = $("#keyword").val();
-		location.href="board?page=1&perPageNum="+perPageNum+"&keyword="+keyword;
-	})
+	var keyword = $("#keyword").val();
+	location.href="board?page=1&perPageNum="+perPageNum+"&keyword="+keyword;
+})
 
 </script>
 </th:block>

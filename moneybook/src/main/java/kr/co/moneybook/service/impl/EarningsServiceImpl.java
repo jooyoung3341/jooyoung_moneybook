@@ -50,10 +50,17 @@ public class EarningsServiceImpl implements EarningsService {
 		User user =  (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String moneybook_name = user.getUsername();
 		String insert_date = request.getParameter("indate");
+		String sort_sub = request.getParameter("sort");
+		String sort_flag = request.getParameter("sort_flag"); 
+		//뒤에 _sort 단어 제거
+		String sort = sort_sub.replace("_sort", "");
 		
 		Map<String, Object> hashEarnings = new HashMap<String, Object>();
 		hashEarnings.put("moneybook_name", moneybook_name);
 		hashEarnings.put("insert_date", insert_date);
+		hashEarnings.put("sort", sort); 
+		hashEarnings.put("sort_flag", sort_flag);
+
 		return earningsMapper.earnings_select(hashEarnings);
 	}
 	

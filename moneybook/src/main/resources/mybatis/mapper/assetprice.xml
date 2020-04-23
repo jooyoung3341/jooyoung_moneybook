@@ -15,7 +15,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	select ano, pno, price, insert_date
 	from assetprice
 	where ano = #{ano}
-	order by insert_date desc, pno desc
+	<choose>
+	<when test='sort_flag == "down"'>
+		order by ${sort}
+	</when>
+	<when test='sort_flag == "up"'>
+		order by ${sort} desc
+	</when>
+	<otherwise>
+		order by insert_date desc, pno desc
+	</otherwise>	
+	</choose>
 </select>
 
 <!-- 자산내역 삭제 -->

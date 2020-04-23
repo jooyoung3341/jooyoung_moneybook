@@ -40,11 +40,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- 가계부이야기 목록 -->
 <select id="board_selete" resultType="Board" parameterType="Criteria">
-	select bno, title, insert_date, readcnt, recommend, reply
+	select bno, title, insert_date, readcnt, recommend, reply, moneybook_name
 	from board
+	<if test="sort != null">
+			order by ${sort} desc
+	</if>
 	<!-- 검색어 -->
 	<include refid="search"></include>
 	limit #{pageStart}, #{perPageNum}
+	
 </select>
 
 

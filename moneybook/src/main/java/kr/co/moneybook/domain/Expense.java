@@ -9,11 +9,6 @@ public class Expense {
     private String insert_date;
     private String moneybook_type;
     
-    //정렬을 위한 변수
-    private String sort;
-    private String sort_flag;
-
-
 	public String getMoneybook_type() {
 		return moneybook_type;
 	}
@@ -58,18 +53,10 @@ public class Expense {
 	}
 
 	//정렬
-	public String getSort() {
-		return sort;
-	}
-	public void setSort(String sort) {
-		this.sort = sort;
-	}
-	public String getSort_flag() {
-		return sort_flag;
-	}
-	public void setSort_flag(String sort_flag) {
-		this.sort_flag = sort_flag;
-	}
-
+	/*
+	 * public String getSort() { return sort; } public void setSort(String sort) {
+	 * this.sort = sort; } public String getSort_flag() { return sort_flag; } public
+	 * void setSort_flag(String sort_flag) { this.sort_flag = sort_flag; }
+	 */
     
 }

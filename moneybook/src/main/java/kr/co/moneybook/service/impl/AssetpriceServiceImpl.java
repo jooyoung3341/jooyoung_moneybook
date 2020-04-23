@@ -1,9 +1,11 @@
 package kr.co.moneybook.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,7 +38,17 @@ public class AssetpriceServiceImpl implements AssetpriceService {
 	@Override
 	public List<Assetprice> assetprice_select(HttpServletRequest request) {
 		String ano = request.getParameter("ano");
-		return assetpriceMapper.assetprice_select(Integer.parseInt(ano));
+		String sort_sub = request.getParameter("sort");
+		String sort_flag = request.getParameter("sort_flag"); 
+		//뒤에 _sort 단어 제거
+		String sort = sort_sub.replace("_sort", "");
+		
+		Map<String, Object> hashAssetprice = new HashedMap<String, Object>();
+		hashAssetprice.put("ano", ano);
+		hashAssetprice.put("sort", sort);
+		hashAssetprice.put("sort_flag", sort_flag);
+		
+		return assetpriceMapper.assetprice_select(hashAssetprice);
 	}
 
 	//자산내역 삭제

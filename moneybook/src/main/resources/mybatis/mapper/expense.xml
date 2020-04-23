@@ -15,31 +15,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	select price, type, cartegory, insert_date, eno
 	from expense
 	where insert_date like CONCAT('%',#{insert_date},'%') and moneybook_name = #{moneybook_name}
-	<if test='sort_flag == "down"'>
-		order by #{sort}
-	</if>
-	<if test = 'sort_flag == "up"'>
-		order by #{sort} desc
-	</if>
-	<if test = 'sort_flag != "up" and sort_flag != "down"'>
-			order by insert_date desc, eno desc	
-	</if>	
+	<choose>
+	<when test='sort_flag == "down"'>
+		order by ${sort}
+	</when>
+	<when test='sort_flag == "up"'>
+		order by ${sort} desc
+	</when>
+	<otherwise>
+		order by insert_date desc, eno desc
+	</otherwise>	
+	</choose>
 </select>
 
-<select id="expense_select_sort" parameterType="hashMap" resultType="Expense">
-	select price, type, cartegory, insert_date, eno
-	from expense
-	where insert_date like CONCAT('%',#{insert_date},'%') and moneybook_name = #{moneybook_name}
-	<if test='sort_flag.equals("down")'>
-		order by #{sort}
-	</if>
-	<if test = 'sort_flag.equals("up")'>
-		order by #{sort} desc
-	</if>
-	<if test = 'sort_flag != "up" and sort_flag != "down"'>
-			order by insert_date desc, eno desc	
-	</if>	
-</select>
 
 
 

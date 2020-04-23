@@ -1,6 +1,7 @@
 package kr.co.moneybook.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -13,7 +14,7 @@ public interface AssetpriceMapper {
 	public void assetprice_insert(Assetprice assetprice);
 	
 	//자산내역 목록
-	public List<Assetprice> assetprice_select(int ano);
+	public List<Assetprice> assetprice_select(Map<String, Object> hashAssetprice);
 	
 	//자산내역 삭제
 	public void assetprice_delete(int pno);

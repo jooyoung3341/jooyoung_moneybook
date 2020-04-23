@@ -15,7 +15,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	select price, cartegory, insert_date, ino
 	from earnings
 	where insert_date like CONCAT('%',#{insert_date},'%') and moneybook_name = #{moneybook_name}
-	order by insert_date desc, ino desc
+	<choose>
+		<when test='sort_flag == "down"'>
+			order by ${sort}
+		</when>
+		<when test='sort_flag == "up"'>
+			order by ${sort} desc
+		</when>
+		<otherwise>
+			order by insert_date desc, ino desc
+		</otherwise>	
+	</choose>
 </select>
 
 <!-- 수입내역 삭제 -->

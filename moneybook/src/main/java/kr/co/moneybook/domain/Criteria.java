@@ -15,6 +15,8 @@ public class Criteria {
 	//현재 페이지에 출력될 데이터의 시작 번호
 	private int pageStart;
 	
+	//정렬
+	private String sort;
 	/*
 	 *생성자 - 객체를 만들 때 처음 호출되는 메소드 
 	*/
@@ -46,6 +48,12 @@ public class Criteria {
 		return pageStart;
 	}
 
-	
+	//정렬
+		public String getSort() {
+			return sort;
+		}
+		public void setSort(String sort) {
+			this.sort = sort;
+		}
 	
 }

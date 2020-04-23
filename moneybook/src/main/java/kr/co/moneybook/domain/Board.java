@@ -22,6 +22,9 @@ public class Board {
 	private String recommend_status;
 	private String reno;
 	
+	private String sort;
+	
+
 	public int getBno() {
 		return bno;
 	}

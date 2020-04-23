@@ -164,25 +164,28 @@
 						   "insert_date" : insert_date},
 				dateType : "json",
 				success : function(){
-					getAssetprice_select(ano);
+					getAssetpriceSelect(ano);
 					assetSelect();
 				}
 		})
 	})
 
 	//자산 내역 
-	 $(document).on("click","#assetprice_span", function Assetprice(ano){
+	 $(document).on("click","#assetprice_span", function Assetprice(){
 			var ano = $(this).attr("value");
+	 		var sort = null;
+	 		var sort_flag = null;
 			$.ajax({
 				url : "assetprice/select",
-				data : {"ano" : ano},
+				data : {"ano" : ano,
+				  	   "sort" : sort,
+				       "sort_flag" : sort_flag},
 				dataType : "json",
 				success : function(data){
 					getAssetprice(data, ano);
-					
 				}
 			});
-		}); 
+		});  
 	
 	//자산 내역 목록
 	function getAssetprice(data, ano){
@@ -211,8 +214,8 @@
 		disp += "</div>";
 		disp += "<table class='table table-hover'>";
 		disp += "<th scope='row'></th>";
-		disp += "<th scope='row'>날짜</th>";
-		disp += "<th scope='row'>금액</th>";
+		disp += "<th scope='row' name='sort' id='insert_date_sort' value='"+ano+"'><a href='#'>날짜</a></th>";
+		disp += "<th scope='row' name='sort' id='price_sort' value='"+ano+"'><a href='#'>금액</a></th>";
 		disp += "<th scope='row'><div class='custom-control custom-checkbox'>"
 		disp += "<input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'/>";
 		disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
@@ -276,7 +279,7 @@
 				success : function(){
 					$("#assetprice_modal").modal("hide");
 					alert("수정 완료!");
-					getAssetprice_select(ano);
+					getAssetpriceSelect(ano);
 				}		
 			})
 		}
@@ -300,18 +303,38 @@
 						data : {"checkArr" : checkArr},
 						traditional : true,
 						success : function(){
-							getAssetprice_select(ano);
+							getAssetpriceSelect(ano);
 						}
 				})
 				}
 			}
 	})
 	
+	var sort_flag = "up";
+	var sort = ""
+	//지출내역 목록 정렬
+ 	$(document).on("click","th[name=sort]",function(){
+ 		sort = $(this).attr("id");
+ 		if(sort_flag == "up"){
+ 			sort_flag = "down";
+ 		}else if(sort_flag == "down"){
+ 			sort_flag = "up";
+ 		}
+ 		var ano = $(this).attr("value");
+ 		getAssetpriceSelect(ano, sort, sort_flag);
+ 	})
+ 	
 	//등록 완료/삭제/수정 후 내역
-	function getAssetprice_select(ano){
+	function getAssetpriceSelect(ano, sort, sort_flag){
+		if(sort == null && sort_flag == null){
+			sort = null;
+ 			sort_flag = null;
+		}	
 		$.ajax({
 			url : "assetprice/select",
-			data : {"ano" : ano},
+			data : {"ano" : ano,
+					   "sort" : sort,
+					   "sort_flag" : sort_flag},
 			dataType : "json",
 			success : function(data){
 				getAssetprice(data, ano)
