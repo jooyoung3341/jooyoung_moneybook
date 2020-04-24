@@ -4,10 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-<style type="text/css">
 
-
-</style>
 <!-- jQuery 설정 -->
 <script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -25,6 +22,7 @@
 	<div class="col-md-6">
 	<div class="row">
 		<div class="col-md-3"></div>
+		
 		<div class="col-md-6">
 			<div class="alert alert-dismissible alert-light">
      			<form method="post" th:action="@{/login}">
@@ -41,15 +39,15 @@
 						<button type="button" class="btn btn-primary" id="bookregister">가계부 등록</button>&nbsp;&nbsp;&nbsp;
 						<button type="button" class="btn btn-danger" id="autoregister">가계부 자동 생성</button>
 					</form>
-				
 			</div>
-</div>
-<div class="col-md-3"></div>
+		</div>
+		
+		<div class="col-md-3"></div>
 
-</div>
-<div class="col-md-5"></div>
+	</div>
+		<div class="col-md-5"></div>
 
-</div>
+	</div>
 </div>
 <!-- Model -->          
 <div class="modal" id="moneybook_modal">
@@ -78,25 +76,25 @@
   </div>
 </div>
 
-<th:block th:if="${loginmsg} != null">
-	<script>
-		alert("${loginmsg}");
-	</script>
-</th:block>
 <script>
 window.onload = function(){
 	errorLogin();
 }
+
+
 $(document).ready(function(){
 	var modal_name_div = ''
+	//가계부 등록 클릭 시 모달창 활성화
 	$("#bookregister").click(function(){
 		$("#moneybook_modal").modal();
 	});
 	//모달창 닫을 떄 값 초기화
 	$("#moneybook_modal").on("hide.bs.modal", function(){
+		//중복 체크 되기 전 
 		modal_name_div +=  "가계부 이름 <br/><input type='text' class='form-control' id='name' name='name' onblur='confirmName()''>"; 
 		$("#name_div").html(modal_name_div);
 		modal_name_div = '';
+		//값 초기화
 		$("#moneybook_modal").find("#moneybook_form")[0].reset();
 	});
 });
@@ -139,12 +137,13 @@ $("#autoregister").click(function(){
 	var id = "";
 	var pw = "";
 	var authority_name = $("#authority_name").val();
-	 var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
-	 for( var i=0; i < 10; i++ ){
-	        id += possible.charAt(Math.floor(Math.random() * possible.length));
-	 		pw += possible.charAt(Math.floor(Math.random() * possible.length));
-	 }
+	var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	
+	//아이디, 패스워드 랜덤값으로 생성
+	for( var i=0; i < 10; i++ ){
+	    id += possible.charAt(Math.floor(Math.random() * possible.length));
+		pw += possible.charAt(Math.floor(Math.random() * possible.length));
+	}
 	$.ajax({
 			url : "moneybookRegister",
 			type : "post",
@@ -200,11 +199,13 @@ $(document).ready(function(){
 
 //로그인 실패 시 메시지
 function errorLogin(){
+	//url 파라미터값 가져오기 
 	var error = location.search
 	var disp = "";
+	//로그인 실패시 error url 파라미터 값을 가지게 됨
 	if(error == "?error"){
 		disp += "<font color='red'>";
-		disp += "<p>아이디 비밀번호 틀림</p>";
+		disp += "<p>아이디 비밀번호 틀립니다/</p>";
 		disp += "</font>";
 		$("#getError").html(disp);
 	}

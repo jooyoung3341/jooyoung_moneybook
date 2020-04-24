@@ -42,11 +42,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <select id="board_selete" resultType="Board" parameterType="Criteria">
 	select bno, title, insert_date, readcnt, recommend, reply, moneybook_name
 	from board
+	<!-- 검색어 -->
+	<include refid="search"></include>
 	<if test="sort != null">
 			order by ${sort} desc
 	</if>
-	<!-- 검색어 -->
-	<include refid="search"></include>
+	<if test="sort == null">
+		order by insert_date desc
+	</if>
+
 	limit #{pageStart}, #{perPageNum}
 	
 </select>
@@ -62,11 +66,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <!-- 가계부이야기 상세보기 -->
 <select id="board_detail" parameterType="hashMap" resultType="Board">
 	select b.moneybook_name, b.title, b.content, b.insert_date, b.readcnt, b.recommend, b.bno,
-		<!-- 추천 타입찾기 -->
+		<!-- 추천 타입찾기 (status)-->
 		(select r.status
 	 	from recommend as r
 	 	where r.bno = #{bno} and r.moneybook_name = #{moneybook_name})as recommend_status,
-	  		<!-- 추천 기본키 값 찾기 -->
+	  		<!-- 추천 기본키 값 찾기 (reno)-->
 	  		(select r.reno
              from recommend as r
              where r.bno = #{bno} and r.moneybook_name = #{moneybook_name})as reno

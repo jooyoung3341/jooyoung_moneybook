@@ -33,7 +33,6 @@
 		<label class="col-form-label" for="inputDefault">가져올 가계부 날짜</label>
 		<input type="month" class="form-control" id="moneybook_date">
 		<button type="button" id="board_status_import">가계부 가져오기</button>
-		<button type="button" id="board_status">확인</button>
 			</div>
 			<div id="moneybook_status_disp"></div>
 
@@ -53,6 +52,7 @@ var price_arr = new Array();
 var insert_date_arr = new Array();
 var cartegory_arr = new Array();
 
+//게시글 등록 유효성 검사
 function check(){
 	var title = $("#title").val();
 
@@ -82,21 +82,7 @@ function check(){
 }
 
 
-$("#board_status").click(function(){
-	$("input[name=moneybook_type]").each(function(idx, item){
-		moneybook_type_arr.push($(item).val());	
-	})
-	$("input[name=board_date]").each(function(idx, item){
-		price_arr.push($(item).val());	
-	})
-	$("input[name=price]").each(function(idx, item){
-		insert_date_arr.push($(item).val());	
-	})
-	$("input[name=cartegory]").each(function(idx, item){
-		cartegory_arr.push($(item).val());	
-	})
-})
-
+//가계부 가져오기 클릭
 $("#board_status_import").click(function(){
 	var moneybook_date = $("#moneybook_date").val();
 	$.ajax({
@@ -104,12 +90,24 @@ $("#board_status_import").click(function(){
 		data : {"insert_date" : moneybook_date},
 		dataType : "json",
 		success : function(data){
+	/* 		if(data.Data.response.length == 0){
+				alert("해당 월에 지출,수입내역이 없습니다.")
+				board_status_check = false;
+			} */
+			
+			if(data.length == 0){
+				alert("해당 월에 지출,수입내역이 없습니다.");
+				getBoard_status(data);
+				board_status_check = false;
+			}else{
 			getBoard_status(data);
 			board_status_check = true;
+			}
 		}
 	})
 })
 
+//가계부 가져오기 성공 시 보여질 내역
 function getBoard_status(data){
 	var status_disp = "";
 	var disp = "";

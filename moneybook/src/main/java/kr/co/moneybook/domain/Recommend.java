@@ -5,6 +5,16 @@ public class Recommend {
 	private int bno;
 	private String moneybook_name;
     private String status;
+    private String recommendStatus;
+    
+    
+    
+	public String getRecommendStatus() {
+		return recommendStatus;
+	}
+	public void setRecommendStatus(String recommendStatus) {
+		this.recommendStatus = recommendStatus;
+	}
 	public int getReno() {
 		return reno;
 	}

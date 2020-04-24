@@ -26,4 +26,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	from recommend
 	where bno = #{bno} and moneybook_name = #{moneybook_name}
 </select>
+
+<!-- 추천 중복 확인 -->
+<select id="recommendStatus" parameterType="hashMap" resultType="Recommend">
+	select count(*) as recommendStatus
+	from recommend
+	where bno = #{bno} and moneybook_name = #{moneybook_name}
+</select>
 </mapper>

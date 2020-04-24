@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import kr.co.moneybook.domain.Recommend;
+import kr.co.moneybook.domain.User;
 import kr.co.moneybook.mapper.BoardMapper;
 import kr.co.moneybook.mapper.RecommendMapper;
 import kr.co.moneybook.service.RecommendService;
@@ -66,6 +68,19 @@ public class RecommendServiceImpl implements RecommendService {
 		boardMapper.board_recommend(hashRecommend);
 		recommendMapper.recommend_cancel(Integer.parseInt(reno));
 		
+	}
+
+	//추천 확인
+	@Override
+	public Recommend recommendStatus(HttpServletRequest request) {
+		String bno = request.getParameter("bno");
+		User user =  (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		String moneybook_name = user.getUsername();
+		
+		Map<String, Object> hashRecommend = new HashMap<String, Object>();
+		hashRecommend.put("bno", Integer.parseInt(bno));
+		hashRecommend.put("moneybook_name", moneybook_name);
+		return recommendMapper.recommendStatus(hashRecommend);
 	}
 
 }

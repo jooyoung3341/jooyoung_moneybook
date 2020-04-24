@@ -1,5 +1,6 @@
 package kr.co.moneybook.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +44,7 @@ public class AssetpriceServiceImpl implements AssetpriceService {
 		//뒤에 _sort 단어 제거
 		String sort = sort_sub.replace("_sort", "");
 		
-		Map<String, Object> hashAssetprice = new HashedMap<String, Object>();
+		Map<String, Object> hashAssetprice = new HashMap<String, Object>();
 		hashAssetprice.put("ano", ano);
 		hashAssetprice.put("sort", sort);
 		hashAssetprice.put("sort_flag", sort_flag);

@@ -36,4 +36,11 @@ public class RecommendController {
 		recommendService.recommend_cancel(request);
 	}
 	
+	//추천 확인
+	@RequestMapping(value="moneybook/recommend/status", method=RequestMethod.GET)
+	@ResponseBody
+	public Recommend recommendStatus(HttpServletRequest request) {
+		return recommendService.recommendStatus(request);
+	}
+	
 }

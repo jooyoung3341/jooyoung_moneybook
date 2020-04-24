@@ -53,4 +53,6 @@ public interface BoardMapper {
 	
 	//가계부이야기 추천
 	public void board_recommend(Map<String, Object> hashRecommend);
+	
+	
 }

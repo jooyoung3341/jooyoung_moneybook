@@ -18,4 +18,6 @@ public interface RecommendMapper {
 	//게시글에 해당하는 추천이 있는지 조회 확인 
 	public Recommend recommend_select(Map<String, Object> hashRecommend);
 	
+	//추천 확인
+	public Recommend recommendStatus(Map<String, Object> hashRecommend);
 }

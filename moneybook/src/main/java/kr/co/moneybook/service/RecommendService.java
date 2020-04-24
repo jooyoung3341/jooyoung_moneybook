@@ -11,4 +11,7 @@ public interface RecommendService {
 	
 	//추천 취소
 	public void recommend_cancel(HttpServletRequest request);
+	
+	//추천 확인
+	public Recommend recommendStatus(HttpServletRequest request);
 }

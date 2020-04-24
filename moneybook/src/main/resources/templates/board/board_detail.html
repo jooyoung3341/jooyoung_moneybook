@@ -272,13 +272,40 @@ $(document).on("click", "#reply_update", function(){
 	}
 })
 
-//추천
+//추천 체크
 $(document).on("click","i[name=recommend]",function(){
-	recommend_status = $(this).attr("id");
-	var recommend_flag = $("#recommend_flag").val();
+	var recommend_status = $(this).attr("id");
+
+	$.ajax({
+		url : "recommend/status",
+		data : {"bno" : bno},
+		dataType : "json",
+		success : function(data){
+			if(recommend_status == "up"){
+				alert("게시물을 추천하셨습니다.")
+			}else{
+				alert("게시물을 비추천하셨습니다.")
+			}
+			if(data.recommendStatus =! "0"){
+				alert("이미 추천 하셨습니다.")
+			}else{
+				recommendStatus(recommend_status);
+			}
+		},
+		error : function(request, error){
+			alert("에러!");
+			alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		}
+		
+	})
+
+})
+//추천
+function recommendStatus(recommend_status){
+	/* var recommend_flag = $("#recommend_flag").val();
 	if(recommend_flag == recommend_status){
 		alert("이미 추천 하셨습니다.")
-	}else
+	}else */
 	$.ajax({
 		url : "recommend",
 		data : {"bno" : bno,
@@ -293,7 +320,7 @@ $(document).on("click","i[name=recommend]",function(){
 			$("#getRecommend").html(disp);
 		}
 	})
-})
+}
  
 //추천 취소
 $(document).on("click","i[name=recommend_cancel]",function(){

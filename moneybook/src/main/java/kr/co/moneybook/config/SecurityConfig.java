@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		//실제 인증을 진행할 Provider
 		auth.userDetailsService(moneybookService).passwordEncoder(passwordEncoder());
-	}
+	} 
 	
 	@Override
 	public void configure(WebSecurity web) {

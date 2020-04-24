@@ -23,6 +23,7 @@
 	
 	<div class="col-md-3">
 	<div class="alert alert-dismissible alert-light">
+	<!-- 지출내역 삽입 폼 -->
 	<form method="post" id="expense_form"  name="form">
 		<input type="hidden" id="moneybook_type" value="expense">
 		<div class="form-group">
@@ -90,6 +91,7 @@
 		statusSelect();
 		
 	}
+	//실시간 콤마
 	comma();
 	document.getElementById("insert_date").valueAsDate = new Date();
  	document.getElementById("indate").valueAsDate = new Date()
@@ -204,8 +206,6 @@
 		disp += "</table>";
 		$("#getExpense").html(disp);
 	}
- 	
- 	
 
  	//지출내역 삭제
  	var delete_check  = false;
@@ -261,8 +261,6 @@
  		})
  	}); 
 	
-
- 	
  	//지출내역 수정
 	$(document).on("click", "#update_expense",function(){
 		var confirm_val = confirm("수정 하시겠습니까?");

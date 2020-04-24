@@ -17,9 +17,9 @@
 		padding: 4px; 
 		border-bottom: 1px solid #DDD;
 	}
-	p{
+/* 	p{
 	width:350px;
-	}
+	} */
 </style>
 </th:block>
 <title>방명록</title>
@@ -53,6 +53,7 @@
 	</div>
 </div>
 
+<!-- modal -->
 <div class="modal" id="guestbook_update_modal">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -140,7 +141,7 @@ function getGuestbook(data){
 		if(i%j == 0){
 			disp += "<span class='row1'>";
 		}
-		disp += "<p class='alert alert-dismissible alert-danger' id='cell'>";
+		disp += "<p class='alert alert-dismissible alert-danger' id='cell' style='width='300px';>";
 		disp += "<strong>";
 		disp += item.moneybook_name+"&emsp;&emsp;<smail>"+item.insert_date+"</smail>";
 		disp += "<br/>"+item.content;

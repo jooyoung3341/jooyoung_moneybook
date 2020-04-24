@@ -5,11 +5,13 @@
 <th:block layout:fragment="css">
 <style>
 .cal_top{
-    text-align: center;
-    font-size: 30px;
+    text-align: left;
+    font-size: 20px;
+    padding:0px 0px 0px 350px;
 }
 .cal{
-    text-align: center;    
+    text-align: left;    
+    padding:0px 0px 0px 100px;
 }
 table.calendar{
     border: 1px solid black;
@@ -18,7 +20,7 @@ table.calendar{
 }
 table.calendar td{
     vertical-align: top;
-    border: 1px solid skyblue;
+    border: 1px solid black;
     width: 100px;
 }
 
@@ -28,8 +30,7 @@ table.calendar td{
 <title>가계부 달력</title>
 </head>
 <div layout:fragment="content">
-
-  <div class="cal_top">
+  		<div class="cal_top">
   		<!-- 이전달로 이동 -->
         <a href="#" id="movePrevMonth">
         	<span id="prevMonth" class="cal_tit">&lt;</span>
@@ -42,9 +43,15 @@ table.calendar td{
         <a href="#" id="moveNextMonth">
         	<span id="nextMonth" class="cal_tit">&gt;</span>
         </a>
+        <span>
+        <span class="badge badge-info" style="height:30px;">수입</span><span id="easum" class="text-info"></span>
+        <span class="badge badge-danger" style="height:30px;">지출</span><span id="exsum" class="text-danger"></span>
+    	</span>
     </div>
     <div id="getCalendar" class="cal">
     </div>
+    <div id="getSum"></div>
+   
 </div>
 
 <th:block layout:fragment="script">
@@ -66,12 +73,18 @@ $(document).ready(function() {
     	moveNextMonth();
     	});
 }); 
+//
 var today = 0;
+//년 
 var year = 0;
+//월
 var month = 0;  
+//달력에 월 처리할 변수
 var firstDay = 0; 
 var lastDay = 0;
+//테이블 td테그값을 넣어 달력 일자를 표시하기 위한 변수
 var tdDay = null;
+//해당 달에 있는 가계부 넣을 배열
 var calendarList = new Array(); 
 
 //calendar 그리기
@@ -113,6 +126,11 @@ function initDate(){
 
 //calendar 날짜표시
 function drawDays(calendarList){
+	//지출 합계
+	var exsum = 0;
+	//수입 합계
+	var easum = 0;
+	var sumdisp = "";
 	//달력 상단에 년과 월 지정
     $("#cal_top_year").text(year);
     $("#cal_top_month").text(month);
@@ -132,13 +150,22 @@ function drawDays(calendarList){
 		var calnum = parseInt(item.day) + parseInt(num-1);
 		
 		//수입과 지출 색을 다르게 지정
- 		if(item.moneybook_type == "earnings"){
- 			$("#cal_moneybook"+calnum).append("<p class='text-info' style='line-height: 10px;'>"+item.cartegory+"</p>"); 
- 		}else if(item.moneybook_type == "expense"){
- 			$("#cal_moneybook"+calnum).append("<p class='text-success' style='line-height: 10px;'>"+item.cartegory+"</p>"); 
+		//수입 내역
+ 		if(item.moneybook_type == "expense"){
+ 			$("#cal_moneybook"+calnum).append("<p class='text-danger' style='line-height: 10px;'>"
+ 																+"<abbr title='"+item.cartegory+"'>"+Number(item.price).toLocaleString('en')+"</abbr></p>"); 
+ 			easum += item.price;
+ 			//지출 내역
+ 		}else if(item.moneybook_type == "earnings"){
+ 			$("#cal_moneybook"+calnum).append("<p class='text-info' style='line-height: 10px;'>"
+																+"<abbr title='"+item.cartegory+"'>"+Number(item.price).toLocaleString('en')+"</abbr></p>"); 
+ 			exsum += item.price;
  		}
-		
-	});
+	}); 
+    sumdisp = Number(easum).toLocaleString('en');
+    $("#easum").html(sumdisp);
+    sumdisp = Number(exsum).toLocaleString('en');
+    $("#exsum").html(sumdisp);
     //토요일, 일요일 색 지정
     for(var i=0; i<42; i+=7){
         tdDay.eq(i).css("color","red");
@@ -164,9 +191,9 @@ function setData(year, month){
 				var calendarJson = new Object();
 				//insert_date 에서 일자만 가져와서 저장
 				calendarJson.day = item.insert_date.substring(8,10);
-				calendarJson.cartegory = item.cartegory;
+				calendarJson.price = item.price;
 				calendarJson.moneybook_type = item.moneybook_type;
-				
+				calendarJson.cartegory = item.cartegory;
 				calendarList.push(calendarJson);
 			})
 			drawDays(calendarList);
