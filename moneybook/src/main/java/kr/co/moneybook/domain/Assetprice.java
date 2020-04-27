@@ -5,15 +5,13 @@ public class Assetprice {
 	private int price;
 	private String insert_date;
 	private int ano;
-	private int price_sum;
-	
-	
-	public int getPrice_sum() {
-		return price_sum;
-	}
-	public void setPrice_sum(int price_sum) {
-		this.price_sum = price_sum;
-	}
+
+	/*
+	 * private int price_sum;
+	 * 
+	 * public int getPrice_sum() { return price_sum; } public void setPrice_sum(int
+	 * price_sum) { this.price_sum = price_sum; }
+	 */
 	public int getAno() {
 		return ano;
 	}
@@ -39,5 +37,8 @@ public class Assetprice {
 		this.insert_date = insert_date;
 	}
 	
-
+	@Override
+	public String toString() {
+		return "Assetprice [pno=" + pno + ", price=" + price + ", insert_date=" + insert_date + ", ano=" + ano + "]";
+	}
 }

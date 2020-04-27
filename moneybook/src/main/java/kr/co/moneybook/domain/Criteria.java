@@ -19,6 +19,7 @@ public class Criteria {
 	private String sort;
 	/*
 	 *생성자 - 객체를 만들 때 처음 호출되는 메소드 
+	 *기본 페이지 시작 = 1, 보여줄 페이지 수 = 10 (기본적으로 설정)
 	*/
 	public Criteria() {
 		page = 1;
@@ -49,11 +50,11 @@ public class Criteria {
 	}
 
 	//정렬
-		public String getSort() {
-			return sort;
-		}
-		public void setSort(String sort) {
-			this.sort = sort;
-		}
+	public String getSort() {
+		return sort;
+	}
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
 	
 }

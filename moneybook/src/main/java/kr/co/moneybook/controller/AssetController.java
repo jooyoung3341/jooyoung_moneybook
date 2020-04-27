@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.moneybook.domain.Asset;
 import kr.co.moneybook.service.AssetService;
 
+/*
+ * 자산
+*/
+
 @Controller
 public class AssetController {
 

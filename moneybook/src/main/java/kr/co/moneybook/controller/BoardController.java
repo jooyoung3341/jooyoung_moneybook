@@ -22,6 +22,11 @@ import kr.co.moneybook.domain.SearchCriteria;
 import kr.co.moneybook.domain.User;
 import kr.co.moneybook.service.BoardService;
 
+
+/*
+ * 가계부이야기 게시판
+*/
+
 @Controller
 public class BoardController {
 
@@ -62,6 +67,7 @@ public class BoardController {
 	@RequestMapping(value="moneybook/board_detail", method= RequestMethod.GET)
 	public String board_detail(SearchCriteria criteria, HttpServletRequest request, Model model) {
 		Board board = boardService.board_detail(request);
+		//가계부이야기 가계부내역 status
 		List<Board> board_status = boardService.board_status_select(request);
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("keyword", criteria.getKeyword());

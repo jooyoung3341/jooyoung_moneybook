@@ -63,11 +63,11 @@
 						
 		
 		<!-- Lombok : getter / setter 없이 간단하게 설정할 수 있는 기능 -->
-		<dependency>
+<!-- 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
-		</dependency>
+		</dependency> -->
 		
 		<!-- Spring Security -->		
  		<dependency>

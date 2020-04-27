@@ -31,4 +31,9 @@ public class Calendar {
 		this.moneybook_type = moneybook_type;
 	}
 	
+	@Override
+	public String toString() {
+		return "Calendar [price=" + price + ", cartegory=" + cartegory + ", insert_date=" + insert_date
+				+ ", moneybook_type=" + moneybook_type + "]";
+	}
 }

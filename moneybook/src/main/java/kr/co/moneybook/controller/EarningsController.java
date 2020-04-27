@@ -14,6 +14,10 @@ import kr.co.moneybook.domain.Earnings;
 import kr.co.moneybook.domain.Expense;
 import kr.co.moneybook.service.EarningsService;
 
+/*
+ * 가계부 수입
+*/
+
 @Controller
 public class EarningsController {
 

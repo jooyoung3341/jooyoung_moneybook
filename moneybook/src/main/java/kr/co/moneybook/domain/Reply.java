@@ -7,6 +7,7 @@ public class Reply {
 	private String moneybook_name;
 	private String content;
 	private String insert_date;
+	
 	public int getRno() {
 		return rno;
 	}
@@ -38,5 +39,9 @@ public class Reply {
 		this.insert_date = insert_date;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "Reply [rno=" + rno + ", bno=" + bno + ", moneybook_name=" + moneybook_name + ", content=" + content
+				+ ", insert_date=" + insert_date + "]";
+	}	
 }

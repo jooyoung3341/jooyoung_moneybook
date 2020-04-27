@@ -18,13 +18,17 @@ import kr.co.moneybook.domain.Moneybook;
 import kr.co.moneybook.domain.User;
 import kr.co.moneybook.service.MoneybookService;
 
+/*
+ * 가계부 등록, 로그인
+*/
+
 @Controller
 public class MoneybookController {
 
 	@Autowired
 	private MoneybookService moneybookService;
 	
-	//지출내역 이동
+	//로그인 성공 후 이동(지출내역 이동)
 	  @RequestMapping(value="moneybook/moneybook", method=RequestMethod.GET) 
 	  public String expense(HttpSession session) { 
 		  return "moneybook/moneybook"; 

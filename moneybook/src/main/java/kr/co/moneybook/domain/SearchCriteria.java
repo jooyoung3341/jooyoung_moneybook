@@ -13,5 +13,8 @@ public class SearchCriteria extends Criteria {
 		this.keyword = keyword;
 	}
 
-	
+	@Override
+	public String toString() {
+		return "SearchCriteria [keyword=" + keyword + "]";
+	}
 }

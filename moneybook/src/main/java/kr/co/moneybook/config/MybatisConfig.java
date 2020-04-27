@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //<annotation-driven>
 @EnableTransactionManagement
 @MapperScan(basePackages="kr.co.moneybook.mapper")
-public class DataSourceConfig {
+public class MybatisConfig {
 	
 	
 	/*
@@ -41,3 +41,4 @@ public class DataSourceConfig {
 	}
 
 }
+

@@ -30,6 +30,10 @@ public class Guestbook {
 	public void setInsert_date(String insert_date) {
 		this.insert_date = insert_date;
 	}
-
 	
+	@Override
+	public String toString() {
+		return "Guestbook [gno=" + gno + ", moneybook_name=" + moneybook_name + ", content=" + content
+				+ ", insert_date=" + insert_date + "]";
+	}
 }

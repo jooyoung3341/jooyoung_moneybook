@@ -167,7 +167,6 @@ $(document).on("click", "button[name=guestbook_delete]",function(){
 	if(confirm_val){
 		var $delete = $(this).attr("id");
 		var gno = $("#"+$delete).attr("value");
-		
 		$.ajax({
 			url : "guestbook/delete",
 			data : {"gno" : gno},

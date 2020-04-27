@@ -39,6 +39,10 @@ public class Recommend {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-    
-    
+	
+	@Override
+	public String toString() {
+		return "Recommend [reno=" + reno + ", bno=" + bno + ", moneybook_name=" + moneybook_name + ", status=" + status
+				+ ", recommendStatus=" + recommendStatus + "]";
+	}   
 }

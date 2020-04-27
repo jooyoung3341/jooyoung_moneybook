@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.moneybook.domain.Recommend;
 import kr.co.moneybook.service.RecommendService;
 
+/*
+ * 가계부 이야기 게시글 추천 기능
+*/
+
 @Controller
 public class RecommendController {
 

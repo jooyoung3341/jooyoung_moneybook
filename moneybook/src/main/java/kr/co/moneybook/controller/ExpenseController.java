@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.moneybook.domain.Expense;
 import kr.co.moneybook.service.ExpenseService;
 
+/*
+ * 가계부 지출
+*/
+
 @Controller
 public class ExpenseController {
 	

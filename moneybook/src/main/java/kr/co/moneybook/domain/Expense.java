@@ -51,12 +51,11 @@ public class Expense {
 	public void setInsert_date(String insert_date) {
 		this.insert_date = insert_date;
 	}
-
-	//정렬
-	/*
-	 * public String getSort() { return sort; } public void setSort(String sort) {
-	 * this.sort = sort; } public String getSort_flag() { return sort_flag; } public
-	 * void setSort_flag(String sort_flag) { this.sort_flag = sort_flag; }
-	 */
-    
+	
+	@Override
+	public String toString() {
+		return "Expense [eno=" + eno + ", moneybook_name=" + moneybook_name + ", price=" + price + ", type=" + type
+				+ ", cartegory=" + cartegory + ", insert_date=" + insert_date + ", moneybook_type=" + moneybook_type
+				+ "]";
+	}
 }

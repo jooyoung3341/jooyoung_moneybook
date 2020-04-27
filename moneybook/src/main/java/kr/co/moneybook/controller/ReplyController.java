@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import kr.co.moneybook.domain.Reply;
 import kr.co.moneybook.service.ReplyService;
 
+/*
+ * 가계부 이야기 게시글 댓글 기능
+*/
+
 @Controller
 public class ReplyController {
 

@@ -55,17 +55,16 @@
 			</span>
 		</div>
 		</th:block>
-		
-		<th:block th:if="${board.moneybook_name == #authentication.principal.username}">
-		<button type="button" id="board_update" class="btn btn-outline-primary">수정</button>
-				
-		<button type="button" id="board_delete" class="btn btn-outline-danger" >삭제</button>
+		<!-- #authentication.principal.username : 로그인한 유저이름(스프링시큐리티) -->
+		<th:block th:if="${board.moneybook_name == #authentication.principal.username || #authentication.principal.username == 'admin'}" >
+			<button type="button" id="board_update" class="btn btn-outline-primary">수정</button>
+			<button type="button" id="board_delete" class="btn btn-outline-danger" >삭제</button>
+		</th:block>
 		<div class="right">
 			<button type="button" id="board_back" class="btn btn-outline-secondary">목록</button>
 		</div>
 											
 
-		</th:block>
 		<!-- 
 				<sec:authorize access="isAuthenticated()">
 		</sec:authorize> -->

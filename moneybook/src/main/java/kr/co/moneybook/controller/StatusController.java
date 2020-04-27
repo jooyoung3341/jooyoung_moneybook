@@ -17,6 +17,10 @@ import kr.co.moneybook.domain.Expense;
 import kr.co.moneybook.domain.Status;
 import kr.co.moneybook.service.StatusService;
 
+/*
+ * 가계부 현황 표(화면 왼쪽부분)
+*/
+
 @Controller
 public class StatusController {
 

@@ -26,4 +26,9 @@ public class Moneybook {
 		this.moneybook_pw = moneybook_pw;
 	}
 	
+	@Override
+	public String toString() {
+		return "Moneybook [moneybook_name=" + moneybook_name + ", moneybook_pw=" + moneybook_pw + ", authority_name="
+				+ authority_name + "]";
+	}
 }

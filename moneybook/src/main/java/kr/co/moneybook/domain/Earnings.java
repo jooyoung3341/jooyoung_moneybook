@@ -8,15 +8,14 @@ public class Earnings {
     private String cartegory;
     private String insert_date;
     private String moneybook_type;
-    private int price_sum;
-    
-    
-	public int getPrice_sum() {
-		return price_sum;
-	}
-	public void setPrice_sum(int price_sum) {
-		this.price_sum = price_sum;
-	}
+
+	/*
+	 * private int price_sum;
+	 * 
+	 * 
+	 * public int getPrice_sum() { return price_sum; } public void setPrice_sum(int
+	 * price_sum) { this.price_sum = price_sum; }
+	 */
 	public String getMoneybook_type() {
 		return moneybook_type;
 	}
@@ -53,6 +52,10 @@ public class Earnings {
 	public void setInsert_date(String insert_date) {
 		this.insert_date = insert_date;
 	}
-    
-    
+	
+	@Override
+	public String toString() {
+		return "Earnings [ino=" + ino + ", moneybook_name=" + moneybook_name + ", price=" + price + ", cartegory="
+				+ cartegory + ", insert_date=" + insert_date + ", moneybook_type=" + moneybook_type + "]";
+	}
 }

@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
-import kr.co.moneybook.config.DataSourceConfig;
+import kr.co.moneybook.config.MybatisConfig;
 
 /*
  * 스프링 부트를 실행시키기 위한 핵심코드이다. 프로젝트 생성 시 자동으로 만들어지는 클래스이다.

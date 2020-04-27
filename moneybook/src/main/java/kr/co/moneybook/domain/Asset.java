@@ -8,8 +8,8 @@ public class Asset {
 	  
 	public int getAsset_price() { 
 		return asset_price; 
-	}
-	public void setAsset_price(int asset_price) { 
+	} 
+	public void setAsset_price(int asset_price) {
 		this.asset_price = asset_price; 
 	} 
 	public int getAno() {
@@ -31,4 +31,9 @@ public class Asset {
 		this.type = type;
 	}
 	
+	@Override
+	public String toString() {
+		return "Asset [ano=" + ano + ", moneybook_name=" + moneybook_name + ", type=" + type + ", asset_price="
+				+ asset_price + "]";
+	}
 }

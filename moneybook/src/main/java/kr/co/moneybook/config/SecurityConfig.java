@@ -51,10 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		//Http 관련 보안 설정 **가장 중요
 		http.	authorizeRequests()
 		//페이지 권한 설정
-			.antMatchers("/admin/**").hasRole("ADMIN") // ADMIN 로그인된 사용자 접근 가능
-			.antMatchers("/moneybook/**","/moneybook/**/**").hasRole("USER")//USER 로그인된 사용자 접근 가능
+			.antMatchers("/moneybook/admin/**").hasRole("ADMIN") // ADMIN 로그인된 사용자 접근 가능
+			.antMatchers("/moneybook/**").hasAnyRole("ADMIN","USER")//USER ,ADMIN 로그인된 사용자 접근 가능
 			.antMatchers("/").permitAll() // 모든사용자 접근 가능
-		//	.anyRequest().permitAll()			
+			.anyRequest().permitAll()			
 		.and()
 			.formLogin()
 			.loginPage("/") //로그인 페이지 url
@@ -70,7 +70,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.logoutSuccessUrl("/") //로그아웃 성공 시 이동할 url
 			.invalidateHttpSession(true); // 세션 초기화
 	}
-	
-
-	
 }

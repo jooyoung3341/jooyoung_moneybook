@@ -92,8 +92,6 @@ public class BoardServiceImpl implements BoardService {
 				}
 			result = true;
 		return result;
-		
-
 	}
 
 	//가계부이야기 목록
@@ -122,6 +120,7 @@ public class BoardServiceImpl implements BoardService {
 		String moneybook_name = user.getUsername();
 		String bno = request.getParameter("bno");
 		
+		//게시글 조회수 +1
 		boardMapper.board_readcnt(Integer.parseInt(bno));
 		Map<String, Object> hashBoard = new HashMap<String, Object>();
 		hashBoard.put("bno", Integer.parseInt(bno));
@@ -159,7 +158,6 @@ public class BoardServiceImpl implements BoardService {
 		board.setInsert_date(insert_date);
 		
 		boardMapper.board_update(board);
-		
 	}
 
 	//가계부이야기 수정 폼

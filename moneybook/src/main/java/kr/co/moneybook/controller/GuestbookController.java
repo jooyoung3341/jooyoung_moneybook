@@ -16,6 +16,10 @@ import kr.co.moneybook.domain.Guestbook;
 import kr.co.moneybook.domain.User;
 import kr.co.moneybook.service.GuestbookService;
 
+/*
+ * 방명록
+*/
+
 @Controller
 public class GuestbookController {
 
@@ -27,6 +31,7 @@ public class GuestbookController {
 	public String guestbook(Model model) {
 		User user =  (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		String moneybook_name = user.getUsername();
+		//방명록 글 작성한 가계부 이름과 로그인한 가계부 이름 비교하기 위해 로그인세션을 클라이언트로 넘김
 		model.addAttribute("moneybook_name", moneybook_name);
 		return "moneybook/guestbook";
 	}

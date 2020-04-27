@@ -11,18 +11,16 @@ public class Board {
 	private int recommend;
 	private int reply;
 	
-	//board_status
+	//board_status(가계부 이야기에 등록할 가계부 내역)
 	private int bsno;
 	private String  moneybook_type;
 	private int  price;
 	private String cartegory;
 	private String board_date;
 	
-	//recommend
+	//recommend(가계부 이야기 추천)
 	private String recommend_status;
 	private String reno;
-	
-	private String sort;
 	
 
 	public int getBno() {

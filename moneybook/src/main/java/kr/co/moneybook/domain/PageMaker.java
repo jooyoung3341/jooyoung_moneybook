@@ -13,7 +13,7 @@ public class PageMaker {
 	private boolean prev;
 	private boolean next;
 	
-	//페이지 번호 출력 개수
+	//페이지 번호 출력 개수 (화면에 보여줄 페이지 번호 수)
 	private int displayPageNum = 5;
 	
 	//이전에 설정된 옵션 값을 저장하기 위한 변수
@@ -24,7 +24,7 @@ public class PageMaker {
 		return totalCount;
 	}
 	
-	//
+	
 	/*
 	 * 전체 데이터 개수를 알고 현재 페이지번호(criteria.page)와
 	 * 출력할 페이지 개수(displayPageNum)를 알면 나머지를 전부 계산 할 수 있다.
