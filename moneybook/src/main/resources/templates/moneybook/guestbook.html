@@ -146,7 +146,7 @@ function getGuestbook(data){
 		disp += item.moneybook_name+"&emsp;&emsp;<smail>"+item.insert_date+"</smail>";
 		disp += "<br/>"+item.content;
 		disp += "</strong><br/></br>";
-		if(moneybook_name == item.moneybook_name){
+		if(moneybook_name == item.moneybook_name || moneybook_name == 'admin'){
 			disp += "<button type='button' class='btn btn-outline-primary' id='"+idx+"' name='guestbook_update' value='"+item.gno+"'>수정</button>";
 			disp += "<button type='button' class='btn btn-outline-danger' id='"+idx+item.gno+"' name='guestbook_delete' value='"+item.gno+"'>삭제</button>";
 		} 

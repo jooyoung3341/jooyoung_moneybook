@@ -15,9 +15,10 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 	
-	//관리자페이지 이동
-	@RequestMapping(value="moneybook/admin", method=RequestMethod.GET)
-	public String admin(HttpServletRequest request) {
-		return "admin/admin";
-	}
+	/*
+	 * //관리자페이지 이동
+	 * 
+	 * @RequestMapping(value="moneybook/admin", method=RequestMethod.GET) public
+	 * String admin(HttpServletRequest request) { return "admin/admin"; }
+	 */
 }

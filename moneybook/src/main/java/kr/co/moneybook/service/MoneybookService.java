@@ -17,5 +17,15 @@ public interface MoneybookService extends UserDetailsService{
 	
 	//가계부 등록
 	public boolean register(HttpServletRequest request) throws Exception;
+	
+	/*
+	 * admin
+	 */	
+	
+	//가입된 가계부 가져오기
+	public List<Moneybook> moneybook_select();
 
+	//가계부 삭제
+	public void moneybookDelete(HttpServletRequest request);
+	
 }

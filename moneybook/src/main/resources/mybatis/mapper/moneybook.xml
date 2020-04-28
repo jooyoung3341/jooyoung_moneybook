@@ -13,8 +13,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- 가계부 등록 -->
 <insert id="moneybookRegister" parameterType="Moneybook">
-	insert into moneybook(moneybook_name, moneybook_pw)
-						 values(#{moneybook_name}, #{moneybook_pw})
+	insert into moneybook(moneybook_name, moneybook_pw, insert_date)
+						 values(#{moneybook_name}, #{moneybook_pw}, #{insert_date})
 </insert>
 
 <!-- 사용자 권한 등록 -->
@@ -32,4 +32,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where m.moneybook_name = #{moneybook_name};
 </select> 
 
+<!-- admin -->
+
+<!-- 가입된 가계부 -->
+<select id="moneybook_select" resultType="Moneybook">
+	select moneybook_name, insert_date
+	from moneybook
+	order by insert_date desc
+</select>
+
+<!-- 가계부 삭제 -->
+<delete id="moneybookDelete">
+	delete
+	from moneybook
+	where moneybook_name = #{moneybook_name}
+</delete>
 </mapper> 

@@ -5,8 +5,14 @@ public class Moneybook {
 	private String moneybook_name;
 	private String moneybook_pw;
 	private String authority_name;
+	private String insert_date;
 	
-	
+	public String getInsert_date() {
+		return insert_date;
+	}
+	public void setInsert_date(String insert_date) {
+		this.insert_date = insert_date;
+	}
 	public String getAuthority_name() {
 		return authority_name;
 	}
@@ -29,6 +35,6 @@ public class Moneybook {
 	@Override
 	public String toString() {
 		return "Moneybook [moneybook_name=" + moneybook_name + ", moneybook_pw=" + moneybook_pw + ", authority_name="
-				+ authority_name + "]";
+				+ authority_name + ", insert_date=" + insert_date + "]";
 	}
 }

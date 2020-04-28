@@ -1,6 +1,8 @@
 package kr.co.moneybook.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -56,4 +59,22 @@ public class MoneybookController {
 		return map;
 	}
 	
+	/*
+	 * admin
+	*/
+	
+	//관리자페이지 이동
+	@RequestMapping(value="moneybook/admin", method=RequestMethod.GET)
+	public String admin(Model model) {
+		List<Moneybook> moneybooklist = moneybookService.moneybook_select();
+		model.addAttribute("moneybooklist", moneybooklist);
+		return "admin/admin";
+	}
+	
+	//가계부 삭제					   
+	@RequestMapping(value="moneybook/moneybook/delete", method=RequestMethod.GET)
+	@ResponseBody
+	public void moneybookDelete(HttpServletRequest request){
+		moneybookService.moneybookDelete(request);	
+	}
 }
