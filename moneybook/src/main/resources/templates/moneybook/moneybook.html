@@ -10,8 +10,9 @@
 
 <div class="row">
 	<div class="col-md-9">
-
+		
 		<input type="month" id="indate" onchange="expenseSelect()"/>
+		
 
 		<div align="right" style="width: 92%">
 			<button type="button" class="btn btn-outline-danger" id="expense_delete">선택 삭제</button>
@@ -86,212 +87,157 @@
 
 <script>
 //현재 페이지로 올 때 함수실행
-	window.onload = function(){
-		expenseSelect();
-		statusSelect();
-		
-	}
-	//실시간 콤마
-	comma();
-	document.getElementById("insert_date").valueAsDate = new Date();
- 	document.getElementById("indate").valueAsDate = new Date()
+window.onload = function(){
+	moneybookSelect();
+	statusSelect();
+}
+//실시간 콤마
+comma();
+document.getElementById("insert_date").valueAsDate = new Date();
+document.getElementById("indate").valueAsDate = new Date()
 	
-	//지출내역 등록
-	$(document).ready(function(){
-		$("#expense_insert").click(function(){
-			var insert_date = $("#insert_date").val();
-			var type = $("#type option:selected").val();
-			var price = $("#price").val();
-			var cartegory = $("#cartegory").val();
-			var moneybook_type = $("#moneybook_type").val();
-			if(price == ""){
-				alert("금액을 입력하셔야 합니다.");
-			}else if(cartegory == ""){
-				alert("사용내역을 입력하셔야 합니다.");
-			}else
-			$.ajax({
-					url : "expense/insert",
-					type : "POST",
-					data : {"insert_date" : insert_date,
-							   "type" : type,
-							   "price" : uncomma(price),
-							   "cartegory" : cartegory,
-							   "moneybook_type" : moneybook_type},
-					dateType : "json",
-					success : function(){
-						expenseSelect();
-						$("#expense_form")[0].reset();
-						document.getElementById("insert_date").valueAsDate = new Date();
-					}
-			})
-		});
-	});
- 	
- 	var sort_flag = "up";
-	var sort = ""
-	//지출내역 목록 정렬
- 	$(document).on("click","th[name=sort]",function(){
- 	 	
- 		sort = $(this).attr("id");
- 		if(sort_flag == "up"){
- 			sort_flag = "down";
- 		}else if(sort_flag == "down"){
- 			sort_flag = "up";
- 		}
-		expenseSelect(sort, sort_flag);
- 	})
- 	
- 	
- 	//지출내역 목록
-	function expenseSelect(sort, sort_flag){
- 		//정렬 클릭 안했을 경우 정렬변수는 null로 값을 보냄
- 		if(sort == null && sort_flag == null){
- 			sort = "";
- 			sort_flag = "";
- 		}  
-		var indate = $("#indate").val();
+//지출내역 등록
+$(document).ready(function(){
+	$("#expense_insert").click(function(){
+		var insert_date = $("#insert_date").val();
+		var type = $("#type option:selected").val();
+		var price = $("#price").val();
+		var cartegory = $("#cartegory").val();
+		var moneybook_type = $("#moneybook_type").val();
+		if(price == ""){
+			alert("금액을 입력하셔야 합니다.");
+		}else if(cartegory == ""){
+			alert("사용내역을 입력하셔야 합니다.");
+		}else
 		$.ajax({
-				url : "expense/select",
-				data : {"indate" : indate,
-						   "sort" : sort,
-						   "sort_flag" : sort_flag},
-				dataType : "json",
-				success : function(data){
-					getExpense(data);
+				url : "expense/insert",
+				type : "POST",
+				data : {"insert_date" : insert_date,
+						   "type" : type,
+						   "price" : uncomma(price),
+						   "cartegory" : cartegory,
+						   "moneybook_type" : moneybook_type},
+				dateType : "json",
+				success : function(){
+					moneybookSelect();
+					$("#expense_form")[0].reset();
+					document.getElementById("insert_date").valueAsDate = new Date();
+				},
+				error : function(request, error){
+					alert("실패");
+					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				}
 		})
-
-	}
+	});
+});
  	
- 	//지출내역
-	function getExpense(data){
- 		var type = "";
- 		var price_sum = 0;
-		disp = "";
-		disp += "<table class='table table-hover'>";
+//지출내역
+function getMoneybook(data){
+	var type = "";
+	var price_sum = 0;
+	disp = "";
+	disp += "<table class='table table-hover'>";
+	disp += "<tr>";
+	disp += "<th scope='row'></th>";
+	disp += "<th scope='row' name='sort' id='insert_date_sort'><a href='#'>날짜</a></th>";
+	disp += "<th scope='row' name='sort' id='price_sort'><a href='#'>금액</a></th>";
+	disp += "<th scope='row' name='sort' id='type_sort'><a href='#'>분류</a></th>";
+	disp += "<th scopt='row' name='sort' id='cartegory_sort'><a href='#'>사용 내역</a></th>";
+	disp += "<th scope='row'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'>";
+	disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
+	disp += "</tr>";
+	$(data).each(function(idx, item){
+		if(item.type == 'cash'){
+			type = '현금';
+		}else if(item.type== 'card'){
+			type = '카드';
+		}
+		disp += "<input type='hidden' id='update_eno' value="+item.eno+">";
 		disp += "<tr>";
-		disp += "<th scope='row'></th>";
-		disp += "<th scope='row' name='sort' id='insert_date_sort'><a href='#'>날짜</a></th>";
-		disp += "<th scope='row' name='sort' id='price_sort'><a href='#'>금액</a></th>";
-		disp += "<th scope='row' name='sort' id='type_sort'><a href='#'>분류</a></th>";
-		disp += "<th scopt='row' name='sort' id='cartegory_sort'><a href='#'>사용 내역</a></th>";
-		disp += "<th scope='row'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'>";
-		disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
+		disp += "<td width='100'><button type='button' class='btn btn-outline-primary' id='"+idx+item.eno+"' name='expense_update_modal' value='"+item.eno+"'>수정</button>";
+		disp += "<td>"+item.insert_date+"</td>";
+		disp += "<td>"+Number(item.price).toLocaleString('en')+"</td>";
+		disp += "<td>"+type+"</td>";
+		disp += "<td>"+item.cartegory+"</td>";
+		disp += "<td width='150'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.eno+"'>";
+		disp += "<label class='custom-control-label' for='customCheck"+idx+"'></label></div></td>";
 		disp += "</tr>";
-		$(data).each(function(idx, item){
-			
-			if(item.type == 'cash'){
-				type = '현금';
-			}else if(item.type== 'card'){
-				type = '카드';
-			}
-			//disp += "<input type='hidden' id='update_eno' value="+item.eno+">";
-			disp += "<tr>";
-			disp += "<td width='100'><button type='button' class='btn btn-outline-primary' id='"+idx+item.eno+"' name='expense_update_modal' value='"+item.eno+"'>수정</button>";
-			disp += "<td>"+item.insert_date+"</td>";
-			disp += "<td>"+Number(item.price).toLocaleString('en')+"</td>";
-			disp += "<td>"+type+"</td>";
-			disp += "<td>"+item.cartegory+"</td>";
-			disp += "<td width='150'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.eno+"'>";
-			disp += "<label class='custom-control-label' for='customCheck"+idx+"'></label></div></td>";
-			disp += "</tr>";
-			price_sum += item.price;
-		});
-		disp += "<td></td>";
-		disp += "<td align='right'>합계 :</td>";
-		disp += "<td>"+Number(price_sum).toLocaleString('en')+"</td>";
-		disp += "<td></td>";
-		disp += "<td></td>";
-		disp += "<td></td>";
-		disp += "</table>";
-		$("#getExpense").html(disp);
-	}
+		price_sum += item.price;
+	});
+	disp += "<td></td>";
+	disp += "<td align='right'>합계 :</td>";
+	disp += "<td>"+Number(price_sum).toLocaleString('en')+"</td>";
+	disp += "<td></td>";
+	disp += "<td></td>";
+	disp += "<td></td>";
+	disp += "</table>";
+	$("#getExpense").html(disp);
+}
 
- 	//지출내역 삭제
- 	var delete_check  = false;
- 	$("#expense_delete").click(function(){
- 		var confirm_val = confirm("삭제 하시겠습니까?");
- 		if(confirm_val){
- 			var checkArr = new Array();
- 			//체크된 값 array에 넣기
- 			$("input[name=checkRow]:checked").each(function(){
- 				checkArr.push($(this).val())
- 				delete_check = true;
- 			});
- 		if(delete_check == true){
- 			$.ajax({
- 				url : "expense/delete",
- 				data : {"checkArr" : checkArr},
- 				//배열값을 넘기기 위한 설정
- 				traditional : true,
- 				dateType : "json",
- 				success : function(){
- 					expenseSelect();
- 					}
- 			})
- 			}
- 		}
- 	})
  	
- 	//지출내역 수정 모달
- 	$(document).on("click","button[name=expense_update_modal]",function(){
- 		var modaldisp = "";
- 		var update = $(this).attr("id");
- 		var eno = $("#"+update).attr("value");
- 		$.ajax({
- 				url: "expense/updateform",
- 				data : {"eno" : eno},
- 				dataType : "json",
- 				success : function(data){
- 					if(data.type == "card"){
- 						$("#modal_type").html("<select class='custom-select' id='update_type'><option value='cash'>현금</option><option value='card' selected=''>카드</option></select>");
- 					}else
- 						$("#modal_type").html("<select class='custom-select' id='update_type'><option value='cash' selected=''>현금</option><option value='card'>카드</option></select>");
- 					
- 					$("#modal_eno").html("<input type='hidden' value='"+data.eno+"'>");			
- 					$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label><br/>"
- 															+"<input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'>");
- 					$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label><br/> "
- 													+"<input type='text' class='form-control' id='update_price' name='price' value='"+Number(data.price).toLocaleString('en')+"' maxlength='12'>");
- 					$("#modal_cartegory").html("<label class='col-form-label' for='inputDefault'>사용내역</label><br/>"
- 															+"<input tpye='text' class='form-control' id='update_cartegory' value='"+data.cartegory+"'>");
- 					$("#expense_modal").modal();
- 					comma();
- 				}//AddComma(Math.floor(data.price))  / 
- 		})
- 	}); 
-	
- 	//지출내역 수정
-	$(document).on("click", "#update_expense",function(){
-		var confirm_val = confirm("수정 하시겠습니까?");
-		if(confirm_val){
-			var update_price = $("#update_price").val();
-			var update_type = $("#update_type option:selected").val();
-			var update_cartegory = $("#update_cartegory").val();
-			var update_insert_date = $("#update_insert_date").val();
- 			var update_eno = $("#update_eno").val();
- 			$.ajax({
- 				url : "expense/update",
- 				type : "POST",
- 				data : {"price" : uncomma(update_price),
- 						   "type" : update_type,
- 						   "cartegory" : update_cartegory,
- 						   "insert_date" : update_insert_date,
- 						   "eno" : update_eno},
- 				dataType : "text",
- 				success : function(){
- 					$('#expense_modal').modal('hide'); 
- 					alert("수정 완료!");
- 					expenseSelect();
- 				},
- 				error : function(request, error){
- 					alert("실패");
- 					//error 코드와 메시지 보기위한 
- 					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
- 				}
- 			})
- 		}
+ //지출내역 수정 모달
+$(document).on("click","button[name=expense_update_modal]",function(){
+	var modaldisp = "";
+	var update = $(this).attr("id");
+	var eno = $("#"+update).attr("value");
+	$.ajax({
+			url: "expense/updateform",
+			data : {"eno" : eno},
+			dataType : "json",
+			success : function(data){
+				if(data.type == "card"){
+					$("#modal_type").html("<select class='custom-select' id='update_type'><option value='cash'>현금</option><option value='card' selected=''>카드</option></select>");
+				}else
+					$("#modal_type").html("<select class='custom-select' id='update_type'><option value='cash' selected=''>현금</option><option value='card'>카드</option></select>");
+				
+				$("#modal_eno").html("<input type='hidden' value='"+data.eno+"'>");			
+				$("#modal_insert_date").html("<label class='col-form-label' fro='inputDefault'>날짜</label><br/>"
+														+"<input type='date' class='form-control' id='update_insert_date' value='"+data.insert_date+"'>");
+				$("#modal_price").html("<label class='col-form-label' for='inputDefault'>금액</label><br/> "
+												+"<input type='text' class='form-control' id='update_price' name='price' value='"+Number(data.price).toLocaleString('en')+"' maxlength='12'>");
+				$("#modal_cartegory").html("<label class='col-form-label' for='inputDefault'>사용내역</label><br/>"
+														+"<input tpye='text' class='form-control' id='update_cartegory' value='"+data.cartegory+"'>");
+				$("#expense_modal").modal();
+				comma();
+ 		},
+		error : function(request, error){
+			alert("실패");
+			alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		}
  	})
+ }); 
+	
+ //지출내역 수정
+$(document).on("click", "#update_expense",function(){
+	var confirm_val = confirm("수정 하시겠습니까?");
+	if(confirm_val){
+		var update_price = $("#update_price").val();
+		var update_type = $("#update_type option:selected").val();
+		var update_cartegory = $("#update_cartegory").val();
+		var update_insert_date = $("#update_insert_date").val();
+		var update_eno = $("#update_eno").val();
+		$.ajax({
+			url : "expense/update",
+			type : "POST",
+			data : {"price" : uncomma(update_price),
+			   		   "type" : update_type,
+			    	   "cartegory" : update_cartegory,
+					   "insert_date" : update_insert_date,
+				   		"eno" : update_eno},
+			dataType : "text",
+			success : function(){
+				$('#expense_modal').modal('hide'); 
+				alert("수정 완료!");
+				moneybookSelect();
+			},
+			error : function(request, error){
+				alert("실패");
+				//error 코드와 메시지 보기위한 
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		})
+	}
+})
 
  		
 </script>

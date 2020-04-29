@@ -125,10 +125,13 @@ function guestbookSelect(){
 		dataType : "json",
 		success : function(data){
 			getGuestbook(data)
+		},
+		error : function(request, error){
+			alert("실패");
+			alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 		}
 	})
 }
-
 
 //방명록 목록 disp
 function getGuestbook(data){
@@ -141,9 +144,9 @@ function getGuestbook(data){
 		if(i%j == 0){
 			disp += "<span class='row1'>";
 		}
-		disp += "<p class='alert alert-dismissible alert-danger' id='cell' style='width='300px';>";
+		disp += "<p class='alert alert-dismissible alert-danger' id='cell' style='width:300px; float:left; margin-left:10px; '>";
 		disp += "<strong>";
-		disp += item.moneybook_name+"&emsp;&emsp;<smail>"+item.insert_date+"</smail>";
+		disp += item.moneybook_name+"<smail>"+item.insert_date+"</smail>";
 		disp += "<br/>"+item.content;
 		disp += "</strong><br/></br>";
 		if(moneybook_name == item.moneybook_name || moneybook_name == 'admin'){
@@ -172,6 +175,10 @@ $(document).on("click", "button[name=guestbook_delete]",function(){
 			data : {"gno" : gno},
 			success : function(){
 				guestbookSelect();
+			},
+			error : function(request, error){
+				alert("실패");
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
 		})
 	}
@@ -189,6 +196,10 @@ $(document).on("click", "button[name=guestbook_update]", function(){
 				$("#modal_content").html("<textarea class='form-control' id='update_content' rows='3'>"+data.content+"</textarea>");
 				$("#modal_gno").html("<input type='hidden' id='update_gno' value='"+data.gno+"'>");
 				$("#guestbook_update_modal").modal();
+			},
+			error : function(request, error){
+				alert("실패");
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
 		})
 })
@@ -208,6 +219,10 @@ $(document).on("click", "#guestbook_update", function(){
 				$("#guestbook_update_modal").modal("hide");
 				alert("수정 완료!");
 				guestbookSelect();
+			},
+			error : function(request, error){
+				alert("실패");
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 			}
 		})
 	}

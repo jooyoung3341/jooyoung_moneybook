@@ -44,17 +44,46 @@ table.calendar td{
         	<span id="nextMonth" class="cal_tit">&gt;</span>
         </a>
         <span>
-        <span class="badge badge-info" style="height:30px;">수입</span><span id="easum" class="text-info"></span>
         <span class="badge badge-danger" style="height:30px;">지출</span><span id="exsum" class="text-danger"></span>
+        <span class="badge badge-info" style="height:30px;">수입</span><span id="easum" class="text-info"></span>
     	</span>
     </div>
     <div id="getCalendar" class="cal">
     </div>
     <div id="getSum"></div>
-   
+ 
+ <!-- modal -->
+ <div class="modal" id="expense_modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			  	<h5 class="modal-title">상세보기</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" name="form">
+					<div id="modal_eno"></div>
+					<div class="form-group" id="modal_expense"></div>
+					<div class="form-group" id="modal_earnings"></div>
+					
+					<div class="form-group" id="modal_price"></div>
+					<div class="form-group" id="modal_cartegory"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="update_expense">수정</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+			
+			
 </div>
 
-<th:block layout:fragment="script">
+<th:block layout:fragment="script"> 
 <script>
 window.onload = function(){
 	statusSelect();
@@ -73,6 +102,7 @@ $(document).ready(function() {
     	moveNextMonth();
     	});
 }); 
+
 //
 var today = 0;
 //년 
@@ -98,9 +128,13 @@ function calendar(){
     	caldisp += "<tr height='100'>";
         //행 구하기
     	for(var j = 0; j < 7 ;j++){
+    	
         	caldisp += "<td style='text-overflow:ellipsis;overflow:hidden;white-space:nowrap'>";
-        	caldisp += "<div class='cal_day' id='cal_moneybook"+calnum+"'></div>";
+        	caldisp += "<a href='#'>"
+        	caldisp += "<div class='cal_day' id='cal_moneybook"+calnum+"' name='cal_moneybook'></div>";
+        	caldisp += "</a>"
         	caldisp += "</td>";
+        	
         	calnum++
         }
         caldisp += "</tr>";
@@ -137,7 +171,6 @@ function drawDays(calendarList){
     
 	//일자 표시
     for(var i = firstDay.getDay(); i < firstDay.getDay() + lastDay.getDate(); i++){
-    	var schedule = ""
         tdDay.eq(i).text(++dayCount);     
 		}
 
@@ -151,13 +184,13 @@ function drawDays(calendarList){
 		
 		//수입과 지출 색을 다르게 지정
 		//수입 내역
- 		if(item.moneybook_type == "expense"){
- 			$("#cal_moneybook"+calnum).append("<p class='text-danger' style='line-height: 10px;'>"
+ 		if(item.moneybook_type == "earnings"){
+ 			$("#cal_moneybook"+calnum).append("<p class='text-info' style='line-height: 10px;'>"
  																+"<abbr title='"+item.cartegory+"'>"+Number(item.price).toLocaleString('en')+"</abbr></p>"); 
  			easum += item.price;
  			//지출 내역
- 		}else if(item.moneybook_type == "earnings"){
- 			$("#cal_moneybook"+calnum).append("<p class='text-info' style='line-height: 10px;'>"
+ 		}else if(item.moneybook_type == "expense"){
+ 			$("#cal_moneybook"+calnum).append("<p class='text-danger' style='line-height: 10px;'>"
 																+"<abbr title='"+item.cartegory+"'>"+Number(item.price).toLocaleString('en')+"</abbr></p>"); 
  			exsum += item.price;
  		}
@@ -240,6 +273,21 @@ function getNewInfo(){
     setData(year, month);
 }
 
+$(document).on("click","div[name=cal_moneybook]",function(){
+	var expenseDisp = "";
+    var moneybook_day = $(this).attr("id");
+    moneybook_day = $("#"+moneybook_day).text();
+    moneybook_day = moneybook_day.replace("cal_moneybook",""); 
+    //10월이하 01,02,03 으로 변경
+    if(moneybook_day<10){
+    	moneybook_day=String("0"+moneybook_day);
+    }
+    $(calendarList).each(function (idx, item){
+    	if(item.moneybook_type == 'expense'){
+    		
+    	}
+    })
+})
 </script>
 </th:block>
 </html>

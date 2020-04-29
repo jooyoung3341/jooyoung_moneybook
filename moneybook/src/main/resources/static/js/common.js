@@ -1,11 +1,10 @@
-var moneybook_url = $("#moneybook_url");
-
+//가계부 타입 가져오기
+var moneybook_type = $("#moneybook_type").val();
 
 var sort_flag = "up";
 var sort = ""
 //가계부 내역 목록 정렬
 $(document).on("click","th[name=sort]",function(){
- 	 	
  	sort = $(this).attr("id");
  	if(sort_flag == "up"){
  		sort_flag = "down";
@@ -18,7 +17,6 @@ $(document).on("click","th[name=sort]",function(){
  	
 //가계부 내역 가져오기
 function moneybookSelect(sort, sort_flag){
-	
 	//정렬 클릭 안했을 경우 정렬변수는 null로 값을 보냄
 	if(sort == null && sort_flag == null){
 		sort = null;
@@ -26,14 +24,19 @@ function moneybookSelect(sort, sort_flag){
 	} 
 	var indate = $("#indate").val();
 	$.ajax({
-			url : moneybook_url+"/select",
-			data : {"indate" : indate,
-				   	   "sort" : sort,
-				   	   "sort_flag" : sort_flag},
-			dataType : "json",
-			success : function(data){
-				getEarnings(data);
-			}
+		url : moneybook_type+"/select",
+		data : {"indate" : indate,
+			   	   "sort" : sort,
+			   	   "sort_flag" : sort_flag},
+		dataType : "json",
+		success : function(data){
+			getMoneybook(data);
+		},
+		error : function(request, error){
+			alert("실패");
+			//error 코드와 메시지 보기위한 
+			alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		}
 	})
 }
 
@@ -56,9 +59,21 @@ var delete_check = false;
 				dateType : "json",
 				success : function(){
 					moneybookSelect();
+				},
+				error : function(request, error){
+					alert("실패");
+					//error 코드와 메시지 보기위한 
+					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 				}
 			})
 		}
 	}
 })
+
+
+
+
+
+
+	
  	
