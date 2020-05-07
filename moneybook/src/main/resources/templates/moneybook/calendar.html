@@ -53,29 +53,58 @@ table.calendar td{
     <div id="getSum"></div>
  
  <!-- modal -->
- <div class="modal" id="expense_modal">
-	<div class="modal-dialog" role="document">
+ <div class="modal fade bd-example-modal-xl" id="calendar_modal" tabindex="-1" role="dialog"
+ 		aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-xl" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-			  	<h5 class="modal-title">상세보기</h5>
+			  	<h5 class="modal-title"></h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 			</div>
+			
 			<div class="modal-body">
-				<form method="post" name="form">
+			<div class="row">
+			<div class="col-md-8">
+						
 					<div id="modal_eno"></div>
+					지출
 					<div class="form-group" id="modal_expense"></div>
+					수입
 					<div class="form-group" id="modal_earnings"></div>
 					
 					<div class="form-group" id="modal_price"></div>
 					<div class="form-group" id="modal_cartegory"></div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-primary" id="update_expense">수정</button>
 						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
 					</div>
-				</form>
 			</div>
+	
+			
+			<div class="col-md-3">
+				<ul class="nav nav-tabs">
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#home">지출 등록</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link active" data-toggle="tab" href="#pro">수입 등록</a>
+					</li>
+				</ul>
+				
+				<div id="myTabContent" class="tab-content">
+					<div class="tab-pane fade" id="home">
+						<p>zzz</p>
+					</div>
+					<div class="tab-pane fade active show" id="pro">
+						<p>asdf</p>
+					</div>
+				</div>
+				
+			</div>
+			</div>
+			</div>
+			
 		</div>
 	</div>
 </div>
@@ -168,7 +197,6 @@ function drawDays(calendarList){
 	//달력 상단에 년과 월 지정
     $("#cal_top_year").text(year);
     $("#cal_top_month").text(month);
-    
 	//일자 표시
     for(var i = firstDay.getDay(); i < firstDay.getDay() + lastDay.getDate(); i++){
         tdDay.eq(i).text(++dayCount);     
@@ -186,15 +214,16 @@ function drawDays(calendarList){
 		//수입 내역
  		if(item.moneybook_type == "earnings"){
  			$("#cal_moneybook"+calnum).append("<p class='text-info' style='line-height: 10px;'>"
- 																+"<abbr title='"+item.cartegory+"'>"+Number(item.price).toLocaleString('en')+"</abbr></p>"); 
+ 																+"<abbr title='"+item.cartegory+"'> "+Number(item.price).toLocaleString('en')+"</abbr></p>"); 
  			easum += item.price;
  			//지출 내역
  		}else if(item.moneybook_type == "expense"){
  			$("#cal_moneybook"+calnum).append("<p class='text-danger' style='line-height: 10px;'>"
-																+"<abbr title='"+item.cartegory+"'>"+Number(item.price).toLocaleString('en')+"</abbr></p>"); 
+																+"<abbr title='"+item.cartegory+"'> "+Number(item.price).toLocaleString('en')+"</abbr></p>"); 
  			exsum += item.price;
  		}
 	}); 
+    //콤마 추가
     sumdisp = Number(easum).toLocaleString('en');
     $("#easum").html(sumdisp);
     sumdisp = Number(exsum).toLocaleString('en');
@@ -213,7 +242,7 @@ function drawDays(calendarList){
 function setData(year, month){
 	//지출, 수입내역 저장된 array값 초기화
 	calendarList.length = 0;
-	
+
 	var insert_date = year + "-" + month;
 	$.ajax({
 		url : "calendar/select", 
@@ -273,22 +302,79 @@ function getNewInfo(){
     setData(year, month);
 }
 
+//달력 일자 클릭시 모달창
 $(document).on("click","div[name=cal_moneybook]",function(){
-	var expenseDisp = "";
+
+	//name:cal_moneybook 에 해당하는 id값 가져오기
     var moneybook_day = $(this).attr("id");
+	//id에 해당하는 text값 가져오기
     moneybook_day = $("#"+moneybook_day).text();
-    moneybook_day = moneybook_day.replace("cal_moneybook",""); 
-    //10월이하 01,02,03 으로 변경
+  	//달력에 표시된 금액도 가져오기때문에 앞에 일자만 가져온 뒤 한자리숫자일 경우 공백을 제거
+	moneybook_day = moneybook_day.substring(0,2);
+  	//공백 제거
+    moneybook_day = moneybook_day.trim();
+  //10월이하 01,02,03 으로 변경
     if(moneybook_day<10){
     	moneybook_day=String("0"+moneybook_day);
     }
-    $(calendarList).each(function (idx, item){
-    	if(item.moneybook_type == 'expense'){
-    		
-    	}
+    var insert_date = year+"-"+month+"-"+moneybook_day;
+    
+    
+	$.ajax({
+    	url : "calendar/select",
+    	data : {"insert_date" : insert_date},
+    	dataType : "json",
+    	success : function(data){
+    		getCalendarModal(data);
+ 
+    	    $("#calendar_modal").modal("show");
+    	},
+		error : function(request, error){
+			alert("실패");
+			alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		}
     })
 })
+
+//모달창 데이터 표현
+function getCalendarModal(data){
+	var disp = "";
+	var expenseDisp = "";
+	var earningsDisp = "";
+	
+	disp += "<table class='table table-hover'>";
+	disp += "<tr>";
+	disp += "<th scope='row'></th>";
+	disp += "<th scope='row'>금액</th>";
+	disp += "<th scope='row'>내역</th>";
+	disp += "</tr>";
+	expenseDisp += disp;
+	earningsDisp += disp;
+	$(data).each(function(idx, item){
+		if(item.moneybook_type == "expense"){
+			expenseDisp += "<tr>";
+			expenseDisp += "<td></td>";
+			expenseDisp += "<td>"+item.price+"</td>";
+			expenseDisp += "<td>"+item.cartegory+"</td>";
+			expenseDisp += "</tr>";
+		}else if(item.moneybook_type == "earnings"){
+			earningsDisp += "<tr>";
+			earningsDisp += "<td></td>";
+			earningsDisp += "<td>"+item.price+"</td>";
+			earningsDisp += "<td>"+item.cartegory+"</td>";
+			earningsDisp += "</tr>";
+		}
+	});
+	expenseDisp += "</table>";
+	earningsDisp += "</table>";
+	
+	$("#modal_expense").html(expenseDisp);
+	$("#modal_earnings").html(earningsDisp);
+}
+
 </script>
 </th:block>
 </html>
+
+
 
