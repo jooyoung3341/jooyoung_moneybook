@@ -24,6 +24,7 @@
 	
 	<div class="col-md-3">
 	<div class="alert alert-dismissible alert-light">
+	
 	<!-- 지출내역 삽입 폼 -->
 	<form method="post" id="expense_form"  name="form">
 		<input type="hidden" id="moneybook_type" value="expense">
@@ -111,7 +112,7 @@ $(document).ready(function(){
 		}else
 		$.ajax({
 				url : "expense/insert",
-				type : "POST",
+				type : "post",
 				data : {"insert_date" : insert_date,
 						   "type" : type,
 						   "price" : uncomma(price),

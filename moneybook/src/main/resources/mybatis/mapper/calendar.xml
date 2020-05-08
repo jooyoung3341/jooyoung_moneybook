@@ -6,11 +6,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- 달력 월 데이터 가져오기 -->
 <select id="calendar_select" parameterType="hashMap" resultType="Calendar">
-	(select price, insert_date, moneybook_type, cartegory, type
+	(select price, insert_date, moneybook_type, cartegory, type, eno
 	from expense
 	where insert_date like CONCAT(#{insert_date},'%') and moneybook_name = #{moneybook_name})
 	union all
-	(select price, insert_date, moneybook_type , cartegory, null
+	(select price, insert_date, moneybook_type , cartegory, null, ino
 	from earnings
 	where insert_date like CONCAT(#{insert_date},'%') and moneybook_name = #{moneybook_name})
 	order by insert_date

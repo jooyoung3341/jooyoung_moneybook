@@ -66,10 +66,10 @@ table.calendar td{
 			
 			<div class="modal-body">
 			<div class="row">
-			<div class="col-md-8">
+			<div class="col-md-7">
 						
 					<div id="modal_eno"></div>
-					지출
+					지출	
 					<div class="form-group" id="modal_expense"></div>
 					수입
 					<div class="form-group" id="modal_earnings"></div>
@@ -82,22 +82,74 @@ table.calendar td{
 			</div>
 	
 			
-			<div class="col-md-3">
+			<div class="col-md-4">
 				<ul class="nav nav-tabs">
 					<li class="nav-item">
-						<a class="nav-link" data-toggle="tab" href="#home">지출 등록</a>
+						<a class="nav-link active" data-toggle="tab" href="#detail">상세 보기</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link active" data-toggle="tab" href="#pro">수입 등록</a>
+						<a class="nav-link" data-toggle="tab" href="#expense">지출 등록</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" data-toggle="tab" href="#earnings">수입 등록</a>
 					</li>
 				</ul>
 				
 				<div id="myTabContent" class="tab-content">
-					<div class="tab-pane fade" id="home">
-						<p>zzz</p>
+					<!-- 상세보기 -->
+					<div class="tab-pane fade" id="detail">
+						<form method="post" id="expense_form"  name="form">
+							
+						</form>
 					</div>
-					<div class="tab-pane fade active show" id="pro">
-						<p>asdf</p>
+					
+					<!-- 지출 등록 -->
+					<div class="tab-pane fade" id="expense">
+						<form method="post" id="expense_form"  name="form">
+							<input type="hidden" id="ex_moneybook_type" value="expense">
+							<div class="form-group">
+								<label class="col-form-label" for="inputDefault">날짜</label>
+								<input type="date" class="form-control" id="ex_insert_date" required="required"/>
+							</div>
+							
+							<div class="form-group">
+						    	<select class="custom-select" id="type">
+						      		<option value="cash">현금</option>
+						      		<option value="card">카드</option>
+						    	</select>
+					 		</div>
+					 		
+					 		<div class="form-group">
+								<label class="col-form-label" for="inputDefault">금액</label>
+					  			<input type="text" class="form-control"  id="ex_price" required="required" maxlength="12">
+							</div>
+					
+							<div class="form-group">
+								<label class="col-form-label" for="inputDefault">사용내역</label>
+					  			<input type="text" class="form-control" id="ex_cartegory" required="required">
+							</div>
+							<button type="button" class="btn btn-primary" id="expense_insert">등록</button>    
+						</form>
+					</div>
+					
+					<!-- 수입 등록 -->
+					<div class="tab-pane fade" id="earnings">
+						<form method="post" id="earnings_form" name="form">
+							<input type="hidden" id="ea_moneybook_type" value="earnings">
+							<div class="form-group">
+								<label class="col-form-label" for="inputDefault">날짜</label>
+								<input type="date" class="form-control" id="ea_insert_date">
+							</div>
+							<div class="form-group">
+								<label class="col-form-label" for="inputDefault">금액</label>
+								<input type="text" class="form-control" id="ea_price" maxlength="12">
+							</div>
+							<div class="form-group">
+								<label class="col-form-label" for="inputDefault">수입처</label>
+								<input type="text" class="form-control" id="ea_cartegory" >
+							</div>
+							<button type="button" class="btn btn-primary" id="earnings_insert">등록</button>
+						</form>
 					</div>
 				</div>
 				
@@ -120,6 +172,9 @@ window.onload = function(){
 	initDate();
 	setData(year, month);
 }
+
+document.getElementById("ex_insert_date").valueAsDate = new Date();
+document.getElementById("ea_insert_date").valueAsDate = new Date();
 
 $(document).ready(function() {
 	//저번 월 이동
@@ -157,7 +212,6 @@ function calendar(){
     	caldisp += "<tr height='100'>";
         //행 구하기
     	for(var j = 0; j < 7 ;j++){
-    	
         	caldisp += "<td style='text-overflow:ellipsis;overflow:hidden;white-space:nowrap'>";
         	caldisp += "<a href='#'>"
         	caldisp += "<div class='cal_day' id='cal_moneybook"+calnum+"' name='cal_moneybook'></div>";
@@ -319,7 +373,6 @@ $(document).on("click","div[name=cal_moneybook]",function(){
     }
     var insert_date = year+"-"+month+"-"+moneybook_day;
     
-    
 	$.ajax({
     	url : "calendar/select",
     	data : {"insert_date" : insert_date},
@@ -352,13 +405,13 @@ function getCalendarModal(data){
 	earningsDisp += disp;
 	$(data).each(function(idx, item){
 		if(item.moneybook_type == "expense"){
-			expenseDisp += "<tr>";
+			expenseDisp += '<tr onclick="location.href='+'#'+'" style="cursor:pointer;">';
 			expenseDisp += "<td></td>";
 			expenseDisp += "<td>"+item.price+"</td>";
 			expenseDisp += "<td>"+item.cartegory+"</td>";
 			expenseDisp += "</tr>";
 		}else if(item.moneybook_type == "earnings"){
-			earningsDisp += "<tr>";
+			earningsDisp += '<tr onclick="location.href='+'#'+'" style="cursor:pointer;">';
 			earningsDisp += "<td></td>";
 			earningsDisp += "<td>"+item.price+"</td>";
 			earningsDisp += "<td>"+item.cartegory+"</td>";
