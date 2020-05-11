@@ -289,7 +289,6 @@ function drawDays(calendarList){
     for(var i=6; i<42; i+=7){
         tdDay.eq(i).css("color","blue");
     }
-   
 } 
 
 //데이터 등록
@@ -378,7 +377,7 @@ $(document).on("click","div[name=cal_moneybook]",function(){
     	data : {"insert_date" : insert_date},
     	dataType : "json",
     	success : function(data){
-    		getCalendarModal(data);
+    		getCalendarModal(data, insert_date);
  
     	    $("#calendar_modal").modal("show");
     	},
@@ -390,7 +389,7 @@ $(document).on("click","div[name=cal_moneybook]",function(){
 })
 
 //모달창 데이터 표현
-function getCalendarModal(data){
+function getCalendarModal(data, insert_date){
 	var disp = "";
 	var expenseDisp = "";
 	var earningsDisp = "";
@@ -399,21 +398,31 @@ function getCalendarModal(data){
 	disp += "<tr>";
 	disp += "<th scope='row'></th>";
 	disp += "<th scope='row'>금액</th>";
+	disp += "<th scope='row'>분류</th>";
 	disp += "<th scope='row'>내역</th>";
 	disp += "</tr>";
 	expenseDisp += disp;
+	disp = disp.replace("<th scope='row'>분류</th>","");
 	earningsDisp += disp;
 	$(data).each(function(idx, item){
 		if(item.moneybook_type == "expense"){
-			expenseDisp += '<tr onclick="location.href='+'#'+'" style="cursor:pointer;">';
+			expenseDisp += '<tr onclick="location.href='+'#'+'" style="cursor:pointer;" name="moneybook_detail" id="moneybook_detail'+idx+'">';
 			expenseDisp += "<td></td>";
+			expenseDisp += "<td style='display:none;'>"+item.insert_date+"</td>";
+			expenseDisp += "<td style='display:none;'>"+item.no+"</td>";
+			expenseDisp += "<td style='display:none;'>"+item.moneybook_type+"</td>";
 			expenseDisp += "<td>"+item.price+"</td>";
+			expenseDisp += "<td>"+item.type+"</td>";
 			expenseDisp += "<td>"+item.cartegory+"</td>";
 			expenseDisp += "</tr>";
 		}else if(item.moneybook_type == "earnings"){
-			earningsDisp += '<tr onclick="location.href='+'#'+'" style="cursor:pointer;">';
+			earningsDisp += '<tr onclick="location.href='+'#'+'" style="cursor:pointer;"name="moneybook_detail" id="moneybook_detail'+idx+'">';
 			earningsDisp += "<td></td>";
+			earningsDisp += "<td style='display:none;'>"+item.insert_date+"</td>";
+			earningsDisp += "<td style='display:none;'>"+item.no+"</td>";
+			earningsDisp += "<td style='display:none;'>"+item.moneybook_type+"</td>";
 			earningsDisp += "<td>"+item.price+"</td>";
+			earningsDisp += "<td style='display:none;'></td>";
 			earningsDisp += "<td>"+item.cartegory+"</td>";
 			earningsDisp += "</tr>";
 		}
@@ -424,6 +433,43 @@ function getCalendarModal(data){
 	$("#modal_expense").html(expenseDisp);
 	$("#modal_earnings").html(earningsDisp);
 }
+
+$(document).on("click","tr[name=moneybook_detail]",function(){
+	var detailDisp = "";
+	var tr = $(this);
+	/* children : 자식노드를 찾는 함수(td는 tr의 자식노드) */
+	var td = tr.children();
+	
+	var detail_insert_date = td.eq(1).text();
+	var detail_no = td.eq(2).text();
+	var detail_moneybook_type = td.eq(3).text();
+	var detail_price = td.eq(4).text();
+	var detail_type = td.eq(5).text();
+	var detail_cartegory = td.eq(6).text();
+	
+	detailDisp += "<form method='post'>";
+	detailDisp += "<div class='form-group'>";
+	detailDisp += "<label class='col-form-label' for='inputDefault'>날짜</label>";
+	detailDisp += "<input type='date' class='form-control' value='"+detai_insert_date+"'>";
+	detailDisp += "</div>";
+	if(detail_moneybook_type == "expense"){
+		detailDisp += "<div class='form-group'>";
+		if(detail_type == "cash"){
+			detailDisp += "<select class='custom-select'>";
+			detailDisp += "<option selected=''>현금</option>";
+			detailDisp += "<option>카드</option>";
+		}else{
+			detailDisp += "<select class='custom-select'>";
+			detailDisp += "<option selected=''>현금</option>";
+			detailDisp += "<option>카드</option>";
+		}
+		detailDisp += "</div>";
+	}else
+	detailDisp += "<div class='form-group'>";
+	detailDisp += "<label class='col-form-label' for='inputDefault'>금액</label>";
+	detailDisp += "<input type='text' class='form-control' id='price' value='"+detai_price+"'>";
+	detailDisp += "</div>";
+})
 
 </script>
 </th:block>

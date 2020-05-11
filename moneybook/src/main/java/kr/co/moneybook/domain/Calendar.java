@@ -5,7 +5,21 @@ public class Calendar {
 	private String cartegory;
 	private String insert_date;
 	private String moneybook_type;
+	private String type;
+	private int no;
 	
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public int getNo() {
+		return no;
+	}
+	public void setNo(int no) {
+		this.no = no;
+	}
 	public int getPrice() {
 		return price;
 	}
