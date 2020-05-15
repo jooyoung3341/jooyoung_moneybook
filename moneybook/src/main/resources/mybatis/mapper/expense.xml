@@ -28,9 +28,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</choose>
 </select>
 
-
-
-
 <!-- 지출내역 삭제 -->
 <delete id="expense_delete" parameterType="java.lang.Integer">
 	delete from expense

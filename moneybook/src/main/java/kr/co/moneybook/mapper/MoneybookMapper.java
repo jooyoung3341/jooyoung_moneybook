@@ -21,7 +21,9 @@ public interface MoneybookMapper {
 	//가계부 정보 가져오기
 	public Moneybook readMoneybook(String moneybook_name);
 
-	//admin
+	/*
+	 * admin
+	*/
 	
 	//가입된 가계부 가져오기
 	public List<Moneybook> moneybook_select();

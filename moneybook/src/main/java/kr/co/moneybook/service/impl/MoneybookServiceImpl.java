@@ -44,6 +44,7 @@ public class MoneybookServiceImpl implements MoneybookService {
 		//암호화 되지 않은 암호
 		String rawPass = request.getParameter("pw");
 		String moneybook_name = request.getParameter("name");
+		//암호화 된 암호
 		String moneybook_pw = passwordEncoder.encode(rawPass);
 
 		
@@ -73,8 +74,6 @@ public class MoneybookServiceImpl implements MoneybookService {
 		  throw new UsernameNotFoundException(moneybook_name);
 	  }
 		 //UsernameNotFoundException
-
-	  
 		return new User(moneybook); 
 	}
 

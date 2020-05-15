@@ -35,4 +35,11 @@ public class CalendarController {
 	public List<Calendar> calendar_select(HttpServletRequest request){
 		return calendarService.calendar_select(request);
 	}
+	
+	//달력 데이터 값 삽입하기
+	@RequestMapping(value="moneybook/calendar/insert", method=RequestMethod.POST)
+	@ResponseBody
+	public void calendar_insert(HttpServletRequest request) {
+		
+	}
 }

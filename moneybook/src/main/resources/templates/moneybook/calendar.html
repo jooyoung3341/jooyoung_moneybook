@@ -74,7 +74,7 @@ table.calendar td{
 					수입
 					<div class="form-group" id="modal_earnings"></div>
 					
-					<div class="form-group" id="modal_price"></div>
+					<div class="form-group" id="modal_price" name="price"></div>
 					<div class="form-group" id="modal_cartegory"></div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
@@ -85,7 +85,7 @@ table.calendar td{
 			<div class="col-md-4">
 				<ul class="nav nav-tabs">
 					<li class="nav-item">
-						<a class="nav-link active" data-toggle="tab" href="#detail">상세 보기</a>
+						<a class="nav-link" data-toggle="tab" href="#detail">상세 보기</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link" data-toggle="tab" href="#expense">지출 등록</a>
@@ -98,22 +98,21 @@ table.calendar td{
 				<div id="myTabContent" class="tab-content">
 					<!-- 상세보기 -->
 					<div class="tab-pane fade" id="detail">
-						<form method="post" id="expense_form"  name="form">
-							
-						</form>
+						<div class="form-group">
+					  	</div>
 					</div>
 					
 					<!-- 지출 등록 -->
 					<div class="tab-pane fade" id="expense">
 						<form method="post" id="expense_form"  name="form">
-							<input type="hidden" id="ex_moneybook_type" value="expense">
+
 							<div class="form-group">
 								<label class="col-form-label" for="inputDefault">날짜</label>
-								<input type="date" class="form-control" id="ex_insert_date" required="required"/>
+								<input type="date" class="form-control" id="expense_insert_date" name="moneybook_date" readonly/>
 							</div>
 							
 							<div class="form-group">
-						    	<select class="custom-select" id="type">
+						    	<select class="custom-select" id="expense_type">
 						      		<option value="cash">현금</option>
 						      		<option value="card">카드</option>
 						    	</select>
@@ -121,34 +120,34 @@ table.calendar td{
 					 		
 					 		<div class="form-group">
 								<label class="col-form-label" for="inputDefault">금액</label>
-					  			<input type="text" class="form-control"  id="ex_price" required="required" maxlength="12">
+					  			<input type="text" class="form-control"  id="expense_price" name="price" required="required" maxlength="12">
 							</div>
 					
 							<div class="form-group">
 								<label class="col-form-label" for="inputDefault">사용내역</label>
-					  			<input type="text" class="form-control" id="ex_cartegory" required="required">
+					  			<input type="text" class="form-control" id="expense_cartegory" required="required">
 							</div>
-							<button type="button" class="btn btn-primary" id="expense_insert">등록</button>    
+							<button type="button" class="btn btn-primary" id="expense_insert" name="insert">등록</button>    
 						</form>
 					</div>
 					
 					<!-- 수입 등록 -->
 					<div class="tab-pane fade" id="earnings">
 						<form method="post" id="earnings_form" name="form">
-							<input type="hidden" id="ea_moneybook_type" value="earnings">
+							
 							<div class="form-group">
 								<label class="col-form-label" for="inputDefault">날짜</label>
-								<input type="date" class="form-control" id="ea_insert_date">
+								<input type="date" class="form-control" id="earnings_insert_date" name="moneybook_date" readonly>
 							</div>
 							<div class="form-group">
 								<label class="col-form-label" for="inputDefault">금액</label>
-								<input type="text" class="form-control" id="ea_price" maxlength="12">
+								<input type="text" class="form-control" id="earnings_price" name="price" maxlength="12">
 							</div>
 							<div class="form-group">
 								<label class="col-form-label" for="inputDefault">수입처</label>
-								<input type="text" class="form-control" id="ea_cartegory" >
+								<input type="text" class="form-control" id="earnings_cartegory" >
 							</div>
-							<button type="button" class="btn btn-primary" id="earnings_insert">등록</button>
+							<button type="button" class="btn btn-primary" id="earnings_insert" name="insert">등록</button>
 						</form>
 					</div>
 				</div>
@@ -173,8 +172,7 @@ window.onload = function(){
 	setData(year, month);
 }
 
-document.getElementById("ex_insert_date").valueAsDate = new Date();
-document.getElementById("ea_insert_date").valueAsDate = new Date();
+comma();
 
 $(document).ready(function() {
 	//저번 월 이동
@@ -351,13 +349,48 @@ function getNewInfo(){
     dayCount=0;
     firstDay = new Date(year,month-1,1);
     lastDay = new Date(year,month,0);
-
+    
     setData(year, month);
 }
 
+
+//달력 모달창에서 데이터 삽입
+$("button[name=insert]").click(function(){
+	//등록버튼 클린한 아이디 값을 가져와서 지출(ex), 수입(ea)구분
+	var insert = $(this).attr("id");
+	var moneybook_type = insert.replace("_insert","");
+	//var type = insert.substring(0,2);
+	var cartegory = $("#"+moneybook_type+"_cartegory").val();
+	var insert_date = $("#"+moneybook_type+"_insert_date").val();
+	var price = $("#"+moneybook_type+"_price").val();
+	if(moneybook_type == "expense"){
+		var type = $("#"+moneybook_type+"_type option:selected").val();
+	}else
+		var type = "";
+	$.ajax({
+		url : moneybook_type+"/insert",
+		type : "post",
+		data : {"insert_date" : insert_date,
+				   "price" : uncomma(price),
+				   "moneybook_type" : moneybook_type,
+				   "type" : type,
+				   "cartegory" : cartegory},
+		success : function(){
+			calendarSelect(insert_date);
+			$("#"+moneybook_type+"_form")[0].reset();
+			document.getElementById(moneybook_type+"_insert_date").valueAsDate = new Date(insert_date);
+		},
+		error : function(request, error){
+			alert("실패");
+			alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		}
+		
+	}) 
+});
+
+
 //달력 일자 클릭시 모달창
 $(document).on("click","div[name=cal_moneybook]",function(){
-
 	//name:cal_moneybook 에 해당하는 id값 가져오기
     var moneybook_day = $(this).attr("id");
 	//id에 해당하는 text값 가져오기
@@ -370,30 +403,38 @@ $(document).on("click","div[name=cal_moneybook]",function(){
     if(moneybook_day<10){
     	moneybook_day=String("0"+moneybook_day);
     }
-    var insert_date = year+"-"+month+"-"+moneybook_day;
-    
+    var moneybook_date = year+"-"+month+"-"+moneybook_day;
+
+    document.getElementById("expense_insert_date").valueAsDate = new Date(moneybook_date);
+    document.getElementById("earnings_insert_date").valueAsDate = new Date(moneybook_date);
+    calendarSelect(moneybook_date);
+})
+
+//달력 데이터 가져오기 ajax
+function calendarSelect(moneybook_date){
 	$.ajax({
     	url : "calendar/select",
-    	data : {"insert_date" : insert_date},
+    	data : {"insert_date" : moneybook_date},
     	dataType : "json",
     	success : function(data){
-    		getCalendarModal(data, insert_date);
- 
-    	    $("#calendar_modal").modal("show");
+    		getCalendarModal(data, moneybook_date);
+    	    $("#calendar_modal").modal();
     	},
 		error : function(request, error){
 			alert("실패");
 			alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
 		}
     })
-})
+}
 
 //모달창 데이터 표현
-function getCalendarModal(data, insert_date){
+function getCalendarModal(data, moneybook_date){
 	var disp = "";
 	var expenseDisp = "";
 	var earningsDisp = "";
-	
+	var ex_type = "";
+	//onclick="location.href='+'#'+'" 
+	disp += "<input type='hidden' name='moneybook_dae' value='"+moneybook_date+"'/>";
 	disp += "<table class='table table-hover'>";
 	disp += "<tr>";
 	disp += "<th scope='row'></th>";
@@ -406,22 +447,27 @@ function getCalendarModal(data, insert_date){
 	earningsDisp += disp;
 	$(data).each(function(idx, item){
 		if(item.moneybook_type == "expense"){
-			expenseDisp += '<tr onclick="location.href='+'#'+'" style="cursor:pointer;" name="moneybook_detail" id="moneybook_detail'+idx+'">';
+			if(item.type == "cash"){
+				ex_type = "현금"
+			}else{
+				ex_type = "카드"
+			}
+			expenseDisp += '<tr style="cursor:pointer;" name="moneybook_detail">';
 			expenseDisp += "<td></td>";
 			expenseDisp += "<td style='display:none;'>"+item.insert_date+"</td>";
 			expenseDisp += "<td style='display:none;'>"+item.no+"</td>";
 			expenseDisp += "<td style='display:none;'>"+item.moneybook_type+"</td>";
-			expenseDisp += "<td>"+item.price+"</td>";
-			expenseDisp += "<td>"+item.type+"</td>";
+			expenseDisp += "<td>"+Number(item.price).toLocaleString('en')+"</td>";
+			expenseDisp += "<td>"+ex_type+"</td>";
 			expenseDisp += "<td>"+item.cartegory+"</td>";
 			expenseDisp += "</tr>";
 		}else if(item.moneybook_type == "earnings"){
-			earningsDisp += '<tr onclick="location.href='+'#'+'" style="cursor:pointer;"name="moneybook_detail" id="moneybook_detail'+idx+'">';
+			earningsDisp += '<tr style="cursor:pointer;" name="moneybook_detail">';
 			earningsDisp += "<td></td>";
 			earningsDisp += "<td style='display:none;'>"+item.insert_date+"</td>";
 			earningsDisp += "<td style='display:none;'>"+item.no+"</td>";
 			earningsDisp += "<td style='display:none;'>"+item.moneybook_type+"</td>";
-			earningsDisp += "<td>"+item.price+"</td>";
+			earningsDisp += "<td>"+Number(item.price).toLocaleString('en')+"</td>";
 			earningsDisp += "<td style='display:none;'></td>";
 			earningsDisp += "<td>"+item.cartegory+"</td>";
 			earningsDisp += "</tr>";
@@ -429,12 +475,13 @@ function getCalendarModal(data, insert_date){
 	});
 	expenseDisp += "</table>";
 	earningsDisp += "</table>";
-	
+
 	$("#modal_expense").html(expenseDisp);
 	$("#modal_earnings").html(earningsDisp);
 }
 
-$(document).on("click","tr[name=moneybook_detail]",function(){
+//모달창 지출,내역 눌렀을 때 상세보기
+$(document).on("click","tr[name=moneybook_detail]",function getDetail(){
 	var detailDisp = "";
 	var tr = $(this);
 	/* children : 자식노드를 찾는 함수(td는 tr의 자식노드) */
@@ -443,34 +490,142 @@ $(document).on("click","tr[name=moneybook_detail]",function(){
 	var detail_insert_date = td.eq(1).text();
 	var detail_no = td.eq(2).text();
 	var detail_moneybook_type = td.eq(3).text();
-	var detail_price = td.eq(4).text();
+	var detail_price = uncomma(td.eq(4).text());
 	var detail_type = td.eq(5).text();
 	var detail_cartegory = td.eq(6).text();
 	
-	detailDisp += "<form method='post'>";
+	detailDisp += "<form name='form'>";
+	detailDisp += "<input type='hidden' id='detail_no' value='"+detail_no+"'>";
+	detailDisp += "<input type='hidden' id='detail_moneybook_type' value='"+detail_moneybook_type+"'>";
+	detailDisp += "<input type='hidden' id='detail_moneybook_date' value='"+detail_moneybook_type+"'>";
 	detailDisp += "<div class='form-group'>";
 	detailDisp += "<label class='col-form-label' for='inputDefault'>날짜</label>";
-	detailDisp += "<input type='date' class='form-control' value='"+detai_insert_date+"'>";
+	detailDisp += "<input type='date' class='form-control' id='detail_insert_date' value='"+detail_insert_date+"'>";
 	detailDisp += "</div>";
+	
 	if(detail_moneybook_type == "expense"){
 		detailDisp += "<div class='form-group'>";
-		if(detail_type == "cash"){
-			detailDisp += "<select class='custom-select'>";
-			detailDisp += "<option selected=''>현금</option>";
-			detailDisp += "<option>카드</option>";
+		if(detail_type == "현금"){
+			detailDisp += "<select class='custom-select' id='detail_type'>";
+			detailDisp += "<option value='cash' selected=''>현금</option>";
+			detailDisp += "<option value='card' >카드</option>";
 		}else{
-			detailDisp += "<select class='custom-select'>";
-			detailDisp += "<option selected=''>현금</option>";
-			detailDisp += "<option>카드</option>";
+			detailDisp += "<select class='custom-select' id='detail_type'>";
+			detailDisp += "<option value='cash' >현금</option>";
+			detailDisp += "<option value='card' selected=''>카드</option>";
 		}
 		detailDisp += "</div>";
-	}else
+	}
 	detailDisp += "<div class='form-group'>";
-	detailDisp += "<label class='col-form-label' for='inputDefault'>금액</label>";
-	detailDisp += "<input type='text' class='form-control' id='price' value='"+detai_price+"'>";
+	detailDisp += "<label class='col-form-label' for='inputDefault'>금액</label>";				
+	detailDisp += "<input type='text' class='form-control' id='detail_price' name='price' value='"+Number(detail_price).toLocaleString('en')+"' maxlength='12'>";
 	detailDisp += "</div>";
+	
+	detailDisp += "<div class='form-group'>";
+	detailDisp += "<label class='col-form-label' for='inputDefault'>사용내역</label>";
+	detailDisp += "<input type='text' class='form-control' id='detail_cartegory' value='"+detail_cartegory+"'>";
+	detailDisp += "</div>";
+	
+	detailDisp += "<button type='button' class='btn btn-outline-primary' id='detail_update'>수정</button>&emsp;&emsp;"
+	detailDisp += "<button type='button' class='btn btn-outline-danger' id='detail_delete'>삭제</button>"
+	detailDisp += "</form>"
+	
+	$("#detail").html(detailDisp);
+	comma();
 })
 
+//달력 상세보기 데이터 삭제
+$(document).on("click","#detail_delete", function(){
+	var detailDisp = "";
+	var insert_date = $("#detail_insert_date").val();
+	//각 데이터의 pk값
+	var no = $("#detail_no").val();
+	//url 구분을 위한 변수
+	var moneybook_type = $("#detail_moneybook_type").val();
+	var confirm_val = confirm("삭제 하시겠습니까?");
+	if(confirm_val){
+		var checkArr = new Array();
+		checkArr.push(no);
+		$.ajax({
+			url : moneybook_type+"/delete",
+			data : {"checkArr" : checkArr},
+			traditional : true,
+			success : function(){
+				calendarSelect(insert_date);
+				detailDisp += "<div class='form-group'>";
+				detailDisp += "</div>";
+				$("#detail").html(detailDisp);
+			},
+			error : function(request, error){
+				alert("실패");
+				//error 코드와 메시지 보기위한 
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		})
+	}
+})
+
+//달력 모달창 데이터 수정
+$(document).on("click","#detail_update", function(){
+	var confirm_val = confirm("수정 하시겠습니까?");
+	if(confirm_val){
+		//url 구분을 위한 변수
+		var moneybook_type = $("#detail_moneybook_type").val();
+		//var type = insert.substring(0,2);
+		var cartegory = $("#detail_cartegory").val();
+		var insert_date = $("#detail_insert_date").val();
+		var moneybook_date = $("#detail_moneybook_date").val();
+		var price = $("#detail_price").val();
+		if(moneybook_type == "expense"){
+			var type = $("#"+moneybook_type+"_type option:selected").val();
+			//지출, 수입 pk값 구분해서 보내기 위한 조건문
+			var eno = $("#detail_no").val();
+			var ino = "";
+		}else{
+			var type = "";
+			var eno = "";
+			var ino = $("#detail_no").val();
+		}
+		$.ajax({
+			url : moneybook_type+"/update",
+			type : "post",
+			data : {"insert_date" : insert_date,
+					   "price" : uncomma(price),
+					   "moneybook_type" : moneybook_type,
+					   "type" : type,
+					   "ino" : ino,
+					   "eno" : eno,
+					   "cartegory" : cartegory},
+			success : function(){
+				calendarSelect(moneybook_date);
+				if(moneybook_date == insert_date){
+					getDetail();
+				}else{
+					detailDisp += "<div class='form-group'>";
+					detailDisp += "</div>";
+					$("#detail").html(detailDisp);
+				}
+				$("#"+moneybook_type+"_form")[0].reset();
+			},
+			error : function(request, error){
+				alert("실패");
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		}) 
+	}
+});
+
+//모달창 초기화
+$("#calendar_modal").on("hide.bs.modal", function(){
+	var detailDisp = "";
+	//$("#calendar_modal").find("form[name=form]")[0].reset();
+	$("form[name=form]")[0].reset();
+	//$("#calendar_modal").find("#earnings_form")[0].reset();
+	detailDisp += "<div class='form-group'>";
+	detailDisp += "</div>";
+	$("#detail").html(detailDisp);
+	location.reload();
+})
 </script>
 </th:block>
 </html>

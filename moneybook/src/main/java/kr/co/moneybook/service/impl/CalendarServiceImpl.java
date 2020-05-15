@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import kr.co.moneybook.domain.Calendar;
 import kr.co.moneybook.domain.User;
 import kr.co.moneybook.mapper.CalendarMapper;
+import kr.co.moneybook.mapper.EarningsMapper;
+import kr.co.moneybook.mapper.ExpenseMapper;
 import kr.co.moneybook.service.CalendarService;
 
 @Service
@@ -37,4 +39,22 @@ public class CalendarServiceImpl implements CalendarService {
 		return calendarMapper.calendar_select(hashCalendar);
 	}
 
+	//달력 데이터 삽입하기
+	@Override
+	public void calendar_insert(HttpServletRequest request) {
+		String moneybook_type = request.getParameter("moneybook_type");
+		String price = request.getParameter("price");
+		String insert_date = request.getParameter("insert_date");
+		String cartegory = request.getParameter("cartegory");
+		
+		Calendar calendar = new Calendar();
+		calendar.setCartegory(cartegory);
+		calendar.setInsert_date(insert_date);
+		calendar.setMoneybook_type(moneybook_type);
+		calendar.setPrice(Integer.parseInt(price));
+		if(moneybook_type == "expense") {
+			String type = request.getParameter("type");
+			calendar.setType(type);
+		}
+	}
 }

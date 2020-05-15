@@ -49,7 +49,7 @@
 
 	</div>
 </div>
-<!-- Model -->          
+<!-- 가계부 등록 Model -->          
 <div class="modal" id="moneybook_modal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -63,8 +63,8 @@
         <form method="post" id="moneybook_form" th:onsubmit="return moneybookcheck()">
 			<!-- 시큐리티에 넣기 위한 하이든  -->
 			<input type="hidden" name="authority_name" id="authority_name" value="ROLE_USER"/>
-			<div class="text-primary" id="name_div">가계부 이름 <br/><input type="text" class="form-control" id="name" name="name" onblur="confirmName()"></div>
-			<div class="text-primary">패스워드 <br/><input type="password" class="form-control" id="pw" name="pw" > </div>
+			<div class="text-primary" id="name_div">가계부 이름 <br/><input type="text" class="form-control" id="name" onblur="confirmName()"></div>
+			<div class="text-primary">패스워드 <br/><input type="password" class="form-control" id="pw"> </div>
 			<div class="text-primary">패스워드 확인 <input type="password" class="form-control" id="confirmpw"/></div>
 		<div class="modal-footer">
         <button type="button" class="btn btn-primary" id="moneybook_register">등록하기</button>
@@ -82,24 +82,20 @@ window.onload = function(){
 }
 
 
-$(document).ready(function(){
-	var modal_name_div = ''
-	//가계부 등록 클릭 시 모달창 활성화
-	$("#bookregister").click(function(){
-		$("#moneybook_modal").modal();
-	});
-	//모달창 닫을 떄 값 초기화
-	$("#moneybook_modal").on("hide.bs.modal", function(){
-		//중복 체크 되기 전 
-		modal_name_div +=  "가계부 이름 <br/><input type='text' class='form-control' id='name' name='name' onblur='confirmName()''>"; 
-		$("#name_div").html(modal_name_div);
-		modal_name_div = '';
-		//값 초기화
-		$("#moneybook_modal").find("#moneybook_form")[0].reset();
-	});
+var modal_name_div = "";
+//가계부 등록 클릭 시 모달창 활성화
+$("#bookregister").click(function(){
+	$("#moneybook_modal").modal();
 });
-
-
+//모달창 닫을 떄 값 초기화
+$("#moneybook_modal").on("hide.bs.modal", function(){
+	//중복 체크 되기 전 
+	modal_name_div +=  "가계부 이름 <br/><input type='text' class='form-control' id='name' name='name' onblur='confirmName()''>"; 
+	$("#name_div").html(modal_name_div);
+	modal_name_div = '';
+	//값 초기화
+	$("#moneybook_modal").find("#moneybook_form")[0].reset();
+});
 
 //가계부 이름 중복 확인
 var namecheck = false;
@@ -108,7 +104,7 @@ function confirmName(){
 	var name_div = "";
 
 	 if(moneybook_name.length < 1){
-		 name_div +=  "가계부 이름 <br/><input type='text' class='form-control' id='name' name='name' onblur='confirmName()''>"; 
+		 name_div +=  "가계부 이름 <br/><input type='text' class='form-control' id='name' onblur='confirmName()''>"; 
 		$("#name_div").html(modal_name_div); 
 	 }
 	else if(moneybook_name.search(/\s/) != -1){
@@ -159,7 +155,6 @@ $("#autoregister").click(function(){
 				$("#getAuto").html(disp);
 				alert("가계부 이름, 패스워드 임의로 생성했습니다.");
 			}
-			
 	})
 })
 
@@ -167,7 +162,6 @@ $("#autoregister").click(function(){
 $(document).ready(function(){
 	myModal = document.getElementById("myModal");
 	$("#moneybook_register").click(function(){
-		//var moneybook_name = document.getElementById("name").value;
 		var moneybook_name = $("#name").val();
 		var moneybook_pw = $("#pw").val();
 		var authority_name = $("#authority_name").val();
@@ -179,7 +173,6 @@ $(document).ready(function(){
 			alert("패스워드를 입력하셔야 합니다.");
 		}else if(moneybook_pw.length < 5){
 			alert("패스워드는 5자이상 이여야 합니다.");
-			
 		}else if(moneybook_pw != confirmpw){
 			alert("패스워드와 패스워드확인이 일치하지 않습니다.");
 		}else
@@ -205,7 +198,7 @@ function errorLogin(){
 	//로그인 실패시 error url 파라미터 값을 가지게 됨
 	if(error == "?error"){
 		disp += "<font color='red'>";
-		disp += "<p>아이디 비밀번호 틀립니다/</p>";
+		disp += "<p>아이디 비밀번호 틀립니다.</p>";
 		disp += "</font>";
 		$("#getError").html(disp);
 	}

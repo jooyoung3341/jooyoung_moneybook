@@ -9,6 +9,7 @@
 		display: table; 
 		width: 100%;
 	}
+	/* 테이블의 행  */
 	.row1 {
 		display: table-row;	
 	}
@@ -28,7 +29,8 @@
 <input type="hidden" id="name" th:value="${moneybook_name}">
 <button type="button" class="btn btn-primary" id="guestbook_modal_btn">방명록 쓰기</button>
 <div id="getGuestbook"></div>
-<!-- Modal -->
+
+<!-- 방명록 등록 Modal -->
 <div class="modal" id="guestbook_modal">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -53,7 +55,7 @@
 	</div>
 </div>
 
-<!-- modal -->
+<!--방명록 수정 modal -->
 <div class="modal" id="guestbook_update_modal">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -89,7 +91,6 @@ window.onload = function(){
 $("#guestbook_modal_btn").click(function(){
 	$("#guestbook_modal").modal();
 });
-
 //방명록 등록 모달창 리셋
 $("#guestbook_modal").on("hide.bs.modal", function(){
 		$("#guestbook_modal").find("#guestbook_form")[0].reset();
@@ -141,6 +142,7 @@ function getGuestbook(data){
 	var disp = "";
 	disp += "<div id='table'>";
 	$(data).each(function(idx, item){
+		//i j 나눈 값이 0일경우에만 i=4, j=4의 배수일경우에만
 		if(i%j == 0){
 			disp += "<span class='row1'>";
 		}
@@ -227,6 +229,7 @@ $(document).on("click", "#guestbook_update", function(){
 		})
 	}
 })
+
 </script>
 </th:block>
 </html>

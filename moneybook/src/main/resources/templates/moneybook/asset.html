@@ -6,21 +6,20 @@
 </head>
 <div layout:fragment="content" style="height:250px;">
 <div class="row">
-
 	<div class="col-md-2">
 		<div id="getAsset">
  			<ul class="list-group">
  				<th:block th:each="asset, i : ${assetlist}" id="asset_">
- 				  <a href="#" class="list-group-item list-group-item-action flex-column align-items-start"
- 				    id="assetprice_span" th:value="${asset.ano}">
-				    <div class="d-flex w-100 justify-content-between">				   
-				      <small class="text-primary" th:text="${asset.type}" style="width:49%;"></small>
-				      																				<!-- 타임리프에서 제공하는 / 콤마찍기  -->
-				      <span class="badge badge-light" id="asset_price" th:text="${#numbers.formatInteger(asset.asset_price,0,'COMMA')}"></span>
-				      <button type="button" class="close" data-dismiss="alert" th:id="${'asset_delete'+i.index}" name="asset_delete" th:value="${asset.ano}">&times;</button>
-				      <input type="hidden" id="delete_ano" th:value="${asset.ano}">
-				    </div>
-				  </a>
+					<a href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="assetprice_span" th:value="${asset.ano}">
+				    	<div class="d-flex w-100 justify-content-between">				   
+				      		<small class="text-primary" th:text="${asset.type}" style="width:49%;"></small>
+						      																				<!-- 타임리프에서 제공하는 / 콤마찍기  -->
+							<span class="badge badge-light" id="asset_price" th:text="${#numbers.formatInteger(asset.asset_price,0,'COMMA')}"></span>
+				      		<!-- 자산삭제 버튼 -->
+				      		<button type="button" class="close" data-dismiss="alert" th:id="${'asset_delete'+i.index}" name="asset_delete" th:value="${asset.ano}">&times;</button>
+				      		<input type="hidden" id="delete_ano" th:value="${asset.ano}">
+				    	</div>
+				  	</a>
  				</th:block>
 			</ul>
 		</div>
@@ -28,26 +27,26 @@
 
 	<div class="col-md-6">
 		<div class="alert alert-dismissible alert-light">
-		<form method="post" id="asset_form">
-			<div class="form-group">
-				<label class="control-label" for="inputDefault">자산 분류</label>
-				<input type="text" class="form-control" id="type">
-				<button type="button" class="btn btn-primary" id="asset_insert">자산 추가</button>
-			</div>
-		</form>
+			<form method="post" id="asset_form">
+				<div class="form-group">
+					<label class="control-label" for="inputDefault">자산 분류</label>
+					<input type="text" class="form-control" id="type">
+					<button type="button" class="btn btn-primary" id="asset_insert">자산 추가</button>
+				</div>
+			</form>
 		</div>
 
-<div id="getAssetprice" class="right"></div>
+		<div id="getAssetprice" class="right"></div>
+	</div>
+
+	<div class="col-md-3">
+		<div id="getAssetprice_form"></div>
+	</div>
+
 </div>
 
-<div class="col-md-3">
-	<div id="getAssetprice_form"></div>
-</div>
 
-</div>
-
-
-<!-- Modal -->	           
+<!-- 자산내역 수정 Modal -->	           
 <div class="modal" id="assetprice_modal">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
@@ -97,7 +96,7 @@ $("#asset_insert").click(function(){
 			error : function(request, error){
 				alert("실패");
 				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-			}
+		}
 	})
 })	
 
@@ -110,7 +109,6 @@ $(document).on("click","button[name=asset_delete]", function(){
 		$.ajax({
 			url : "asset/delete",
 			data : {"ano" : ano},
-			dataType : "text",
 			success : function(){
 				alert("삭제 완료했습니다.");
 				assetSelect();

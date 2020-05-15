@@ -34,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 <!-- admin -->
 
-<!-- 가입된 가계부 -->
+<!-- 가입된 가계부 목록 -->
 <select id="moneybook_select" resultType="Moneybook">
 	select moneybook_name, insert_date
 	from moneybook

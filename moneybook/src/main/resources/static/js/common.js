@@ -52,11 +52,10 @@ var delete_check = false;
 			});
 		if(delete_check == true){
 		$.ajax({
-				url : moneybook_url+"/delete",
+				url : moneybook_type+"/delete",
 				data : {"checkArr" : checkArr},
 				//배열값을 넘기기 위한 설정
 				traditional : true,
-				dateType : "json",
 				success : function(){
 					moneybookSelect();
 				},

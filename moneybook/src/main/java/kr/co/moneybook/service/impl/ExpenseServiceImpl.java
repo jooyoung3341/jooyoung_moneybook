@@ -79,20 +79,16 @@ public class ExpenseServiceImpl implements ExpenseService {
 	  //뒤에 _sort 단어 제거
 	  String sort = sort_sub.replace("_sort", "");
 
-	  
 	  //parameter값이 2개이상 맵으로 값을 넘긴다.
 	  Map<String, String> hashExpense = new HashMap<String, String>();
 	  hashExpense.put("insert_date", insert_date);
 	  hashExpense.put("moneybook_name", moneybook_name);
 	  hashExpense.put("sort", sort); 
 	  hashExpense.put("sort_flag", sort_flag);
-
 	  
 	  return expenseMapper.expense_select_sort(hashExpense);
 	  }
-	 
 	
-
 	//지출내역 삭제
 	@Override
 	public void expense_delete(HttpServletRequest request) {
@@ -116,13 +112,14 @@ public class ExpenseServiceImpl implements ExpenseService {
 		String cartegory = request.getParameter("cartegory");
 		String insert_date = request.getParameter("insert_date");
 		String eno = request.getParameter("eno");
-	
+		
 		Expense expense = new Expense();
 		expense.setPrice(Integer.parseInt(price));
 		expense.setType(type);
 		expense.setCartegory(cartegory);
 		expense.setInsert_date(insert_date);
 		expense.setEno(Integer.parseInt(eno));
+
 		
 		expenseMapper.expense_update(expense);
 		

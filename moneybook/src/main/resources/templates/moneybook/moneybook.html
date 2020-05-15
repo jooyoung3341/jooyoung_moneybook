@@ -10,12 +10,10 @@
 
 <div class="row">
 	<div class="col-md-9">
-		
 		<input type="month" id="indate" onchange="moneybookSelect()"/>
 		
-
 		<div align="right" style="width: 92%">
-			<button type="button" class="btn btn-outline-danger" id="expense_delete">선택 삭제</button>
+			<button type="button" class="btn btn-outline-danger" id="moneybook_delete">선택 삭제</button>
 		</div>
 	
 		<!-- 자바스크립트 disp 영역 -->
@@ -23,35 +21,39 @@
 	</div>
 	
 	<div class="col-md-3">
-	<div class="alert alert-dismissible alert-light">
 	
-	<!-- 지출내역 삽입 폼 -->
-	<form method="post" id="expense_form"  name="form">
-		<input type="hidden" id="moneybook_type" value="expense">
-		<div class="form-group">
-			<label class="col-form-label" for="inputDefault">날짜</label>
-			<input type="date" class="form-control" id="insert_date" name="insert_date" required="required"/>
+		<div class="alert alert-dismissible alert-light">
+		<!-- 지출내역 삽입 폼 -->
+		<form id="expense_form"  name="form">
+		<!-- 지출, 수입 구분하기 위한 하이든 -->
+			<input type="hidden" id="moneybook_type" value="expense">
+			
+			<div class="form-group">
+				<label class="col-form-label" for="inputDefault">날짜</label>
+				<input type="date" class="form-control" id="insert_date" required="required"/>
+			</div>
+			
+			<div class="form-group">
+		    	<select class="custom-select" id="type">
+		      		<option value="cash">현금</option>
+		      		<option value="card">카드</option>
+		    	</select>
+	 		</div>
+	 		
+	 		<div class="form-group">
+				<label class="col-form-label" for="inputDefault">금액</label>
+	  			<input type="text" class="form-control"  id="price" name="price" required="required" maxlength="12">
+			</div>
+	
+			<div class="form-group">
+				<label class="col-form-label" for="inputDefault">사용내역</label>
+	  			<input type="text" class="form-control" id="cartegory" required="required">
+			</div>
+			
+			<button type="button" class="btn btn-primary" id="expense_insert">등록</button>    
+	
+		</form>
 		</div>
-		
-		<div class="form-group">
-	    	<select class="custom-select" id="type">
-	      		<option value="cash">현금</option>
-	      		<option value="card">카드</option>
-	    	</select>
- 		</div>
- 		
- 		<div class="form-group">
-			<label class="col-form-label" for="inputDefault">금액</label>
-  			<input type="text" class="form-control"  id="price" name="price" required="required" maxlength="12">
-		</div>
-
-		<div class="form-group">
-			<label class="col-form-label" for="inputDefault">사용내역</label>
-  			<input type="text" class="form-control" id="cartegory" name="cartegory" required="required">
-		</div>
-		<button type="button" class="btn btn-primary" id="expense_insert">등록</button>    
-	</form>
-	</div>
 	</div>
 </div>
 
@@ -94,6 +96,7 @@ window.onload = function(){
 }
 //실시간 콤마
 comma();
+
 document.getElementById("insert_date").valueAsDate = new Date();
 document.getElementById("indate").valueAsDate = new Date()
 	
@@ -111,23 +114,22 @@ $(document).ready(function(){
 			alert("사용내역을 입력하셔야 합니다.");
 		}else
 		$.ajax({
-				url : "expense/insert",
-				type : "post",
-				data : {"insert_date" : insert_date,
-						   "type" : type,
-						   "price" : uncomma(price),
-						   "cartegory" : cartegory,
-						   "moneybook_type" : moneybook_type},
-				dateType : "json",
-				success : function(){
-					moneybookSelect();
-					$("#expense_form")[0].reset();
-					document.getElementById("insert_date").valueAsDate = new Date();
-				},
-				error : function(request, error){
-					alert("실패");
-					alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
-				}
+			url : "expense/insert",
+			type : "post",
+			data : {"insert_date" : insert_date,
+					   "type" : type,
+					   "price" : uncomma(price),
+					   "cartegory" : cartegory,
+					   "moneybook_type" : moneybook_type},
+			success : function(){
+				moneybookSelect();
+				$("#expense_form")[0].reset();
+				document.getElementById("insert_date").valueAsDate = new Date();
+			},
+			error : function(request, error){
+				alert("실패");
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
 		})
 	});
 });
@@ -219,7 +221,7 @@ $(document).on("click", "#update_expense",function(){
 		var update_eno = $("#update_eno").val();
 		$.ajax({
 			url : "expense/update",
-			type : "POST",
+			type : "post",
 			data : {"price" : uncomma(update_price),
 			   		   "type" : update_type,
 			    	   "cartegory" : update_cartegory,

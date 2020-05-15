@@ -3,7 +3,7 @@ function comma(){
 var price_comma = $("form[name='form']").find("input[name='price']");
 price_comma.on("keyup", function(event){
  	    // 입력 된 값을 price_comma에 넣어준다
-         var $this = $( this );
+         var $this = $(this);
          var price_comma= $this.val();
          //특수문자, 공백 등 제거하는 정규식
          var price_comma = price_comma.replace(/[\D\s\._\-]+/g, "");

@@ -24,6 +24,7 @@ public class GuestbookServiceImpl implements GuestbookService {
 	//방명록 등록
 	@Override
 	public void guestbook_insert(HttpServletRequest request) {
+		//현재 날짜,시간과 로그인 한 세션이름
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar time = Calendar.getInstance();
 		String insert_date = format.format(time.getTime());

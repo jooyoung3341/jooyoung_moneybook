@@ -67,6 +67,7 @@ public class MoneybookController {
 	@RequestMapping(value="moneybook/admin", method=RequestMethod.GET)
 	public String admin(Model model) {
 		List<Moneybook> moneybooklist = moneybookService.moneybook_select();
+		//가계부 목록을 클라이언트로 전달
 		model.addAttribute("moneybooklist", moneybooklist);
 		return "admin/admin";
 	}
