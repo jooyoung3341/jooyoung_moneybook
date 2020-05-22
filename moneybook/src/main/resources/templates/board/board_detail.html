@@ -90,7 +90,7 @@
 			<th:block th:each="board_status : ${board_status}">
 				<tr th:if="${board_status.moneybook_type == 'expense'}">
 					<td th:text="${board_status.board_date}"></td>
-					<td th:text="${numbers.formatInteger(board_status.price,0,'COMMA')}"></td>
+					<td th:text="${#numbers.formatInteger(board_status.price,0,'COMMA')}"></td>
 					<td th:text="${board_status.cartegory}"></td>
 				</tr>
 			</th:block>
@@ -105,7 +105,7 @@
 			<th:block th:each="board_status : ${board_status}">
 				<tr th:if="${board_status.moneybook_type == 'earnings'}">
 					<td th:text="${board_status.board_date}"></td>
-					<td th:text="${numbers.formatInteger(board_status.price,0,'COMMA')}"></td>
+					<td th:text="${#numbers.formatInteger(board_status.price,0,'COMMA')}"></td>
 					<td th:text="${board_status.cartegory}"></td>
 				</tr>
 			</th:block>

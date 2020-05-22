@@ -42,7 +42,10 @@ function moneybookSelect(sort, sort_flag){
 
 //내역 삭제
 var delete_check = false;
-	$("#moneybook_delete").click(function(){
+
+/*	$("#moneybook_delete").click(function(){*/
+	$(document).on("click","#moneybook_delete",function(){
+		
 		var confirm_val = confirm("삭제 하시겠습니까?");
 		if(confirm_val){
 			var checkArr = new Array();

@@ -6,41 +6,72 @@
 </head>
 <div layout:fragment="content" style="height:250px;">
 <div class="row">
-	<div class="col-md-2">
+	<div class="col-md-3">
+		<br/><br/><br/>
 		<div id="getAsset">
- 			<ul class="list-group">
+		<!-- 자산 목록 -->
+			<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title"><font style="vertical-align: inherit;">자산 목록</font></h3>
+				</div>
+				<ul class="list-group">
+				<th:block th:each="asset, i : ${assetlist}" id="asset_">
+					<a href="#" class="list-group-item" id="assetprice_span" th:value="${asset.ano}">
+					<button type='button' th:id="${'asset_delete'+i.index}" name="asset_delete" th:value="${asset.ano}" class="close">&times;</button><font style="vertical-align: inherit;" th:text="${asset.type}"></font>
+																												<!-- 타임리프에서 제공하는 / 콤마찍기  -->						
+						<span class="badge"><font style="vertical-align: inherit;" th:text="${#numbers.formatInteger(asset.asset_price,0,'COMMA')}"></font></span>
+						
+					</a>
+				</th:block>
+					
+				</ul>
+			</div>
+ 	<!-- 		<ul class="list-group">
  				<th:block th:each="asset, i : ${assetlist}" id="asset_">
 					<a href="#" class="list-group-item list-group-item-action flex-column align-items-start" id="assetprice_span" th:value="${asset.ano}">
 				    	<div class="d-flex w-100 justify-content-between">				   
 				      		<small class="text-primary" th:text="${asset.type}" style="width:49%;"></small>
-						      																				<!-- 타임리프에서 제공하는 / 콤마찍기  -->
+						      																				타임리프에서 제공하는 / 콤마찍기 
 							<span class="badge badge-light" id="asset_price" th:text="${#numbers.formatInteger(asset.asset_price,0,'COMMA')}"></span>
-				      		<!-- 자산삭제 버튼 -->
+				      		자산삭제 버튼
 				      		<button type="button" class="close" data-dismiss="alert" th:id="${'asset_delete'+i.index}" name="asset_delete" th:value="${asset.ano}">&times;</button>
 				      		<input type="hidden" id="delete_ano" th:value="${asset.ano}">
 				    	</div>
 				  	</a>
  				</th:block>
-			</ul>
+			</ul> -->
 		</div>
 	</div>
 
 	<div class="col-md-6">
-		<div class="alert alert-dismissible alert-light">
+	<br/><br/><br/>
+		<div class="panel">
+			
 			<form method="post" id="asset_form">
-				<div class="form-group">
-					<label class="control-label" for="inputDefault">자산 분류</label>
-					<input type="text" class="form-control" id="type">
+				<div class="panel-body">
+						<label class="control-label" for="inputDefault">자산 분류</label>
+					<input type="text" class="form-control" id="type" maxlength="10">
 					<button type="button" class="btn btn-primary" id="asset_insert">자산 추가</button>
 				</div>
 			</form>
 		</div>
 
-		<div id="getAssetprice" class="right"></div>
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">자산 테이블</h3>
+			</div>
+			<div id="getAssetprice" class="panel-body"></div>
+		</div>
+		
 	</div>
 
 	<div class="col-md-3">
-		<div id="getAssetprice_form"></div>
+		<div class="panel">
+			<div class="panel-heading"></div>
+			<div class="panel-body" id="getAssetprice_form">
+			
+			</div>
+		</div>
 	</div>
 
 </div>
@@ -141,16 +172,17 @@ function assetSelect(){
 //자산 목록 disp
  function getAsset(data){
 	disp = "";
+	disp += "<div class='mall-categories'>";
 	disp += "<ul class='list-group'>";
 	$(data).each(function(idx, item){
-		disp += "<a href='#' class='list-group-item list-group-item-action flex-column align-items-start' id='assetprice_span' value='"+item.ano+"'>";
-		disp += "<div class='d-flex w-100 justify-content-between'>";
-		disp += "<small class='text-primary' style='width:49%;'>"+item.type+"</small>";
-		disp += "<span class='badge badge-light' id='asset_price'>"+Number(item.asset_price).toLocaleString('en')+"</span>";
-		disp += "<button type='button' class='close' data-dismiss='alert' id='asset_delete"+idx+"' name='asset_delete' value='"+item.ano+"'>&times;</button>";
-		disp += "</div></a>";
+		disp += "<a href='#' class='list-group-item' id='assetprice_span' value='"+item.ano+"'>";
+		disp += "<i class='fa fa-circle pull-reft'></i><font style='vertical-align: inherit;'>"+item.type+"</font>";
+/* 		disp += "<span class='badge badge-light' id='asset_price'>"+Number(item.asset_price).toLocaleString('en')+"</span>"; */
+		disp += "<button type='button' class='close' id='asset_delete"+idx+"' name='asset_delete' value='"+item.ano+"'>&times;</button>";
+		disp += "</a>";
 	}) 
 	disp += "</ul>";
+	disp += "</div>";
 	$("#getAsset").html(disp);
 } 
 
@@ -211,7 +243,6 @@ function getAssetprice(data, ano){
 	//자산내역 등록 폼
 	var form_disp = "";
 	var price_sum = 0;
-	form_disp += "<div class='alert alert-dismissible alert-light'>";
 	form_disp += "<form method='post' name='form'>";
 	form_disp += "<input type='hidden' id='hidden_ano' value='"+ano+"'>";
 	form_disp += "<div class='form-group'>";
@@ -225,18 +256,22 @@ function getAssetprice(data, ano){
 	form_disp += "</div>";
 	form_disp += "<button type='button' class='btn btn-primary' id='assetprice_insert'>등록</button>";
 	form_disp += "</form>";
-	form_disp += "<div>"; 
 	
-	disp += "<div align='right' style='width: 90%'>";
-	disp += "<button type='button' class='btn btn-outline-danger' id='assetprice_delete'>선택 삭제</button>";
+	disp += "<div align='right' style='width: 85%'>";
+	disp += "<button type='button' class='btn btn-danger btn-icon icon-lg fa fa-times' id='assetprice_delete'></button>";
 	disp += "</div>";
-	disp += "<table class='table table-hover'>";
-	disp += "<th scope='row'></th>";
-	disp += "<th scope='row' name='sort' id='insert_date_sort' value='"+ano+"'><a href='#'>날짜</a></th>";
-	disp += "<th scope='row' name='sort' id='price_sort' value='"+ano+"'><a href='#'>금액</a></th>";
-	disp += "<th scope='row'><div class='custom-control custom-checkbox'>"
+	disp += "<table id='demo-dt-basic' class='table table-striped table-boardered'>";
+	disp += "<thead>";
+	disp += "<tr>";
+	disp += "<th></th>";
+	disp += "<th name='sort' id='insert_date_sort' value='"+ano+"'><a href='#'>날짜</a></th>";
+	disp += "<th name='sort' id='price_sort' value='"+ano+"'><a href='#'>금액</a></th>";
+	disp += "<th><div class='custom-control custom-checkbox'>"
 	disp += "<input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'/>";
 	disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
+	disp += "</tr>";
+	disp += "</thead>";
+	disp += "<tbody>";
 	$(data).each(function(idx, item){
 		disp += "<tr>";																									  
 		disp += "<td><button type='button' class='btn btn-outline-primary' id='"+idx+item.pno+"' name='assetprice_update_modal' value='"+item.pno+"'>수정</button>";
@@ -252,6 +287,8 @@ function getAssetprice(data, ano){
 		disp += "<td align='right'>합계 :</td>";
 		disp += "<td>"+Number(price_sum).toLocaleString('en')+"</td>";
 		disp += "<td></td>";
+		disp += "</tbody>";
+		disp += "</table>";
 	$("#getAssetprice").html(disp);
 	$("#getAssetprice_form").html(form_disp);
 	document.getElementById("insert_date").valueAsDate = new Date();

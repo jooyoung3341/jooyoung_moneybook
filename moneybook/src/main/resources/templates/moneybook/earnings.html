@@ -8,19 +8,26 @@
 
 <div layout:fragment="content">
 <div class="row">
-	<div class="col-md-9">
-		<input type="month" id="indate" onchange="earningsSelect()"/>
+	<div class="col-md-8">
+	<!-- 	<input type="month" id="indate" onchange="earningsSelect()"/>
 		
 		<div align="right" style="width: 92%">
 			<button type="button" class="btn btn-outline-danger" id="earnings_delete">선택 삭제</button>
+		</div> -->
+		<div class="panel">
+		<br/><br/><br/><br/>
+		<div class="panel-heading">
+			<h3 class="panel-title">수입 테이블</h3><input type="month" id="indate" onchange="moneybookSelect()"/>
 		</div>
-		
-		<div id="getEarnings"></div>
+		<div id="getEarnings" class="panel-body"></div>
+	</div>
 	</div>
 	
-	<div class="col-md-3">
+	<div class="col-md-4">
 	
-		<div class="alert alert-dismissible alert-light">
+		<div class="panel">
+		<div class="panel-heading"></div>
+		<div class="panel-body">
 			<form method="post" id="earnings_form" name="form">
 				<input type="hidden" id="moneybook_type" value="earnings">
 				
@@ -42,9 +49,8 @@
 			</form>
 		</div>
 	</div>
-
 </div>
-
+</div>
 <!-- Modal -->
 <div class="modal" id="earnings_modal">
 	<div class="modal-dialog" role="document">
@@ -122,15 +128,22 @@ $("#earnings_insert").click(function(){
 function getMoneybook(data){
 	var price_sum = 0;
 	var disp = "";
-	disp += "<table class='table table-hover'>";
+	disp += "<br/>";
+	disp += "<div align='right' style='width: 85%'>";
+	disp += "<button type='button' class='btn btn-danger btn-icon icon-lg fa fa-times' id='moneybook_delete'></button>";
+	disp += "</div>";
+	disp += "<table id='demo-dt-basic' class='table table-striped table-boardered'>";
+	disp += "<thead>";
 	disp += "<tr>";
-	disp += "<th scope='row' width='100'></th>";
-	disp += "<th scope='row' width='200' name='sort' id='insert_date_sort'><a href='#'>날짜</a></th>";
-	disp += "<th scope='row' name='sort' id='price_sort'><a href='#'>금액</a></th>";
-	disp += "<th scope='row' name='sort' id='cartegory_sort'><a href='#'>수입처</a></th>";
-	disp += "<th scope='row'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'>"
+	disp += "<th width='100'></th>";
+	disp += "<th width='200' name='sort' id='insert_date_sort'><a href='#'>날짜</a></th>";
+	disp += "<th name='sort' id='price_sort'><a href='#'>금액</a></th>";
+	disp += "<th name='sort' id='cartegory_sort'><a href='#'>수입처</a></th>";
+	disp += "<th><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkAll' id='customCheck' onclick='checkAll()'>"
 	disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
 	disp += "</tr>";
+	disp += "</thead>";
+	disp += "<tbody>";
 	$(data).each(function(idx, item){
 		disp += "<tr>";
 		disp += "<td><button type='button' class='btn btn-outline-primary' id='"+idx+item.ino+"' name='earnings_update_modal' value='"+item.ino+"'>수정</button>";
@@ -146,7 +159,8 @@ function getMoneybook(data){
 	disp += "<td align='right'>합계 :</td>";
 	disp += "<td>"+Number(price_sum).toLocaleString('en')+"</td>";
 	disp += "<td></td>";
-	disp += "<td></td>"
+	disp += "<td></td>";
+	disp += "</tbody>";
 	disp += "</table>";
 	$("#getEarnings").html(disp);
 }

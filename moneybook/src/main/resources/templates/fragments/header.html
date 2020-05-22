@@ -1,46 +1,83 @@
 <!DOCTYPE html>
 <html>
 <head xmlns:th="http://www.thymeleaf.org">
-<div >
+</head>
+<div id="container" class="effect mainnav-full">
 
-<header th:fragment="headerFragment">
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" href="#"><i sec:authentication="principal.username"></i>가계부</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<header th:fragment="headerFragment" id="navbar">
+	<div id="navbar-container" class="boxed">
+		<div class="navbar-header">
+			<a href="#" class="navbar-brand">
+				<div class="brand-title">
+									<!-- 로그인 한 가계부이름 넣을것 -->
+					<span class="brand-text">OOO가계부</span>
+				</div>
+			</a>
+		</div>
+		
+		<div class="navbar-content clearfix">
+			<ul class="nav navbar-top-links pull-right">
+				<li id="dropdown-user">
+					<span class="pull-right"><div class="username hidden-xs">로그아웃</div></span>
+				</li>
+			</ul>
+		</div>
+	</div>
 
-  <div class="collapse navbar-collapse" id="navbarColor01">
-    <ul class="navbar-nav mr-auto">
- 		<li class="nav-item">
-       		<a class="nav-link" href="moneybook">지출</a>
-      	</li>
-      	<li class="nav-item">
-     		<a class="nav-link" href="earnings">수입</a>
-      	</li>
-      	<li class="nav-item">
-        	<a class="nav-link" href="asset">자산</a>
-      	</li>
-      	<li class="nav-item">
-        	<a class="nav-link" href="board">가계부 이야기</a>
-      	</li>
-      	<li class="nav-item">
-        	<a class="nav-link" href="guestbook">방명록</a>
-      	</li>
-      	<li class="nav-item">
-        	<a class="nav-link" href="calendar">가계부 달력</a>
-      	</li>
-      	<th:block th:if="${#authentication.principal.username == 'admin'}">
-			<li class="nav-item">
-      			<a class="nav-link" href="admin">관리자 페이지</a>
-      		</li>
-      	</th:block>
-    </ul>
-    <form class="form-inline my-2 my-lg-0">
-  	   <a th:href="@{/logout}">로그아웃</a>
-    </form>
-  </div>
-</nav>
+	<nav class="navbar navbar-default megamenu">
+		<!-- 뭐하는 div class인지 확인해 볼 것 -->
+	<!-- 	<div class="navbar-header">
+			<button type="button" data-toggle="collapse" data-target="#defaultmenu" class="navbar-toggle">
+				<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+			</button>
+		</div> -->
+		<!-- ----------------------------- -->
+		<div id="defaultmenu" class="navbar-collapse collapse">
+				
+			<ul class="nav navbar-nav">
+				<!-- 드롭다운 예시 -->
+				<li class="dropdown">	
+					<a href="#" data-toggle="dropdown" class="dropdown-toggle">드롭다운 예시<b class="caret"></b></a>
+					<ul class="dropdown-menu" role="menu">
+						<li>
+							<a href="#">예시1</a>
+						</li>	
+					</ul>
+				</li>
+			
+				<li>
+					<a href="moneybook">지출</a>
+				</li>
+			
+				<li>
+					<a href="earnings">수입</a>
+				</li>
+				
+				<li>
+					<a href="asset">자산</a>
+				</li>
+				
+				<li>
+					<a href="board">가계부 이야기</a>
+				</li>
+				
+				<li>
+					<a href="guestbook">방명록</a>
+				</li>
+				
+				<li>
+					<a href="calendar">가계부 달력</a>
+				</li>
+				
+				<!-- admin만 볼 수 있게 -->
+				<li>
+					<a href="#">관리자</a>
+				</li>
+				
+			</ul>
+			
+		</div>
+	</nav>
 </header>
 </div>
 </html>
