@@ -8,22 +8,23 @@
 <div class="row">
 	<div class="col-md-3">
 		<br/><br/><br/>
-		<div id="getAsset">
+
 		<!-- 자산 목록 -->
 			<div class="panel">
 				<div class="panel-heading">
 					<h3 class="panel-title"><font style="vertical-align: inherit;">자산 목록</font></h3>
 				</div>
 				<ul class="list-group">
+					<div id="getAsset">
 				<th:block th:each="asset, i : ${assetlist}" id="asset_">
 					<a href="#" class="list-group-item" id="assetprice_span" th:value="${asset.ano}">
 					<button type='button' th:id="${'asset_delete'+i.index}" name="asset_delete" th:value="${asset.ano}" class="close">&times;</button><font style="vertical-align: inherit;" th:text="${asset.type}"></font>
 																												<!-- 타임리프에서 제공하는 / 콤마찍기  -->						
 						<span class="badge"><font style="vertical-align: inherit;" th:text="${#numbers.formatInteger(asset.asset_price,0,'COMMA')}"></font></span>
-						
+			
 					</a>
 				</th:block>
-					
+					</div>
 				</ul>
 			</div>
  	<!-- 		<ul class="list-group">
@@ -40,7 +41,7 @@
 				  	</a>
  				</th:block>
 			</ul> -->
-		</div>
+		
 	</div>
 
 	<div class="col-md-6">
@@ -172,17 +173,15 @@ function assetSelect(){
 //자산 목록 disp
  function getAsset(data){
 	disp = "";
-	disp += "<div class='mall-categories'>";
-	disp += "<ul class='list-group'>";
+
 	$(data).each(function(idx, item){
 		disp += "<a href='#' class='list-group-item' id='assetprice_span' value='"+item.ano+"'>";
-		disp += "<i class='fa fa-circle pull-reft'></i><font style='vertical-align: inherit;'>"+item.type+"</font>";
+		disp += "<button type='button' id='asset_delete"+idx+"' name='asset_delete' value='"+item.ano+"' class='close'>&times;</button>";
+		disp += "<font style='vertical-align: inherit;'>"+item.type+"</font>";
+		disp += "<span class='badge'><font style='vertical-align: inherit;'>"+Number(item.asset_price).toLocaleString('en')+"</font></span>";
 /* 		disp += "<span class='badge badge-light' id='asset_price'>"+Number(item.asset_price).toLocaleString('en')+"</span>"; */
-		disp += "<button type='button' class='close' id='asset_delete"+idx+"' name='asset_delete' value='"+item.ano+"'>&times;</button>";
 		disp += "</a>";
 	}) 
-	disp += "</ul>";
-	disp += "</div>";
 	$("#getAsset").html(disp);
 } 
 

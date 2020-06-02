@@ -15,14 +15,18 @@
 <input type="hidden" th:value="${perPageNum}" id="perPageNum">
 <input type="hidden" th:value="${keyword}" id="keyword">
 	<div class="col-md-7">
-
-	    <label class="control-label" for="readOnlyInput">제목</label>
+		<div class="panel">
+		<div class="panel-heading"></div>
+		<div class="panel-body">
+		
+	    <label class="col-md-3 control-label">
+	    	<font style="vertical-align: inherit;">제목</font></label>
 	    <input class="form-control" type="text" th:placeholder="${board.title}" readonly="">
 		
 
-		<label class="control-label" for="readOnlyInput">이야기</label>
-		<div class="alert alert-dismissible alert-light">
-		 	<p th:text="${board.content}"></p>
+		<label class="col-md-3 control-label">
+			<font style="vertical-align: inherit;">이야기</font></label>
+		<textarea rows="9" class="form-control" readonly=""><th:block th:text="${board.content}"></th:block></textarea>
 		</div>
 		
 		<input type="hidden" id="recommend_flag" th:value="${board.recommend_status}">
@@ -57,11 +61,14 @@
 		</th:block>
 		<!-- #authentication.principal.username : 로그인한 유저이름(스프링시큐리티) -->
 		<th:block th:if="${board.moneybook_name == #authentication.principal.username || #authentication.principal.username == 'admin'}" >
-			<button type="button" id="board_update" class="btn btn-outline-primary">수정</button>
-			<button type="button" id="board_delete" class="btn btn-outline-danger" >삭제</button>
+			<button type="button" id="board_update" class="btn btn-primary btn-rounded">
+				<font style="vertical-align: inherit:">수정</font></button>
+			<button type="button" id="board_delete" class="btn btn-danger btn-rounded">
+				<font style="vertical-align: inherit;">삭제</font></button>
 		</th:block>
 		<div class="right">
-			<button type="button" id="board_back" class="btn btn-outline-secondary">목록</button>
+			<button type="button" id="board_back" class="btn btn-default btn-rounded">
+				<font style="vertical-align: inherit;">목록</font></button>
 		</div>
 											
 
@@ -73,45 +80,66 @@
 		<div class="form-group">
 			<span sec:authentication="principal.username" id="moneyname" sec:value="principal.username"> </span>
 			<textarea class="form-control" rows="3" id="content"></textarea>
-			<button type="button" id="replay_insert" class="btn btn-outline-primary" th:value="${board.bno}">댓글 등록</button>
+			<button type="button" id="replay_insert" class="btn btn-default btn-rounded" th:value="${board.bno}">댓글 등록</button>
 		</div>
-		<div id="getReply"></div>
+		<div id="getReply" class="tiemline"></div>
 		
+		</div>
+	
 	</div>
+	
+	
+	
 	<div class="col-md-3">
-		지출
-		<table class="table table-hover">
-			<tr>
-				<th scope="row">날짜</th>
-				<th scope="row">금액</th>
-				<th scope="row">내역</th>
-			</tr>
-			<!-- 등록된 가계부 내역 -->
-			<th:block th:each="board_status : ${board_status}">
-				<tr th:if="${board_status.moneybook_type == 'expense'}">
-					<td th:text="${board_status.board_date}"></td>
-					<td th:text="${#numbers.formatInteger(board_status.price,0,'COMMA')}"></td>
-					<td th:text="${board_status.cartegory}"></td>
-				</tr>
-			</th:block>
-		</table>
-		수입
-		<table class="table table-hover">
-			<tr>
-				<th scope="row">날짜</th>
-				<th scope="row">금액</th>
-				<th scope="row">내역</th>
-			</tr>
-			<th:block th:each="board_status : ${board_status}">
-				<tr th:if="${board_status.moneybook_type == 'earnings'}">
-					<td th:text="${board_status.board_date}"></td>
-					<td th:text="${#numbers.formatInteger(board_status.price,0,'COMMA')}"></td>
-					<td th:text="${board_status.cartegory}"></td>
-				</tr>
-			</th:block>
-		</table>
+		<br/><br/><br/>
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">지출</h3>
+			</div>
+			<div class="panel-body">
+				<table class="table table-striped table-boardered">
+					<thead>
+						<tr>날짜</tr>
+						<tr>금액</tr>
+						<tr>내역</tr>
+					</thead>
+					<tbody>
+						<th:block th:each="board_status : ${board_status}">
+							<tr th:if="${board_status.moneybook_type == 'expense'}">
+								<td th:text="${board_status.board_date}"></td>
+								<td th:text="${#numbers.formatInteger(board_status.price,0,'COMMA')}"></td>
+								<td th:text="${board_status.cartegory}"></td>
+							</tr>
+						</th:block>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">수입</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-striped table-boardered">
+						<thead>
+							<tr>날짜</tr>
+							<tr>금액</tr>
+							<tr>내역</tr>
+						</thead>
+						<tbody>
+							<th:block th:each="board_status : ${board_status}">
+								<tr th:if="${board_status.moneybook_type == 'earnings'}">
+									<td th:text="${board_status.board_date}"></td>
+									<td th:text="${#numbers.formatInteger(board_status.price,0,'COMMA')}"></td>
+									<td th:text="${board_status.cartegory}"></td>
+								</tr>
+							</th:block>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
 	</div>
-
 </div>
 
 <!-- 댓글 수정 Modal -->
@@ -207,17 +235,21 @@ function replySelect(){
 //댓글 목록 disp
 function getReply(data){
 	var disp = "";
+
 	$(data).each(function(idx, item){
-		disp += "<div class='alert alert-dismissible alert-primary'>";
+		disp += '<hr size="10px" color="black">';
+		disp += "<div class='tiemline-entry'>";
 		disp += "<p class='text-primary'>"+item.moneybook_name+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 		disp += "<span class='badge badge-light'>"+item.insert_date+"</span></p><br/>";
 		disp += "<p class='text-muted'>"+item.content+"</p>";
 		if(moneybook_name == item.moneybook_name){
-			disp += "<button type='button' class='btn btn-outline-primary' id='"+item.rno+"' name='reply_update_modal' value='"+item.rno+"'>수정</button>";
-			disp += "<button type='button' class='btn btn-outline-danger' id='"+idx+item.rno+"' name='reply_delete' value='"+item.rno+"'>삭제</button>"
+			disp += "<button type='button' class='btn btn-primary btn-rounded' id='"+item.rno+"' name='reply_update_modal' value='"+item.rno+"'>수정</button>";
+			disp += "<button type='button' class='btn btn-danger' id='"+idx+item.rno+"' name='reply_delete' value='"+item.rno+"'>삭제</button>"
 		}
 		disp += "</div>"; 
+		
 	});
+	
 	$("#getReply").html(disp); 
 }
 

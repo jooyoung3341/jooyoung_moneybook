@@ -5,14 +5,52 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<!-- jQuery 설정 -->
-<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>	
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- jQuery 설정 --><!-- 
+<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>	-->
+        <!--jQuery [ REQUIRED ]--><!-- 
+        <script src="/bootstrapTemplate/js/jquery-2.1.1.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>  -->
+        <!--STYLESHEET-->
+        <!--=================================================-->
+        <!--Roboto Slab Font [ OPTIONAL ] -->
+        <link href="http://fonts.googleapis.com/css?family=Roboto+Slab:400,300,100,700" rel="stylesheet">
+        <link href="http://fonts.googleapis.com/css?family=Roboto:500,400italic,100,700italic,300,700,500italic,400" rel="stylesheet">
+        <!--Bootstrap Stylesheet [ REQUIRED ]-->
+        <link href="/bootstrapTemplate/css/bootstrap.min.css" rel="stylesheet">
+        <!--Jasmine Stylesheet [ REQUIRED ]-->
+        <link href="/bootstrapTemplate/css/style.css" rel="stylesheet">
+        <!--Font Awesome [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+        <!--Switchery [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/switchery/switchery.min.css" rel="stylesheet">
+        <!--Weather Icons [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/weather-icons/weather-icons.min.css" rel="stylesheet">
+        <!--Bootstrap Select [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/bootstrap-select/bootstrap-select.min.css" rel="stylesheet">
+        <!--Bootstrap Tags Input [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css" rel="stylesheet">
+        <!--Jquery Tag It [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/tag-it/jquery.tagit.css" rel="stylesheet">
+        <!--Ion.RangeSlider [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/ion-rangeslider/ion.rangeSlider.css" rel="stylesheet">
+        <link href="/bootstrapTemplate/plugins/ion-rangeslider/ion.rangeSlider.skinNice.css" rel="stylesheet">
+        <!--Chosen [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/chosen/chosen.min.css" rel="stylesheet">
+        <!--noUiSlider [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/noUiSlider/jquery.nouislider.min.css" rel="stylesheet">
+        <link href="/bootstrapTemplate/plugins/noUiSlider/jquery.nouislider.pips.min.css" rel="stylesheet">
+        <!--Bootstrap Timepicker [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/bootstrap-timepicker/bootstrap-timepicker.min.css" rel="stylesheet">
+        <!--Bootstrap Datepicker [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet">
+        <!--Dropzone [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/dropzone/dropzone.css" rel="stylesheet">
+        <!--Summernote [ OPTIONAL ]-->
+        <link href="/bootstrapTemplate/plugins/summernote/summernote.min.css" rel="stylesheet">
+        <!--Demo [ DEMONSTRATION ]-->
+        <link href="/bootstrapTemplate/css/demo/jasmine.css" rel="stylesheet">
+        <!--/STYLESHEET-->
 
-<!-- 합쳐지고 최소화된 최신 자바스크립트 -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>   
-<title>Home</title>
-<link href="https://stackpath.bootstrapcdn.com/bootswatch/4.4.1/spacelab/bootstrap.min.css" rel="stylesheet" integrity="sha384-nl8CRcNYOGaXP68QRJeVTXCWAhwqBhRha0QbuubX1qDQpGT3GgclpvyzkR2JzyfZ" crossorigin="anonymous">
 </head>
 
 <body>
@@ -24,7 +62,7 @@
 		<div class="col-md-3"></div>
 		
 		<div class="col-md-6">
-			<div class="alert alert-dismissible alert-light">
+			<!-- <div class="alert alert-dismissible alert-light">
      			<form method="post" th:action="@{/login}">
      				<div id="getAuto">
      					<div class="form-group">
@@ -39,6 +77,37 @@
 						<button type="button" class="btn btn-primary" id="bookregister">가계부 등록</button>&nbsp;&nbsp;&nbsp;
 						<button type="button" class="btn btn-danger" id="autoregister">가계부 자동 생성</button>
 					</form>
+			</div> -->
+			<div class="lock-wrapper">
+			<div class="panel lock-box">
+				<div class="row">
+					<form method="post" th:action="@{/login}">
+						<div class="form-group col-md-12 col-sm-12 col-xs-12">
+						<div id="getAuto">
+						
+							<div class="text-left">
+								<label class="text-muted">
+									<font style="vertical-align: inherit;">가계부 이름</font>
+								</label>
+								<input type="text" class="form-control" id="moneybook_name" name="moneybook_name">
+							</div>
+							
+							<div class="text-left">
+								<label class="text-muted">
+									<font style="vertical-align: inherit;">패스워드</font>
+								</label>
+								<input type="password" class="form-control" id="moneybook_pw" name="moneybook_pw">
+							</div>
+							
+						</div>
+							<div id="getError"></div>
+						<button type="submit" class="btn btn-block btn-primary">들어가기</button>
+						<button type="button" class="btn btn-block btn-primary" id="bookregister">가계부 등록</button>
+						<button type="button" class="btn btn-block btn-danger" id="autoregister">가계부 자동 생성</button>
+						</div>
+					</form>
+				</div>
+			</div>
 			</div>
 		</div>
 		
@@ -52,7 +121,7 @@
 <!-- 가계부 등록 Model -->          
 <div class="modal" id="moneybook_modal">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div class="modal-content" style="height: 350px;"> 
       <div class="modal-header">
         <h5 class="modal-title">가계부 등록</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -63,19 +132,81 @@
         <form method="post" id="moneybook_form" th:onsubmit="return moneybookcheck()">
 			<!-- 시큐리티에 넣기 위한 하이든  -->
 			<input type="hidden" name="authority_name" id="authority_name" value="ROLE_USER"/>
-			<div class="text-primary" id="name_div">가계부 이름 <br/><input type="text" class="form-control" id="name" onblur="confirmName()"></div>
-			<div class="text-primary">패스워드 <br/><input type="password" class="form-control" id="pw"> </div>
-			<div class="text-primary">패스워드 확인 <input type="password" class="form-control" id="confirmpw"/></div>
+			<div class="form-group col-md-12 col-sm-12 col-xs-12">
+			<div class="text-left" id="name_div">
+				<label class="text-muted">
+					<font style="vertical-align: inherit;">가계부 이름</font>
+				</label>
+				<input type="text" class="form-control" id="name" onblur="confirmName()">
+			</div>
+			<div class="text-left">
+				<label class="text-muted">
+					<font style="vertical-align: inherit;">패스워드</font>
+				</label>
+				<input type="password" class="form-control" id="pw">
+			</div>
+			<div class="text-left">
+				<label class="text-muted">
+					<font style="vertical-align: inherit;">패스워드 확인</font>
+				</label>
+				<input type="text" class="form-control" id="confirmpw">
+			</div>
 		<div class="modal-footer">
         <button type="button" class="btn btn-primary" id="moneybook_register">등록하기</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
         </div>
+        </div>
    		</form>
       </div>   
-    </div>
+    </div> 
   </div>
 </div>
-
+        <!--JAVASCRIPT-->
+        <!--=================================================-->
+        
+        <!--jQuery [ REQUIRED ]-->
+        <script src="/bootstrapTemplate/js/jquery-2.1.1.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!--jQuery UI [ REQUIRED ]-->
+        <script src="/bootstrapTemplate/js/jquery-ui.min.js"></script>
+        <!--BootstrapJS [ RECOMMENDED ]-->
+        <script src="/bootstrapTemplate/js/bootstrap.min.js"></script>
+        <!--Fast Click [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/fast-click/fastclick.min.js"></script>
+        <!--Jquery Nano Scroller js [ REQUIRED ]-->
+        <script src="/bootstrapTemplate/plugins/nanoscrollerjs/jquery.nanoscroller.min.js"></script>
+        <!--Metismenu js [ REQUIRED ]-->
+        <script src="/bootstrapTemplate/plugins/metismenu/metismenu.min.js"></script>
+        <!--Jasmine Admin [ RECOMMENDED ]-->
+        <script src="/bootstrapTemplate/js/scripts.js"></script>
+        <!--Switchery [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/switchery/switchery.min.js"></script>
+        <!--Bootstrap Select [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/bootstrap-select/bootstrap-select.min.js"></script>
+        <!--Bootstrap Tags Input [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/bootstrap-tagsinput/bootstrap-tagsinput.min.js"></script>
+        <!--Bootstrap Tags Input [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/tag-it/tag-it.min.js"></script>
+        <!--Chosen [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/chosen/chosen.jquery.min.js"></script>
+        <!--noUiSlider [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/noUiSlider/jquery.nouislider.all.min.js"></script>
+        <!--Bootstrap Timepicker [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/bootstrap-timepicker/bootstrap-timepicker.min.js"></script>
+        <!--Bootstrap Datepicker [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+        <!--Dropzone [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/dropzone/dropzone.min.js"></script>
+        <!--Dropzone [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/ion-rangeslider/ion.rangeSlider.min.js"></script>
+        <!--Masked Input [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/masked-input/jquery.maskedinput.min.js"></script>
+        <!--Summernote [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/summernote/summernote.min.js"></script>
+        <!--Fullscreen jQuery [ OPTIONAL ]-->
+        <script src="/bootstrapTemplate/plugins/screenfull/screenfull.js"></script>
+        <!--Form Component [ SAMPLE ]-->
+     <!--    <script src="/bootstrapTemplate/js/demo/form-component.js"></script> -->
 <script>
 window.onload = function(){
 	errorLogin();
@@ -90,7 +221,10 @@ $("#bookregister").click(function(){
 //모달창 닫을 떄 값 초기화
 $("#moneybook_modal").on("hide.bs.modal", function(){
 	//중복 체크 되기 전 
-	modal_name_div +=  "가계부 이름 <br/><input type='text' class='form-control' id='name' name='name' onblur='confirmName()''>"; 
+	modal_name_div +=  "<label class='text-muted'>";
+	modal_name_div +=  "<font style='vertical-align: inherit;'>가계부 이름</font>";
+	modal_name_div +=  "</label>";
+	modal_name_div +=  "<input type='text' class='form-control' id='name' onblur='confirmName()'>";
 	$("#name_div").html(modal_name_div);
 	modal_name_div = '';
 	//값 초기화
@@ -104,7 +238,10 @@ function confirmName(){
 	var name_div = "";
 
 	 if(moneybook_name.length < 1){
-		 name_div +=  "가계부 이름 <br/><input type='text' class='form-control' id='name' onblur='confirmName()''>"; 
+		name_div +=  "<label class='text-muted'>";
+		name_div +=  "<font style='vertical-align: inherit;'>가계부 이름</font>";
+		name_div +=  "</label>";
+		name_div +=  "<input type='text' class=form-control' id='name' onblur='confirmName()'>";
 		$("#name_div").html(modal_name_div); 
 	 }
 	else if(moneybook_name.search(/\s/) != -1){
@@ -116,10 +253,22 @@ function confirmName(){
 			dataType : "json",
 			success : function(data){
 				if(data.result == true){
-					name_div += "가계부 이름 <br/><input type='text' class='form-control is-valid' id='name' name='name' onblur='confirmName()' value='"+moneybook_name+"'>"; 
+					name_div +=  "<div class='form-group has-success has-feedback'>"
+					name_div +=  "<label for='demo-oi-sccinput' class='control-label'>";
+					name_div +=  "<font style='vertical-align: inherit;'>가계부 이름</font>";
+					name_div +=  "</label>";				
+					name_div +=  "<input type='text' class='form-control' id='name' onblur='confirmName()' value='"+moneybook_name+"'>";
+					name_div +=  "<span class='fa fa-check fa-lg form-control-feedback'></span>";
+					name_div +=  "</div>";
 					namecheck = true;
 				}else	{
-					name_div += "가계부 이름 <br/><input type='text' class='form-control is-invalid' id='name' name='name' onblur='confirmName()' value='"+moneybook_name+"'>";
+					name_div +=  "<div class='form-group has-error has-feedback'>"
+					name_div +=  "<label for='demo-oi-errinput' class='control-label'>";
+					name_div +=  "<font style='vertical-align: inherit;'>가계부 이름</font>";
+					name_div +=  "</label>";				
+					name_div +=  "<input type='text' class='form-control' id='name' onblur='confirmName()' value='"+moneybook_name+"'>";
+					name_div +=  "<span class='fa fa-times fa-lg form-control-feedback'></span>";
+					name_div +=  "</div>";
 					namecheck = false;
 					}
 				$("#name_div").html(name_div);
@@ -148,10 +297,20 @@ $("#autoregister").click(function(){
 					   "authority_name" : authority_name},
 			success : function(){
 				disp = "";
-				disp += "<p class='text-primary'>가계부 이름</p>";
-				disp += "<input type='text' class='form-control' placeholder='Default input' id='moneybook_name' name='moneybook_name' value='"+id+"'/><br/>";
-				disp += "<p class='text-primary'>패스워드</p>";
-				disp += "<input type='password' class='form-control' placeholder='Default input' id='moneybook_pw' name='moneybook_pw' value='"+pw+"'/><br/>";
+				disp += "<div class='text-left'>";
+				disp += "<label class='text-muted'>";
+				disp += "<font style='vertical-align: inherit;'>가계부 이름</font>";
+				disp += "</label>";
+				disp += "<input type='text' class='form-control' id='moneybook_name' name='moneybook_name' value='"+id+"'>";
+				disp += "</div>";
+				
+				disp += "<div class='text-left'>";
+				disp += "<label class='text-muted'>";
+				disp += "<font style='vertical-align: inherit;'>패스워드</font>";
+				disp += "</label>";
+				disp += "<input type='password' class='form-control' id='moneybook_pw' name='moneybook_pw' value='"+pw+"'>";
+				disp += "</div>";
+				
 				$("#getAuto").html(disp);
 				alert("가계부 이름, 패스워드 임의로 생성했습니다.");
 			}

@@ -4,7 +4,7 @@
 <head>
 <th:block layout:fragment="css">
 <style>
-.cal_top{
+/* .cal_top{
     text-align: left;
     font-size: 20px;
     padding:0px 0px 0px 350px;
@@ -23,6 +23,7 @@ table.calendar td{
     border: 1px solid black;
     width: 100px;
 }
+ */
 
 </style>
 </th:block>
@@ -30,16 +31,50 @@ table.calendar td{
 <title>가계부 달력</title>
 </head>
 <div layout:fragment="content">
-  		<div class="cal_top">
-  		<!-- 이전달로 이동 -->
+<br/><br/><br/><br/>
+
+<div class="panel">
+	<div class="panel-body">
+		<div class="fc fc-ltr fc-unthemed">
+			<div class="fc-toolbar">
+			<div class="fc-left">
+				<button type="button" class="fc-prev-button fc-button fc-state-default fc-corner-left" id="movePrevMonth"><span class="fc-icon fc-icon-left-single-arrow"></span></button>
+				<button type="button" class="fc-next-button fc-button fc-state-default fc-corner-right" id="moveNextMonth"><span class="fc-icon fc-icon-right-single-arrow"></span></button>
+			</div>
+			<div class="fc-right">
+				<span>
+		        <span class="badge badge-danger" style="height:30px;">지출</span><span id="exsum" class="text-danger"></span>
+		        <span class="badge badge-info" style="height:30px;">수입</span><span id="easum" class="text-info"></span>
+		    	</span>
+			</div>
+				<div class="fc-center">
+					
+					<!-- 달력 년,월 -->
+					<h2 id="cal_top_year"></h2>
+					
+				</div>
+			</div>
+		
+			<div class="fc-view-container">
+				<div class="fc-view fc-month-view fc-basic-view" id="getCalendar">
+				
+				</div>
+				
+			</div>
+			
+		</div>
+	</div>
+</div>
+<!--   		<div class="cal_top">
+  		이전달로 이동
         <a href="#" id="movePrevMonth">
         	<span id="prevMonth" class="cal_tit">&lt;</span>
         </a>
-        <!-- 년 -->
+        년
         <span id="cal_top_year"></span>
-        <!-- 월 -->
+        월
         <span id="cal_top_month"></span>
-        <!-- 다음달로 이동 -->
+        다음달로 이동
         <a href="#" id="moveNextMonth">
         	<span id="nextMonth" class="cal_tit">&gt;</span>
         </a>
@@ -51,11 +86,11 @@ table.calendar td{
     <div id="getCalendar" class="cal">
     </div>
     <div id="getSum"></div>
- 
+  -->
  <!-- modal -->
- <div class="modal fade bd-example-modal-xl" id="calendar_modal" tabindex="-1" role="dialog"
- 		aria-labelledby="myExtraLargeModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-xl" role="document">
+
+<div class="modal" id="calendar_modal">
+	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
 			  	<h5 class="modal-title"></h5>
@@ -80,7 +115,6 @@ table.calendar td{
 						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
 					</div>
 			</div>
-	
 			
 			<div class="col-md-4">
 				<ul class="nav nav-tabs">
@@ -104,6 +138,9 @@ table.calendar td{
 					
 					<!-- 지출 등록 -->
 					<div class="tab-pane fade" id="expense">
+					<div class="panel">
+						<div class="panel-heading"></div>
+						<div class="panel-body">
 						<form method="post" id="expense_form"  name="form">
 
 							<div class="form-group">
@@ -112,7 +149,7 @@ table.calendar td{
 							</div>
 							
 							<div class="form-group">
-						    	<select class="custom-select" id="expense_type">
+						    	<select class="form-control selectpicker" id="expense_type">
 						      		<option value="cash">현금</option>
 						      		<option value="card">카드</option>
 						    	</select>
@@ -129,12 +166,17 @@ table.calendar td{
 							</div>
 							<button type="button" class="btn btn-primary" id="expense_insert" name="insert">등록</button>    
 						</form>
+						</div>
+						</div>
 					</div>
 					
 					<!-- 수입 등록 -->
 					<div class="tab-pane fade" id="earnings">
+					<div class="panel">	
+						<div class="panel-heading"></div>
+						<div class="panel-body">
 						<form method="post" id="earnings_form" name="form">
-							
+						
 							<div class="form-group">
 								<label class="col-form-label" for="inputDefault">날짜</label>
 								<input type="date" class="form-control" id="earnings_insert_date" name="moneybook_date" readonly>
@@ -149,9 +191,12 @@ table.calendar td{
 							</div>
 							<button type="button" class="btn btn-primary" id="earnings_insert" name="insert">등록</button>
 						</form>
+						</div>
 					</div>
+					</div>
+					
+					
 				</div>
-				
 			</div>
 			</div>
 			</div>
@@ -203,14 +248,20 @@ var calendarList = new Array();
 function calendar(){
     var caldisp = "";
     var calnum = 0;
-    caldisp += "<table class='calendar'>";
-    caldisp += "<tr><th>일</th><th>월</th><th>화</th><th>수</th><th>목</th><th>금</th><th>토</th></tr>";
+    caldisp += "<table>";
+    caldisp += "<thead><tr'><th class='fc-day-header fc-widget-header fc-sun'>일</th>";
+    caldisp += "<th class='fc-day-header fc-widget-header fc-mon'>월</th>";
+    caldisp += "<th class='fc-day-header fc-widget-header fc-tue'>화</th>";
+    caldisp += "<th class='fc-day-header fc-widget-header fc-wed'>수</th>";
+    caldisp += "<th class='fc-day-header fc-widget-header fc-thu'>목</th>";
+    caldisp += "<th class='fc-day-header fc-widget-header fc-fri'>금</th>";
+    caldisp += "<th class='fc-day-header fc-widget-header fc-sat'>토</th></tr></thead>";
     //열 구하기
     for(var i = 0; i < 6; i++){
     	caldisp += "<tr height='100'>";
         //행 구하기
     	for(var j = 0; j < 7 ;j++){
-        	caldisp += "<td style='text-overflow:ellipsis;overflow:hidden;white-space:nowrap'>";
+        	caldisp += "<td style='text-overflow:ellipsis;overflow:hidden;white-space:nowrap''>";
         	caldisp += "<a href='#'>"
         	caldisp += "<div class='cal_day' id='cal_moneybook"+calnum+"' name='cal_moneybook'></div>";
         	caldisp += "</a>"
@@ -246,9 +297,11 @@ function drawDays(calendarList){
 	//수입 합계
 	var easum = 0;
 	var sumdisp = "";
+	var cal_disp = "<font style='vertical-align: inherit;'>"+year+"년"+month+"월</font>";
+	//cal_disp += "<a href='#' id='moveNextMonth'><span id='nextMonth' class='cal_tit'>&gt;</span></a>" ;
+	
 	//달력 상단에 년과 월 지정
-    $("#cal_top_year").text(year);
-    $("#cal_top_month").text(month);
+    $("#cal_top_year").html(cal_disp);
 	//일자 표시
     for(var i = firstDay.getDay(); i < firstDay.getDay() + lastDay.getDate(); i++){
         tdDay.eq(i).text(++dayCount);     
@@ -356,7 +409,7 @@ function getNewInfo(){
 
 //달력 모달창에서 데이터 삽입
 $("button[name=insert]").click(function(){
-	//등록버튼 클린한 아이디 값을 가져와서 지출(ex), 수입(ea)구분
+	//등록버튼 클릭한 아이디 값을 가져와서 지출(ex), 수입(ea)구분
 	var insert = $(this).attr("id");
 	var moneybook_type = insert.replace("_insert","");
 	//var type = insert.substring(0,2);
@@ -500,7 +553,7 @@ $(document).on("click","tr[name=moneybook_detail]",function getDetail(){
 	detailDisp += "<input type='hidden' id='detail_moneybook_date' value='"+detail_moneybook_type+"'>";
 	detailDisp += "<div class='form-group'>";
 	detailDisp += "<label class='col-form-label' for='inputDefault'>날짜</label>";
-	detailDisp += "<input type='date' class='form-control' id='detail_insert_date' value='"+detail_insert_date+"'>";
+	detailDisp += "<input type='date' class='form-control' id='detail_insert_date' value='"+detail_insert_date+"' readonly/>";
 	detailDisp += "</div>";
 	
 	if(detail_moneybook_type == "expense"){
@@ -618,13 +671,12 @@ $(document).on("click","#detail_update", function(){
 //모달창 초기화
 $("#calendar_modal").on("hide.bs.modal", function(){
 	var detailDisp = "";
-	//$("#calendar_modal").find("form[name=form]")[0].reset();
 	$("form[name=form]")[0].reset();
-	//$("#calendar_modal").find("#earnings_form")[0].reset();
 	detailDisp += "<div class='form-group'>";
 	detailDisp += "</div>";
 	$("#detail").html(detailDisp);
-	location.reload();
+
+	getNewInfo();
 })
 </script>
 </th:block>

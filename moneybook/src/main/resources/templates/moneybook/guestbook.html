@@ -5,19 +5,19 @@
 <meta charset="UTF-8">
 <th:block layout:fragment="css">
 <style type="text/css">
-	#table {	
+/* 	#table {	
 		display: table; 
 		width: 100%;
 	}
-	/* 테이블의 행  */
-	.row1 {
+ */	/* 테이블의 행  */
+/* 	.row1 {
 		display: table-row;	
 	}
 	#cell {
 		display: table-cell; 
 		padding: 4px; 
 		border-bottom: 1px solid #DDD;
-	}
+	} */
 /* 	p{
 	width:350px;
 	} */
@@ -27,6 +27,7 @@
 </head>
 <div layout:fragment="content">
 <input type="hidden" id="name" th:value="${moneybook_name}">
+<br/><br/><br/>
 <button type="button" class="btn btn-primary" id="guestbook_modal_btn">방명록 쓰기</button>
 <div id="getGuestbook"></div>
 
@@ -144,22 +145,29 @@ function getGuestbook(data){
 	$(data).each(function(idx, item){
 		//i j 나눈 값이 0일경우에만 i=4, j=4의 배수일경우에만
 		if(i%j == 0){
-			disp += "<span class='row1'>";
+			disp += "<div class='row'>";
 		}
-		disp += "<p class='alert alert-dismissible alert-danger' id='cell' style='width:300px; float:left; margin-left:10px; '>";
-		disp += "<strong>";
-		disp += item.moneybook_name+"<smail>"+item.insert_date+"</smail>";
-		disp += "<br/>"+item.content;
-		disp += "</strong><br/></br>";
+		
+		disp += "<div class='col-lg-4' id='cell' style='width:300px; float:left; margin-left:10px;'>";
+		disp += "<div class='panel'>";
+		disp += "<div class='panel-heading'>";
+		disp += item.moneybook_name+"<span style='float: right;'>"+item.insert_date+"</span>";
+		disp += "</div>";
+		disp += "<div class='panel-body'>";
+		disp += item.content;
+		disp += "</div>";
+		//disp += "<br/>"+item.content;
+		
 		if(moneybook_name == item.moneybook_name || moneybook_name == 'admin'){
-			disp += "<button type='button' class='btn btn-outline-primary' id='"+idx+"' name='guestbook_update' value='"+item.gno+"'>수정</button>";
-			disp += "<button type='button' class='btn btn-outline-danger' id='"+idx+item.gno+"' name='guestbook_delete' value='"+item.gno+"'>삭제</button>";
+			disp += "<button type='button' class='btn btn-primary btn-round' id='"+idx+"' name='guestbook_update' value='"+item.gno+"'>수정</button>";
+			disp += "<button type='button' class='btn btn-danger btn-round' id='"+idx+item.gno+"' name='guestbook_delete' value='"+item.gno+"'>삭제</button>";
 		} 
-		disp += "</p>&nbsp;&nbsp;&nbsp;";
+		disp += "</div>";
+		disp += "</div>&nbsp;&nbsp;&nbsp;";
 		
 		i += 1;
 		if(i%j == 0){
-			disp += "</span><br/>";
+			disp += "</div><br/>";
 		}
 	})
 	disp += "</div>";

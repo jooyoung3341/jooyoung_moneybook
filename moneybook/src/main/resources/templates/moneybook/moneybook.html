@@ -155,7 +155,7 @@ function getMoneybook(data){
 	disp += "<div align='right' style='width: 85%'>";
 	disp += "<button type='button' class='btn btn-danger btn-icon icon-lg fa fa-times' id='moneybook_delete'></button>";
 	disp += "</div>";
-	disp += "<table id='demo-dt-basic' class='table table-striped table-boardered'>";
+	disp += "<table class='table table-striped table-boardered'>";
 	disp += "<thead>";
 	disp += "<tr>";
 	disp += "<th></th>";
@@ -167,7 +167,7 @@ function getMoneybook(data){
 	disp += "<label class='custom-control-label' for='customCheck'></label></div></th>";
 	disp += "</tr>";
 	disp += "</thead>";
-	disp += "</tbody>";
+	disp += "<tbody>";
 	$(data).each(function(idx, item){
 		if(item.type == 'cash'){
 			type = '현금';
