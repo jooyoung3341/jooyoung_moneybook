@@ -7,18 +7,19 @@
 <header th:fragment="headerFragment" id="navbar">
 	<div id="navbar-container" class="boxed">
 		<div class="navbar-header">
-			<a href="#" class="navbar-brand">
+			
 				<div class="brand-title">
 									<!-- 로그인 한 가계부이름 넣을것 -->
-					<span class="brand-text">OOO가계부</span>
+					<span class="brand-text" th:text="${#authentication.principal.username}+가계부"></span>
 				</div>
-			</a>
+			<!-- <a href="#" class="navbar-brand">
+			</a> -->
 		</div>
 		
 		<div class="navbar-content clearfix">
 			<ul class="nav navbar-top-links pull-right">
 				<li id="dropdown-user">
-					<span class="pull-right"><div class="username hidden-xs">로그아웃</div></span>
+					<span class="pull-right"><div class="username hidden-xs"><a href="/logout">로그아웃</a></div></span>
 				</li>
 			</ul>
 		</div>
@@ -35,16 +36,9 @@
 		<div id="defaultmenu" class="navbar-collapse collapse">
 				
 			<ul class="nav navbar-nav">
-				<!-- 드롭다운 예시 -->
-				<li class="dropdown">	
-					<a href="#" data-toggle="dropdown" class="dropdown-toggle">드롭다운 예시<b class="caret"></b></a>
-					<ul class="dropdown-menu" role="menu">
-						<li>
-							<a href="#">예시1</a>
-						</li>	
-					</ul>
+				<li>
+				&emsp;&emsp;&emsp;
 				</li>
-			
 				<li>
 					<a href="moneybook">지출</a>
 				</li>
@@ -54,7 +48,7 @@
 				</li>
 				
 				<li>
-					<a href="asset">자산</a>
+					<a href="asset">자산</a>	
 				</li>
 				
 				<li>
@@ -70,10 +64,11 @@
 				</li>
 				
 				<!-- admin만 볼 수 있게 -->
+				<th:block th:if="${#authentication.principal.username == 'admin'}" >
 				<li>
-					<a href="#">관리자</a>
+					<a href="admin">관리자</a>
 				</li>
-				
+				</th:block>
 			</ul>
 			
 		</div>

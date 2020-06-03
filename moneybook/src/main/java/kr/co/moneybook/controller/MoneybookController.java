@@ -73,7 +73,7 @@ public class MoneybookController {
 	}
 	
 	//가계부 삭제					   
-	@RequestMapping(value="moneybook/moneybook/delete", method=RequestMethod.GET)
+	@RequestMapping(value="moneybook/admin/delete", method=RequestMethod.GET)
 	@ResponseBody
 	public void moneybookDelete(HttpServletRequest request){
 		moneybookService.moneybookDelete(request);	

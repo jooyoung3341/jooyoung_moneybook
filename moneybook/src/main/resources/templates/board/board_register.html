@@ -8,36 +8,48 @@
 <title>가계부 이야기 등록</title>
 </head>
 <div layout:fragment="content">
-<div class="row">
-<div class="col-md-7">
-
-<form method="post" th:action="@{/board/board_register}" onsubmit="return check()">
-	<div id="status_disp"></div>
-	<div class="form-group">
-		<label class="col-form-label" for="inputDefault">제목</label>
-		<input type="text" class="form-control" id="title" name="title">
-	</div>
-
-	<div class="form-group">
-		<label class="col-form-label" for="inputDefault"></label>
-		<textarea class="form-control" rows="3" id="content" name="content"></textarea>
-	</div>
-	
-	<button type="submit" class="btn btn-primary" id="board_register">등록</button>
-</form>
-</div>
-
-<div class="col-md-3">
-	
-	<div class="form-group">
-		<label class="col-form-label" for="inputDefault">가져올 가계부 날짜</label>
-		<input type="month" class="form-control" id="moneybook_date">
-		<button type="button" id="board_status_import">가계부 가져오기</button>
+<br/><br/><br/><br/>
+	<div class="row">
+		<div class="col-md-7">
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">가계부이야기 작성</h3>
+			</div>
+			<div class="panel-body">
+				<form method="post" th:action="@{/board/board_register}" onsubmit="return check()">
+					<div id="status_disp"></div>
+					<div class="form-group">
+						<label class="col-form-label">제목</label>
+						<input type="text" class="form-control" id="title" name="title">
+					</div>
+				
+					<div class="form-group">
+						<label class="col-form-label"></label>
+						<textarea class="form-control" rows="3" id="content" name="content"></textarea>
+					</div>
+					
+					<button type="submit" class="btn btn-primary" id="board_register">등록</button>
+				</form>
+			</div>
+		</div>
+		</div>
+		
+		<div class="col-md-4">
+		<div class="panel">
+		<div class="panel-heading">
+			<h2 class="panel-title">가져올 가계부 날짜</h3>
+			<input type="month" class="form-control" id="moneybook_date">
+		</div>
+		<br/><br/>
+		<div calss="panel-body">
+			<div class="form-group">
+				<button type="button" class="btn btn-default btn-rounded" id="board_status_import">가계부 가져오기</button>
 			</div>
 			<div id="moneybook_status_disp"></div>
-
-</div>
-</div>
+		</div>
+		</div>
+		</div>
+	</div>
 </div>
 <th:block layout:fragment="script">
 <script>
@@ -111,12 +123,14 @@ $("#board_status_import").click(function(){
 function getBoard_status(data){
 	var status_disp = "";
 	var disp = "";
-	disp += "<table class='table table-hover'>";
-	disp += "<tr>";
-	disp += "<th scope='row'>날짜</th>";
-	disp += "<th scope='row'>금액</th>";
-	disp += "<th scope='row'>내역</th>";
-	disp += "</tr>";
+	disp += "<h3 class='panel-title'>지출 테이블</h3>"
+	disp += "<table class='table table-striped table-boardered'>";
+	disp += "<thead><tr>";
+	disp += "<th>날짜</th>";
+	disp += "<th>금액</th>";
+	disp += "<th>내역</th>";
+	disp += "</tr></thead>";
+	disp += "<tbody>";
 	$(data).each(function(idx, item){
 		if(item.moneybook_type == "expense"){
 			status_disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
@@ -130,13 +144,17 @@ function getBoard_status(data){
 			disp += "</tr>";
 		}
 	})
+	disp += "<tbody>";
 	disp += "</table>";
-	disp += "<table class='table table-hover'>";
-	disp += "<tr>";
-	disp += "<th scope='row'>날짜</th>";
-	disp += "<th scope='row'>금액</th>";
-	disp += "<th scope='row'>내역</th>";
-	disp += "</tr>";
+
+	disp += "<h3 class='panel-title'>수입 테이블</h3>"
+	disp += "<table class='table table-striped table-boardered'>";
+	disp += "<thead><tr>";
+	disp += "<th>날짜</th>";
+	disp += "<th>금액</th>";
+	disp += "<th>내역</th>";
+	disp += "</tr></thead>";
+	disp += "<tbody>";
 	$(data).each(function(idx, item){
 		if(item.moneybook_type == "earnings"){
 			status_disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
@@ -150,7 +168,8 @@ function getBoard_status(data){
 			disp += "</tr>";
 		}
 	})
-		disp += "</table>";
+	disp += "</tbody>";
+	disp += "</table>";
 
 	document.getElementById("moneybook_status_disp").innerHTML = disp;
 	document.getElementById("status_disp").innerHTML = status_disp;

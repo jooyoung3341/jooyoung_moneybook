@@ -44,10 +44,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	from board
 	<!-- 검색어 -->
 	<include refid="search"></include>
-	<if test="sort != null">
-			order by ${sort} desc
+	<if test='sort == "insert_date" or sort == "recommend" or sort == "reply" or sort == "readcnt"'>
+		order by ${sort} desc
 	</if>
-	<if test="sort == null">
+	<if test='sort == null or sort == ""'>
 		order by insert_date desc
 	</if>
 

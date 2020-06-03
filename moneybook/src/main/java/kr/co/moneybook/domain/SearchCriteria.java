@@ -4,7 +4,17 @@ package kr.co.moneybook.domain;
 public class SearchCriteria extends Criteria {
 	//검색어를 저장할 변수
 	private String keyword;
+	//정렬
+	private String sort;
 
+	public String getSort() {
+		return sort;
+	}
+
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+	
 	public String getKeyword() {
 		return keyword;
 	}

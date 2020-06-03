@@ -111,7 +111,7 @@ table.calendar td{
 					
 					<div class="form-group" id="modal_price" name="price"></div>
 					<div class="form-group" id="modal_cartegory"></div>
-					<div class="modal-footer">
+					<div>
 						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
 					</div>
 			</div>
@@ -139,7 +139,6 @@ table.calendar td{
 					<!-- 지출 등록 -->
 					<div class="tab-pane fade" id="expense">
 					<div class="panel">
-						<div class="panel-heading"></div>
 						<div class="panel-body">
 						<form method="post" id="expense_form"  name="form">
 
@@ -173,7 +172,6 @@ table.calendar td{
 					<!-- 수입 등록 -->
 					<div class="tab-pane fade" id="earnings">
 					<div class="panel">	
-						<div class="panel-heading"></div>
 						<div class="panel-body">
 						<form method="post" id="earnings_form" name="form">
 						
@@ -579,8 +577,8 @@ $(document).on("click","tr[name=moneybook_detail]",function getDetail(){
 	detailDisp += "<input type='text' class='form-control' id='detail_cartegory' value='"+detail_cartegory+"'>";
 	detailDisp += "</div>";
 	
-	detailDisp += "<button type='button' class='btn btn-outline-primary' id='detail_update'>수정</button>&emsp;&emsp;"
-	detailDisp += "<button type='button' class='btn btn-outline-danger' id='detail_delete'>삭제</button>"
+	detailDisp += "<button type='button' class='btn btn-primary' id='detail_update'>수정</button>&emsp;&emsp;"
+	detailDisp += "<button type='button' class='btn btn-danger' id='detail_delete'>삭제</button>"
 	detailDisp += "</form>"
 	
 	$("#detail").html(detailDisp);
