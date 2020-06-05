@@ -8,7 +8,7 @@
 <title>가계부 이야기 - 수정</title>
 </head>
 <div layout:fragment="content">
-<input type="hidden" id="bno" th:value="${board.bno}">
+
 <input type="hidden" id="page" th:value="${page}">
 <input type="hidden" id="keyword" th:value="${keyword}">
 <br/><br/><br/><br/>
@@ -20,6 +20,7 @@
 	</div>
 	<div class="panel-body">
 		<form method="post" th:action="@{/board/board_update}">
+			<input type="hidden" name="bno" th:value="${board.bno}">
 			<div class="form-group">
 				<label class="col-form-label">제목</label>
 				<input tpye="text" class="form-control" id="title" name="title" th:value="${board.title}">
