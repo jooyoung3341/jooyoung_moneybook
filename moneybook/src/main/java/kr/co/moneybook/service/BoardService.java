@@ -34,4 +34,7 @@ public interface BoardService {
 	
 	//가계부이야기 수정
 	public void board_update(HttpServletRequest request);
+	
+	//가계부이야기 상세보기 합계금액
+	public List<Board> board_sum(HttpServletRequest request);
 }

@@ -54,5 +54,8 @@ public interface BoardMapper {
 	//가계부이야기 추천
 	public void board_recommend(Map<String, Object> hashRecommend);
 	
+	//가계부이야기 상세보기 금액 합계
+	public List<Board> board_sum(int bno);
+	
 	
 }

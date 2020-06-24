@@ -69,6 +69,7 @@ public class BoardController {
 		Board board = boardService.board_detail(request);
 		//가계부이야기 가계부내역 status
 		List<Board> board_status = boardService.board_status_select(request);
+		List<Board> board_sum = boardService.board_sum(request);
 		User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		model.addAttribute("keyword", criteria.getKeyword());
 		model.addAttribute("page", criteria.getPage());		
@@ -76,6 +77,7 @@ public class BoardController {
 		model.addAttribute("moneybook_name", user.getUsername());
 		model.addAttribute("board", board);
 		model.addAttribute("board_status", board_status);
+		model.addAttribute("board_sum", board_sum);
 		return "board/board_detail";
 	}
 	

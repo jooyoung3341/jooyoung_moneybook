@@ -12,7 +12,7 @@
 	<artifactId>moneybook</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>moneybook</name>
-	<!-- <packaging>war</packaging> -->
+	<packaging>war</packaging>
 	<description>test</description>
 
 	<properties>

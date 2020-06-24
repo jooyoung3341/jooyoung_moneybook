@@ -109,6 +109,13 @@
 								<td th:text="${board_status.cartegory}"></td>
 							</tr>
 						</th:block>
+						
+						<th:block th:each="board_sum : ${board_sum}">					
+							<tr th:if="${board_sum.moneybook_type == 'expense'}">
+								<td>합계 : </td>
+								<td colspan="2" th:text="${#numbers.formatInteger(board_sum.sum_price,0,'COMMA')}"></td>
+							</tr>
+						</th:block>
 					</tbody>
 				</table>
 			</div>
@@ -130,6 +137,13 @@
 									<td th:text="${board_status.board_date}"></td>
 									<td th:text="${#numbers.formatInteger(board_status.price,0,'COMMA')}"></td>
 									<td th:text="${board_status.cartegory}"></td>
+								</tr>
+							</th:block>	
+							
+							<th:block th:each="board_sum : ${board_sum}">					
+								<tr th:if="${board_sum.moneybook_type == 'earnings'}">
+									<td>합계 : </td>
+									<td colspan="2" th:text="${#numbers.formatInteger(board_sum.sum_price,0,'COMMA')}"></td>
 								</tr>
 							</th:block>
 						</tbody>

@@ -22,6 +22,11 @@ public class Board {
 	private String recommend_status;
 	private String reno;
 	
+	private String sum_price;
+	
+	
+	
+
 
 	public int getBno() {
 		return bno;
@@ -124,6 +129,12 @@ public class Board {
 		this.reno = reno;
 	}
 	
-	
+	//sum 게시판 가계부 합계 금액
+	public String getSum_price() {
+		return sum_price;
+	}
+	public void setSum_price(String sum_price) {
+		this.sum_price = sum_price;
+	}
 
 }

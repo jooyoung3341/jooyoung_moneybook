@@ -139,4 +139,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	where bno = #{bno}
 </update>
 
+<!-- 가계부이야기 상세보기 금액 합계-->
+<select id="board_sum" parameterType="java.lang.Integer" resultType="Board">
+	select sum(price) as sum_price, moneybook_type
+    from board_status
+    where bno = #{bno}
+    group by moneybook_type
+</select>	 
+
 </mapper>

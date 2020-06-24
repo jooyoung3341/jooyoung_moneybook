@@ -166,5 +166,12 @@ public class BoardServiceImpl implements BoardService {
 		String bno = request.getParameter("bno");
 		return boardMapper.board_updateform(Integer.parseInt(bno));
 	}
+
+	//가계부이야기 상세보기 금액 합계
+	@Override
+	public List<Board> board_sum(HttpServletRequest request) {
+		String bno = request.getParameter("bno");
+		return boardMapper.board_sum(Integer.parseInt(bno));
+	}
 	
 }
