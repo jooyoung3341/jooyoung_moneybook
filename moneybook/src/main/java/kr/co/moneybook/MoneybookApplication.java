@@ -4,6 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 import kr.co.moneybook.config.MybatisConfig;
 
@@ -17,10 +19,21 @@ import kr.co.moneybook.config.MybatisConfig;
 */
 @SpringBootApplication
 /* @EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class}) */
-public class MoneybookApplication {
+public class MoneybookApplication extends SpringBootServletInitializer{
 
-	public static void main(String[] args) {
+	public static void main(String[] args) {															  
+		/*
+		 * SpringApplicationBuilder springApplicationBuilder = new
+		 * SpringApplicationBuilder(MoneybookApplication.class);
+		 * 
+		 * SpringApplication springApplication = springApplicationBuilder.build();
+		 */
 		SpringApplication.run(MoneybookApplication.class, args);
 	}
+	
+	@Override protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) { 
+		return builder.sources(MoneybookApplication.class); 
+	}
+
 
 }

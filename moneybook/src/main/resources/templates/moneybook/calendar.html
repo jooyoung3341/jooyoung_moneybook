@@ -177,7 +177,7 @@ table.calendar td{
 						
 							<div class="form-group">
 								<label class="col-form-label" for="inputDefault">날짜</label>
-								<input type="date" class="form-control" id="earnings_insert_date" name="moneybook_date" readonly>
+								<input type="date" class="form-control" id="earnings_insert_date" name="moneybook_date" readonly/>
 							</div>
 							<div class="form-group">
 								<label class="col-form-label" for="inputDefault">금액</label>
@@ -439,7 +439,6 @@ $("button[name=insert]").click(function(){
 	}) 
 });
 
-
 //달력 일자 클릭시 모달창
 $(document).on("click","div[name=cal_moneybook]",function(){
 	//name:cal_moneybook 에 해당하는 id값 가져오기
@@ -456,8 +455,6 @@ $(document).on("click","div[name=cal_moneybook]",function(){
     }
     var moneybook_date = year+"-"+month+"-"+moneybook_day;
 
-    document.getElementById("expense_insert_date").valueAsDate = new Date(moneybook_date);
-    document.getElementById("earnings_insert_date").valueAsDate = new Date(moneybook_date);
     calendarSelect(moneybook_date);
 })
 
@@ -484,7 +481,6 @@ function getCalendarModal(data, moneybook_date){
 	var expenseDisp = "";
 	var earningsDisp = "";
 	var ex_type = "";
-	//onclick="location.href='+'#'+'" 
 	disp += "<input type='hidden' name='moneybook_dae' value='"+moneybook_date+"'/>";
 	disp += "<table class='table table-hover'>";
 	disp += "<tr>";
@@ -529,10 +525,13 @@ function getCalendarModal(data, moneybook_date){
 
 	$("#modal_expense").html(expenseDisp);
 	$("#modal_earnings").html(earningsDisp);
+    document.getElementById("expense_insert_date").valueAsDate = new Date(moneybook_date);
+    document.getElementById("earnings_insert_date").valueAsDate = new Date(moneybook_date);
 }
 
+
 //모달창 지출,내역 눌렀을 때 상세보기
-$(document).on("click","tr[name=moneybook_detail]",function getDetail(){
+$(document).on("click","tr[name=moneybook_detail]",function (){
 	var detailDisp = "";
 	var tr = $(this);
 	/* children : 자식노드를 찾는 함수(td는 tr의 자식노드) */
@@ -544,11 +543,11 @@ $(document).on("click","tr[name=moneybook_detail]",function getDetail(){
 	var detail_price = uncomma(td.eq(4).text());
 	var detail_type = td.eq(5).text();
 	var detail_cartegory = td.eq(6).text();
-	
+
 	detailDisp += "<form name='form'>";
 	detailDisp += "<input type='hidden' id='detail_no' value='"+detail_no+"'>";
 	detailDisp += "<input type='hidden' id='detail_moneybook_type' value='"+detail_moneybook_type+"'>";
-	detailDisp += "<input type='hidden' id='detail_moneybook_date' value='"+detail_moneybook_type+"'>";
+	detailDisp += "<input type='hidden' id='detail_moneybook_date' value='"+detail_insert_date+"'>";
 	detailDisp += "<div class='form-group'>";
 	detailDisp += "<label class='col-form-label' for='inputDefault'>날짜</label>";
 	detailDisp += "<input type='date' class='form-control' id='detail_insert_date' value='"+detail_insert_date+"' readonly/>";
@@ -557,18 +556,20 @@ $(document).on("click","tr[name=moneybook_detail]",function getDetail(){
 	if(detail_moneybook_type == "expense"){
 		detailDisp += "<div class='form-group'>";
 		if(detail_type == "현금"){
-			detailDisp += "<select class='custom-select' id='detail_type'>";
+			detailDisp += "<select class='form-control selectpicker' id='detail_type'>";
 			detailDisp += "<option value='cash' selected=''>현금</option>";
 			detailDisp += "<option value='card' >카드</option>";
+			detailDisp += "</select>";
 		}else{
-			detailDisp += "<select class='custom-select' id='detail_type'>";
+			detailDisp += "<select class='form-control selectpicker' id='detail_type'>";
 			detailDisp += "<option value='cash' >현금</option>";
 			detailDisp += "<option value='card' selected=''>카드</option>";
+			detailDisp += "</select>";
 		}
 		detailDisp += "</div>";
 	}
 	detailDisp += "<div class='form-group'>";
-	detailDisp += "<label class='col-form-label' for='inputDefault'>금액</label>";				
+	detailDisp += "<label class='col-form-label'>금액</label>";				
 	detailDisp += "<input type='text' class='form-control' id='detail_price' name='price' value='"+Number(detail_price).toLocaleString('en')+"' maxlength='12'>";
 	detailDisp += "</div>";
 	
@@ -619,16 +620,19 @@ $(document).on("click","#detail_delete", function(){
 //달력 모달창 데이터 수정
 $(document).on("click","#detail_update", function(){
 	var confirm_val = confirm("수정 하시겠습니까?");
+	var detailDisp = "";
 	if(confirm_val){
 		//url 구분을 위한 변수
 		var moneybook_type = $("#detail_moneybook_type").val();
 		//var type = insert.substring(0,2);
 		var cartegory = $("#detail_cartegory").val();
 		var insert_date = $("#detail_insert_date").val();
+
 		var moneybook_date = $("#detail_moneybook_date").val();
 		var price = $("#detail_price").val();
 		if(moneybook_type == "expense"){
-			var type = $("#"+moneybook_type+"_type option:selected").val();
+			var type = $("#detail_type option:selected").val();
+			//var type = $("#"+moneybook_type+"_type option:selected").val();
 			//지출, 수입 pk값 구분해서 보내기 위한 조건문
 			var eno = $("#detail_no").val();
 			var ino = "";
@@ -649,13 +653,15 @@ $(document).on("click","#detail_update", function(){
 					   "cartegory" : cartegory},
 			success : function(){
 				calendarSelect(moneybook_date);
-				if(moneybook_date == insert_date){
+				document.getElementById("expense_insert_date").valueAsDate = new Date(moneybook_date);
+			    document.getElementById("earnings_insert_date").valueAsDate = new Date(moneybook_date);
+		/* 		if(moneybook_date == insert_date){
 					getDetail();
 				}else{
 					detailDisp += "<div class='form-group'>";
 					detailDisp += "</div>";
 					$("#detail").html(detailDisp);
-				}
+				} */
 				$("#"+moneybook_type+"_form")[0].reset();
 			},
 			error : function(request, error){
