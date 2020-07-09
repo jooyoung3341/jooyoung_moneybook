@@ -39,6 +39,7 @@ public class BoardController {
 		Map<String, Object> map = boardService.board_select(criteria);
 		//map에는 board_list, pageMaker 가 들어 있음
 		model.addAttribute("map", map);
+		System.out.print("he");
 		return "board/board";
 	}
 	

@@ -59,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			.formLogin()
 			.loginPage("/") //로그인 페이지 url
 			.loginProcessingUrl("/login") // 로그인 처리 url
+			
 			.failureUrl("/?error") //실패시 url
 			.defaultSuccessUrl("/moneybook/moneybook") //성공 시 이동할 url
 			.usernameParameter("moneybook_name")//아이디 파라미터 값 이름
