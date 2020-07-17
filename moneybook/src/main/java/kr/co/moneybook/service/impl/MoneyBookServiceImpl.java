@@ -13,16 +13,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import kr.co.moneybook.domain.Moneybook;
+import kr.co.moneybook.domain.MoneyBook;
 import kr.co.moneybook.domain.User;
-import kr.co.moneybook.mapper.MoneybookMapper;
-import kr.co.moneybook.service.MoneybookService;
+import kr.co.moneybook.mapper.MoneyBookMapper;
+import kr.co.moneybook.service.MoneyBookService;
 
 @Service
-public class MoneybookServiceImpl implements MoneybookService {
+public class MoneyBookServiceImpl implements MoneyBookService {
 	
 	@Autowired
-	private MoneybookMapper moneybookMapper;
+	private MoneyBookMapper moneybookMapper;
 
 	//가계부 이름 중복 확인
 	@Override
@@ -48,7 +48,7 @@ public class MoneybookServiceImpl implements MoneybookService {
 		String moneybook_pw = passwordEncoder.encode(rawPass);
 
 		
-		Moneybook moneybook= new Moneybook();
+		MoneyBook moneybook= new MoneyBook();
 		moneybook.setMoneybook_name(moneybook_name);
 		moneybook.setMoneybook_pw(moneybook_pw);
 		moneybook.setInsert_date(insert_date);
@@ -68,7 +68,7 @@ public class MoneybookServiceImpl implements MoneybookService {
 	//사용자 정보 가져오기
 	@Override
 	public UserDetails loadUserByUsername(String moneybook_name) throws UsernameNotFoundException {
-	  Moneybook moneybook = moneybookMapper.readMoneybook(moneybook_name);
+	  MoneyBook moneybook = moneybookMapper.readMoneybook(moneybook_name);
 		  
 	  if(moneybook == null) { 
 		  throw new UsernameNotFoundException(moneybook_name);
@@ -83,7 +83,7 @@ public class MoneybookServiceImpl implements MoneybookService {
 	
 	//가입된 사용자 가져오기
 	@Override
-	public List<Moneybook> moneybook_select() {
+	public List<MoneyBook> moneybook_select() {
 		return moneybookMapper.moneybook_select();
 	}
 

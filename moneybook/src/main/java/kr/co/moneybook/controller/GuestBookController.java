@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.co.moneybook.domain.Guestbook;
+import kr.co.moneybook.domain.GuestBook;
 import kr.co.moneybook.domain.User;
-import kr.co.moneybook.service.GuestbookService;
+import kr.co.moneybook.service.GuestBookService;
 
 /*
  * 방명록
 */
 
 @Controller
-public class GuestbookController {
+public class GuestBookController {
 
 	@Autowired
-	private GuestbookService guestbookService;
+	private GuestBookService guestbookService;
 	
 	//방명록 이동
 	@RequestMapping(value="moneybook/guestbook", method=RequestMethod.GET)
@@ -46,7 +46,7 @@ public class GuestbookController {
 	//방명록 목록
 	@RequestMapping(value="moneybook/guestbook/select", method=RequestMethod.GET)
 	@ResponseBody
-	public List<Guestbook> guestbook_select(){
+	public List<GuestBook> guestbook_select(){
 		return guestbookService.guestbook_select();
 	}
 	
@@ -60,7 +60,7 @@ public class GuestbookController {
 	//방명록 수정 폼
 	@RequestMapping(value="moneybook/guestbook/update_form", method=RequestMethod.GET)
 	@ResponseBody
-	public Guestbook guestbook_update_form(HttpServletRequest request) {
+	public GuestBook guestbook_update_form(HttpServletRequest request) {
 		return guestbookService.guestbook_update_form(request);
 	}
 	

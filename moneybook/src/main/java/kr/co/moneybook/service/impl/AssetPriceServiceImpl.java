@@ -10,15 +10,15 @@ import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import kr.co.moneybook.domain.Assetprice;
-import kr.co.moneybook.mapper.AssetpriceMapper;
-import kr.co.moneybook.service.AssetpriceService;
+import kr.co.moneybook.domain.AssetPrice;
+import kr.co.moneybook.mapper.AssetPriceMapper;
+import kr.co.moneybook.service.AssetPriceService;
 
 @Service
-public class AssetpriceServiceImpl implements AssetpriceService {
+public class AssetPriceServiceImpl implements AssetPriceService {
 
 	@Autowired
-	private AssetpriceMapper assetpriceMapper;
+	private AssetPriceMapper assetpriceMapper;
 	
 	//자산내역 추가
 	@Override
@@ -27,7 +27,7 @@ public class AssetpriceServiceImpl implements AssetpriceService {
 		String price = request.getParameter("price");
 		String insert_date = request.getParameter("insert_date");
 
-		Assetprice assetprice = new Assetprice();
+		AssetPrice assetprice = new AssetPrice();
 		assetprice.setAno(Integer.parseInt(ano));
 		assetprice.setPrice(Integer.parseInt(price));
 		assetprice.setInsert_date(insert_date);
@@ -37,7 +37,7 @@ public class AssetpriceServiceImpl implements AssetpriceService {
 	
 	//자산내역 목록
 	@Override
-	public List<Assetprice> assetprice_select(HttpServletRequest request) {
+	public List<AssetPrice> assetprice_select(HttpServletRequest request) {
 		String ano = request.getParameter("ano");
 		String sort_sub = request.getParameter("sort");
 		String sort_flag = request.getParameter("sort_flag"); 
@@ -64,7 +64,7 @@ public class AssetpriceServiceImpl implements AssetpriceService {
 
 	//자산내역 수정 폼
 	@Override
-	public Assetprice assetprice_updateform(HttpServletRequest request) {
+	public AssetPrice assetprice_updateform(HttpServletRequest request) {
 		String pno = request.getParameter("pno");
 		return assetpriceMapper.assetprice_updateform(Integer.parseInt(pno));
 	}
@@ -76,7 +76,7 @@ public class AssetpriceServiceImpl implements AssetpriceService {
 		String price = request.getParameter("price");
 		String insert_date = request.getParameter("insert_date");
 		
-		Assetprice assetprice = new Assetprice();
+		AssetPrice assetprice = new AssetPrice();
 		assetprice.setPno(Integer.parseInt(pno));
 		assetprice.setInsert_date(insert_date);
 		assetprice.setPrice(Integer.parseInt(price));

@@ -10,16 +10,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import kr.co.moneybook.domain.Guestbook;
+import kr.co.moneybook.domain.GuestBook;
 import kr.co.moneybook.domain.User;
-import kr.co.moneybook.mapper.GuestbookMapper;
-import kr.co.moneybook.service.GuestbookService;
+import kr.co.moneybook.mapper.GuestBookMapper;
+import kr.co.moneybook.service.GuestBookService;
 
 @Service
-public class GuestbookServiceImpl implements GuestbookService {
+public class GuestBookServiceImpl implements GuestBookService {
 
 	@Autowired
-	private GuestbookMapper guestbookMapper;
+	private GuestBookMapper guestbookMapper;
 
 	//방명록 등록
 	@Override
@@ -33,7 +33,7 @@ public class GuestbookServiceImpl implements GuestbookService {
 		String content = request.getParameter("content");
 		
 		
-		Guestbook guestbook = new Guestbook();
+		GuestBook guestbook = new GuestBook();
 		guestbook.setContent(content);
 		guestbook.setInsert_date(insert_date);
 		guestbook.setMoneybook_name(moneybook_name);
@@ -43,7 +43,7 @@ public class GuestbookServiceImpl implements GuestbookService {
 
 	//방명록 목록
 	@Override
-	public List<Guestbook> guestbook_select() {
+	public List<GuestBook> guestbook_select() {
 		return guestbookMapper.guestbook_select();
 	}
 
@@ -56,7 +56,7 @@ public class GuestbookServiceImpl implements GuestbookService {
 
 	//방명록 수정 폼 
 	@Override
-	public Guestbook guestbook_update_form(HttpServletRequest request) {
+	public GuestBook guestbook_update_form(HttpServletRequest request) {
 		String gno = request.getParameter("gno");
 		return guestbookMapper.guestbook_update_form(Integer.parseInt(gno));
 	}
@@ -67,7 +67,7 @@ public class GuestbookServiceImpl implements GuestbookService {
 		String gno = request.getParameter("gno");
 		String content = request.getParameter("content");
 		
-		Guestbook guestbook = new Guestbook();
+		GuestBook guestbook = new GuestBook();
 		guestbook.setContent(content);
 		guestbook.setGno(Integer.parseInt(gno));
 		

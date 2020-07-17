@@ -10,7 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import kr.co.moneybook.domain.Asset;
-import kr.co.moneybook.domain.Moneybook;
+import kr.co.moneybook.domain.MoneyBook;
 import kr.co.moneybook.domain.User;
 import kr.co.moneybook.mapper.AssetMapper;
 import kr.co.moneybook.service.AssetService;

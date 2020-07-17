@@ -1,6 +1,6 @@
 package kr.co.moneybook.domain;
 
-public class Guestbook {
+public class GuestBook {
 	private int gno;
 	private String moneybook_name;
 	private String content;

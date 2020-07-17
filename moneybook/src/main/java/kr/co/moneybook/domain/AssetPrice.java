@@ -1,6 +1,6 @@
 package kr.co.moneybook.domain;
 
-public class Assetprice {
+public class AssetPrice {
 	private int pno;
 	private int price;
 	private String insert_date;

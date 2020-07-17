@@ -17,19 +17,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import kr.co.moneybook.domain.Moneybook;
+import kr.co.moneybook.domain.MoneyBook;
 import kr.co.moneybook.domain.User;
-import kr.co.moneybook.service.MoneybookService;
+import kr.co.moneybook.service.MoneyBookService;
 
 /*
  * 가계부 등록, 로그인
 */
 
 @Controller
-public class MoneybookController {
+public class MoneyBookController {
 
 	@Autowired
-	private MoneybookService moneybookService;
+	private MoneyBookService moneybookService;
 	
 	//로그인 성공 후 이동(지출내역 이동)
 	  @RequestMapping(value="moneybook/moneybook", method=RequestMethod.GET) 
@@ -66,7 +66,7 @@ public class MoneybookController {
 	//관리자페이지 이동
 	@RequestMapping(value="moneybook/admin", method=RequestMethod.GET)
 	public String admin(Model model) {
-		List<Moneybook> moneybooklist = moneybookService.moneybook_select();
+		List<MoneyBook> moneybooklist = moneybookService.moneybook_select();
 		//가계부 목록을 클라이언트로 전달
 		model.addAttribute("moneybooklist", moneybooklist);
 		return "admin/admin";

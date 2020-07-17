@@ -14,14 +14,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
-import kr.co.moneybook.domain.Moneybook;
-import kr.co.moneybook.service.MoneybookService;
+import kr.co.moneybook.domain.MoneyBook;
+import kr.co.moneybook.service.MoneyBookService;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
-	private MoneybookService moneybookService;
+	private MoneyBookService moneybookService;
 	/*
 	 * security에서 제공하는 비밀번호 암호화 객체
 	 * Service에서 암호화할 수 있도록 Bean으로 등록

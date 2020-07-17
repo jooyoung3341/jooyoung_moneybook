@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import kr.co.moneybook.domain.Assetprice;
-import kr.co.moneybook.service.AssetpriceService;
+import kr.co.moneybook.domain.AssetPrice;
+import kr.co.moneybook.service.AssetPriceService;
 
 /*
  * 자산내역
 */
 
 @Controller
-public class AssetpriceController {
+public class AssetPriceController {
 
 	@Autowired
-	private AssetpriceService assetpriceService;
+	private AssetPriceService assetpriceService;
 	
 	//자산내역 추가
 	@RequestMapping(value="moneybook/assetprice/insert", method=RequestMethod.POST)
@@ -34,7 +34,7 @@ public class AssetpriceController {
 	//자산내역 목록
 	@RequestMapping(value="moneybook/assetprice/select", method=RequestMethod.GET)
 	@ResponseBody
-	public List<Assetprice> assetprice(HttpServletRequest request) {
+	public List<AssetPrice> assetprice(HttpServletRequest request) {
 		return assetpriceService.assetprice_select(request);
 	}
 	
@@ -48,7 +48,7 @@ public class AssetpriceController {
 	//자산내역 수정 폼
 	@RequestMapping(value="moneybook/assetprice/updateform", method=RequestMethod.GET)
 	@ResponseBody
-	public Assetprice assetprice_updateform(HttpServletRequest request) {
+	public AssetPrice assetprice_updateform(HttpServletRequest request) {
 		return assetpriceService.assetprice_updateform(request);
 	}
 	

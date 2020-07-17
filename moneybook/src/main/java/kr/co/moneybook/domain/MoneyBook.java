@@ -1,6 +1,6 @@
 package kr.co.moneybook.domain;
 
-public class Moneybook {
+public class MoneyBook {
 
 	private String moneybook_name;
 	private String moneybook_pw;

@@ -8,9 +8,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import kr.co.moneybook.domain.Moneybook;
+import kr.co.moneybook.domain.MoneyBook;
 
-public interface MoneybookService extends UserDetailsService{
+public interface MoneyBookService extends UserDetailsService{
 
 	//가계부 이름 중복 확인
 	public String moneybook_name_check(HttpServletRequest request);
@@ -23,7 +23,7 @@ public interface MoneybookService extends UserDetailsService{
 	 */	
 	
 	//가입된 가계부 가져오기
-	public List<Moneybook> moneybook_select();
+	public List<MoneyBook> moneybook_select();
 
 	//가계부 삭제
 	public void moneybookDelete(HttpServletRequest request);

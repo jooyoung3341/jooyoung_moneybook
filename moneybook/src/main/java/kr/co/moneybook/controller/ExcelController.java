@@ -116,6 +116,22 @@ public class ExcelController {
 		
 		//헤더 생성
 		row = sheet.getRow(rowNo++);
+		sheet.addMergedRegion(new CellRangeAddress(0,0,0,2));
+		cell = row.createCell(0);
+		cell.setCellStyle(headStyle);
+		cell.setCellValue("지출");
+		
+		sheet.addMergedRegion(new CellRangeAddress(0,0,4,6));
+		cell = row.createCell(4);
+		cell.setCellStyle(headStyle);
+		cell.setCellValue("수입");
+		//셸 병합
+		sheet.addMergedRegion(new CellRangeAddress(0,0,8,9));
+		cell = row.createCell(8);
+		cell.setCellStyle(headStyle);
+		cell.setCellValue("자산");
+
+		row = sheet.getRow(rowNo++);
 		cell = row.createCell(0);
 		cell.setCellStyle(headStyle);
 		cell.setCellValue("날짜");
@@ -136,11 +152,6 @@ public class ExcelController {
 		cell.setCellStyle(headStyle);
 		cell.setCellValue("사용 내역");
 		
-		//셸 병합
-		sheet.addMergedRegion(new CellRangeAddress(0,0,8,9));
-		cell = row.createCell(8);
-		cell.setCellStyle(headStyle);
-		cell.setCellValue("자산");
 
 		
 		//지출 데이터 부분 생성
@@ -165,7 +176,7 @@ public class ExcelController {
 		cell.setCellStyle(footStyle);
 		cell.setCellValue(expense_max);
 		
-		rowNo = 1;
+		rowNo = 2;
 		//수입 데이터 부분 생성
 		for (Earnings earnings : earnings_list) {
 			row = sheet.getRow(rowNo++);
