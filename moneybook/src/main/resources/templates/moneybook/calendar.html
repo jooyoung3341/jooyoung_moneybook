@@ -275,6 +275,7 @@ function calendar(){
 
 //날짜 초기화
 function initDate(){
+	
     tdDay = $("td div.cal_day")
     dayCount = 0;
     today = new Date();
@@ -286,6 +287,7 @@ function initDate(){
     }
     firstDay = new Date(year,month-1,1);
     lastDay = new Date(year,month,0);
+
 }
 
 //calendar 날짜표시
@@ -301,6 +303,7 @@ function drawDays(calendarList){
 	//달력 상단에 년과 월 지정
     $("#cal_top_year").html(cal_disp);
 	//일자 표시
+	//eq() : 제이쿼리의 선택자 메소드로 특정 위치에 존재하는 객체를 선택 / eq(n) 번째 요소에 스타이이나 동작이 적용
     for(var i = firstDay.getDay(); i < firstDay.getDay() + lastDay.getDate(); i++){
         tdDay.eq(i).text(++dayCount);     
 		}
