@@ -176,14 +176,14 @@ function getMoneybook(data){
 		}
 		disp += "<input type='hidden' id='update_eno' value="+item.eno+">";
 		disp += "<tr>";
-		disp += "<td width='100'><button type='button' class='btn btn-outline-primary' id='"+idx+item.eno+"' name='expense_update_modal' value='"+item.eno+"'>수정</button>";
+		disp += "<td width='100'><button type='button' class='btn btn-primary' id='"+idx+item.eno+"' name='expense_update_modal' value='"+item.eno+"'>수정</button>";
 		disp += "<td>"+item.insert_date+"</td>";
 		disp += "<td>"+Number(item.price).toLocaleString('en')+"</td>";
 		disp += "<td>"+type+"</td>";
 		disp += "<td>"+item.cartegory+"</td>";
 		disp += "<td width='150'><div class='custom-control custom-checkbox'><input type='checkbox' class='custom-control-input' name='checkRow' id='customCheck"+idx+"' value='"+item.eno+"'>";
 		disp += "<label class='custom-control-label' for='customCheck"+idx+"'></label></div></td>";
-		disp += "</tr>";
+		disp += "</tr>"; 
 		price_sum += item.price;
 	});
 	disp += "<td></td>";

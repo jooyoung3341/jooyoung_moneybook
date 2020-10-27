@@ -273,7 +273,7 @@ function getAssetprice(data, ano){
 	disp += "<tbody>";
 	$(data).each(function(idx, item){
 		disp += "<tr>";																									  
-		disp += "<td><button type='button' class='btn btn-outline-primary' id='"+idx+item.pno+"' name='assetprice_update_modal' value='"+item.pno+"'>수정</button>";
+		disp += "<td><button type='button' class='btn btn-primary' id='"+idx+item.pno+"' name='assetprice_update_modal' value='"+item.pno+"'>수정</button>";
 		disp += "<td>"+item.insert_date+"</td>";
 		disp += "<td>"+Number(item.price).toLocaleString('en')+"</td>";
 		disp += "<td><div class='custom-control custom-checkbox'>"
