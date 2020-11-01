@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{layout/default}">
+<head>
+<th:block layout:fragment="css">
+</th:block>
+<meta charset="UTF-8">
+<title>가계부 이야기 - 상세보기</title>
+</head>
+<div layout:fragment="content">
+<div class="row">
+<input type="hidden" th:value="${board.bno}" id="bno">
+<input type="hidden" th:value="${moneybook_name}" id="moneybook_name">
+<input type="hidden" th:value="${page}" id="page">
+<input type="hidden" th:value="${perPageNum}" id="perPageNum">
+<input type="hidden" th:value="${keyword}" id="keyword">
+	<div class="col-md-7">
+		<div class="panel">
+		<div class="panel-heading"></div>
+		<div class="panel-body">
+		
+	    <label class="col-md-3 control-label">
+	    	<font style="vertical-align: inherit;">제목</font></label>
+	    <input class="form-control" type="text" th:placeholder="${board.title}" readonly="">
+		
+
+		<label class="col-md-3 control-label">
+			<font style="vertical-align: inherit;">이야기</font></label>
+		<textarea rows="9" class="form-control" readonly=""><th:block th:text="${board.content}"></th:block></textarea>
+		</div>
+		
+		<input type="hidden" id="recommend_flag" th:value="${board.recommend_status}">
+		<!-- 추천을 안 누른 게시물일 경우에만 보임 -->
+		<th:block th:if="${board.recommend_status == null}">
+		<div id="getRecommend" style="text-align:center">
+			<span>
+				<a href="#"><i class="ri-thumb-up-line ri-xl" id="up" name="recommend"></i></a>&emsp;&emsp;&emsp;&emsp;
+				<a href="#"><i class="ri-thumb-down-line ri-xl" id="down" name="recommend"></i></a>
+			</span>
+		</div>
+		</th:block>
+		
+		<!-- 추천 up한 게시물일 떄 보임 -->
+		<th:block th:if="${board.recommend_status == 'up'}">
+		<div id="getRecommendUp" style="text-align:center">
+			<span>
+				<a href='#'><i class="ri-thumb-up-fill ri-xl" name="recommend_cancel" id="up"></i></a>
+			</span>
+		</div>
+		</th:block>
+		
+		<input type="hidden" name="reno" th:value="${board.reno}">
+
+		<!-- 추천 down한 게시물일 떄 보임 -->
+		<th:block th:if="${board.recommend_status == 'down'}">
+		<div id="getRecommendDown" style="text-align:center">
+			<span>
+				<a href='#'><i class="ri-thumb-down-fill ri-xl" name="recommend_cancel" id="down"></i></a>
+			</span>
+		</div>
+		</th:block>
+		<!-- #authentication.principal.username : 로그인한 유저이름(스프링시큐리티) -->
+		<th:block th:if="${board.moneybook_name == #authentication.principal.username || #authentication.principal.username == 'admin'}" >
+			<button type="button" id="board_update" class="btn btn-primary btn-rounded">
+				<font style="vertical-align: inherit:">수정</font></button>
+			<button type="button" id="board_delete" class="btn btn-danger btn-rounded">
+				<font style="vertical-align: inherit;">삭제</font></button>
+		</th:block>
+		<div class="right">
+			<button type="button" id="board_back" class="btn btn-default btn-rounded">
+				<font style="vertical-align: inherit;">목록</font></button>
+		</div>
+											
+
+		<!-- 
+				<sec:authorize access="isAuthenticated()">
+		</sec:authorize> -->
+					<!-- 시큐리티타임리프 로그인 사용자 이름 가져오기 -->
+		<!-- <span sec:authentication="principal.username"> -->
+		<div class="form-group">
+			<span sec:authentication="principal.username" id="moneyname" sec:value="principal.username"> </span>
+			<textarea class="form-control" rows="3" id="content"></textarea>
+			<button type="button" id="replay_insert" class="btn btn-default btn-rounded" th:value="${board.bno}">댓글 등록</button>
+		</div>
+		<div id="getReply" class="tiemline"></div>
+		
+		</div>
+	
+	</div>
+	
+	<div class="col-md-3">
+		<br/><br/><br/>
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">지출</h3>
+			</div>
+			<div class="panel-body">
+				<table class="table table-striped table-boardered">
+					<thead><tr>
+						<th>날짜</th>
+						<th>금액</th>
+						<th>내역</th>
+					</tr></thead>
+					<tbody>
+						<th:block th:each="board_status : ${board_status}">
+							<tr th:if="${board_status.moneybook_type == 'expense'}">
+								<td th:text="${board_status.board_date}"></td>
+								<td th:text="${#numbers.formatInteger(board_status.price,0,'COMMA')}"></td>
+								<td th:text="${board_status.cartegory}"></td>
+							</tr>
+						</th:block>
+						
+						<th:block th:each="board_sum : ${board_sum}">					
+							<tr th:if="${board_sum.moneybook_type == 'expense'}">
+								<td>합계 : </td>
+								<td colspan="2" th:text="${#numbers.formatInteger(board_sum.sum_price,0,'COMMA')}"></td>
+							</tr>
+						</th:block>
+					</tbody>
+				</table>
+			</div>
+		</div>
+		<div class="panel">
+				<div class="panel-heading">
+					<h3 class="panel-title">수입</h3>
+				</div>
+				<div class="panel-body">
+					<table class="table table-striped table-boardered">
+						<thead><tr>
+							<th>날짜</th>
+							<th>금액</th>
+							<th>내역</th>
+						</tr></thead>
+						<tbody>
+							<th:block th:each="board_status : ${board_status}">
+								<tr th:if="${board_status.moneybook_type == 'earnings'}">
+									<td th:text="${board_status.board_date}"></td>
+									<td th:text="${#numbers.formatInteger(board_status.price,0,'COMMA')}"></td>
+									<td th:text="${board_status.cartegory}"></td>
+								</tr>
+							</th:block>	
+							
+							<th:block th:each="board_sum : ${board_sum}">					
+								<tr th:if="${board_sum.moneybook_type == 'earnings'}">
+									<td>합계 : </td>
+									<td colspan="2" th:text="${#numbers.formatInteger(board_sum.sum_price,0,'COMMA')}"></td>
+								</tr>
+							</th:block>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- 댓글 수정 Modal -->
+<div class="modal" id="reply_modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			  	<h5 class="modal-title">댓글 수정</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" id="reply_form">
+					<span sec:authentication="principal.username" id="moneyname" sec:value="principal.username"> </span>
+					<div id="modal_rno"></div>
+					<div class="form-group" id="modal_content"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="reply_update">등록</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<th:block layout:fragment="script">
+<script>
+window.onload = function(){
+	replySelect();
+	statusSelect();
+}
+var bno = $("#bno").val();
+var moneybook_name = $("#moneybook_name").val();
+var recommend_status = null;
+
+//가계부이야기 삭제
+$("#board_delete").click(function(){
+	var confirm_val = confirm("삭제 하시겠습니까?");
+	if(confirm_val){
+			location.href="board_delete?bno="+bno;
+		}
+	})
+	
+//가계부이야기 수정
+$("#board_update").click(function(){
+	var page = $("#page").val();
+	var keyword = $("#keyword").val(); 
+	location.href="board_update?bno="+bno+"&page="+page+"&perPageNum=10&keyword="+keyword;
+})
+
+//목록
+$("#board_back").click(function(){
+	var page = $("#page").val();
+	var keyword = $("#keyword").val(); 
+	location.href="board?page="+page+"&perPageNum=10&keyword="+keyword;
+})
+
+//댓글 삽입
+$("#replay_insert").click(function(){
+	var content = $("#content").val();
+	if(content == ""){
+		alert("댓글을 입력하셔야 합니다.");
+	}else
+		$.ajax({
+			url : "reply/insert",
+			type : "post",
+			data : {
+					"content" : content,
+					"bno" : bno
+			},
+			success : function(){
+				replySelect();
+				document.getElementById("content").value="";
+			}
+		})
+})
+
+//댓글 목록 
+function replySelect(){
+	$.ajax({
+			url : "reply/select",
+			data : {"bno" : bno},
+			dataType : "json",
+			success : function(data){
+				getReply(data);
+			}
+	})
+}
+
+//댓글 목록 disp
+function getReply(data){
+	var disp = "";
+
+	$(data).each(function(idx, item){
+		disp += '<hr size="10px" color="black">';
+		disp += "<div class='tiemline-entry'>";
+		disp += "<p class='text-primary'>"+item.moneybook_name+"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
+		disp += "<span class='badge badge-light'>"+item.insert_date+"</span></p><br/>";
+		disp += "<p class='text-muted'>"+item.content+"</p>";
+		if(moneybook_name == item.moneybook_name){
+			disp += "<button type='button' class='btn btn-primary btn-rounded' id='"+item.rno+"' name='reply_update_modal' value='"+item.rno+"'>수정</button>";
+			disp += "<button type='button' class='btn btn-danger' id='"+idx+item.rno+"' name='reply_delete' value='"+item.rno+"'>삭제</button>"
+		}
+		disp += "</div>"; 
+		
+	});
+	
+	$("#getReply").html(disp); 
+}
+
+//댓글 삭제
+$(document).on("click","button[name=reply_delete]",function(){
+	var confirm_val = confirm("삭제 하시겠습니까?");
+	if(confirm_val){
+		var $delete = $(this).attr("id");
+		var rno = $("#"+$delete).attr("value");
+		$.ajax({
+			url : "reply/delete",
+			data : {"rno" : rno,
+					   "bno" : bno},
+			success : function(){
+				replySelect();
+			}
+		})
+	}
+})
+
+//댓글 수정 폼(모달) 
+$(document).on("click","button[name=reply_update_modal]",function(){
+	var $update = $(this).attr("id");
+	var rno = $("#"+$update).attr("value");
+	$.ajax({
+		url : "reply/update_form",
+		data : {"rno" : rno},
+		dataType : "json",
+		success : function(data){
+			$("#modal_rno").html("<input type='hidden' id='update_rno' value='"+data.rno+"'>");
+			$("#modal_content").html("<textarea class='form-control' id='update_content' rows='3'>"+data.content+"</textarea>");
+			$("#reply_modal").modal();
+		}
+	})
+});
+
+//댓글 수정
+$(document).on("click", "#reply_update", function(){
+	var confirm_val = confirm("수정 하시겠습니까?");
+	if(confirm_val){
+		var rno = $("#update_rno").val();
+		var content = $("#update_content").val();
+		$.ajax({
+			url : "reply/update",
+			type : "post",
+			data : {"rno" : rno, 
+					   "content" : content},
+			success : function(){
+				$("#reply_modal").modal("hide");
+				alert("수정 완료!");
+				replySelect();
+			}
+		})
+	}
+})
+
+//추천 체크
+$(document).on("click","i[name=recommend]",function(){
+	var recommend_status = $(this).attr("id");
+
+	$.ajax({
+		url : "recommend/status",
+		data : {"bno" : bno},
+		dataType : "json",
+		success : function(data){
+			if(recommend_status == "up"){
+				alert("게시물을 추천하셨습니다.")
+			}else{
+				alert("게시물을 비추천하셨습니다.")
+			}
+			if(data.recommendStatus =! "0"){
+				alert("이미 추천 하셨습니다.")
+			}else{
+				recommendStatus(recommend_status);
+			}
+		},
+		error : function(request, error){
+			alert("에러!");
+			alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		}
+		
+	})
+
+})
+//추천
+function recommendStatus(recommend_status){
+	/* var recommend_flag = $("#recommend_flag").val();
+	if(recommend_flag == recommend_status){
+		alert("이미 추천 하셨습니다.")
+	}else */
+	$.ajax({
+		url : "recommend",
+		data : {"bno" : bno,
+				   "status" : recommend_status,
+				   "moneybook_name" : moneybook_name
+				},
+		dataType : "json",
+		success : function(reno){																												
+			var disp = "";
+			disp += "<span><a href='#'><i class='ri-thumb-"+recommend_status+"-fill ri-xl' id='"+recommend_status+"' name='recommend_cancel'></i></a>";
+			disp += "<input type='hidden' name='reno' value='"+reno+"'></span>";
+			$("#getRecommend").html(disp);
+		}
+	})
+}
+ 
+//추천 취소
+$(document).on("click","i[name=recommend_cancel]",function(){
+	recommend_status = $(this).attr("id");
+	var reno = $("input[name=reno]").val();
+	
+	var status_type = "";
+	if(recommend_status == "up"){
+		status_type = "getRecommendUp";
+	}else if(recommend_status == "down"){
+		status_type = "getRecommendDown";
+	}
+	$.ajax({
+		url : "recommend/cancel",
+		data : {"bno" : bno,
+				   "status" : recommend_status,
+				   "reno" : reno},
+		success : function(){
+			var disp = "";
+			disp += "<span>";
+			disp += "<a href='#'><i class='ri-thumb-up-line ri-xl' id='up' name='recommend'></i></a>&emsp;&emsp;&emsp;&emsp;";
+			disp += "<a href='#'><i class='ri-thumb-down-line ri-xl' id='down' name='recommend'></i></a>";
+			disp += "</span>"
+			$("#"+status_type).html(disp);
+			$("#getRecommend").html(disp);
+		}
+	})
+})
+
+</script>
+</th:block>
+</html> 

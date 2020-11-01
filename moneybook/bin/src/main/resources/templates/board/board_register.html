@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{layout/default}">
+<head>
+<th:block layout:fragment="css">
+</th:block>
+<meta charset="UTF-8">
+<title>가계부 이야기 등록</title>
+</head>
+<div layout:fragment="content">
+<br/><br/><br/><br/>
+	<div class="row">
+		<div class="col-md-7">
+		<div class="panel">
+			<div class="panel-heading">
+				<h3 class="panel-title">가계부이야기 작성</h3>
+			</div>
+			<div class="panel-body">
+				<form method="post" th:action="@{/board/board_register}" onsubmit="return check()">
+					<div id="status_disp"></div>
+					<div class="form-group">
+						<label class="col-form-label">제목</label>
+						<input type="text" class="form-control" id="title" name="title">
+					</div>
+				
+					<div class="form-group">
+						<label class="col-form-label"></label>
+						<textarea class="form-control" rows="3" id="content" name="content"></textarea>
+					</div>
+					
+					<button type="submit" class="btn btn-primary" id="board_register">등록</button>
+				</form>
+			</div>
+		</div>
+		</div>
+		
+		<div class="col-md-4">
+		<div class="panel">
+		<div class="panel-heading">
+			<h2 class="panel-title">가져올 가계부 날짜</h3>
+			<input type="month" class="form-control" id="moneybook_date">
+		</div>
+		<br/><br/>
+		<div calss="panel-body">
+			<div class="form-group">
+				<button type="button" class="btn btn-default btn-rounded" id="board_status_import">가계부 가져오기</button>
+			</div>
+			<div id="moneybook_status_disp"></div>
+		</div>
+		</div>
+		</div>
+	</div>
+</div>
+<th:block layout:fragment="script">
+<script>
+window.onload = function(){
+	statusSelect();
+}
+document.getElementById("moneybook_date").valueAsDate = new Date();
+var board_status_check = false;
+
+var moneybook_type_arr = new Array();
+var price_arr = new Array();
+var insert_date_arr = new Array();
+var cartegory_arr = new Array();
+
+//게시글 등록 유효성 검사
+function check(){
+	var title = $("#title").val();
+
+	if(title == ""){
+		alert("제목을 입력하셔야 합니다.");
+		return false;
+	}
+
+	var content = $("#content").val();
+	if(content == ""){
+		alert("내용을 입력하셔야 합니다.");
+		return false;
+	}
+	if(content.search(/\s/) != -1){
+		alert("내용에 공백은 사용할 수 없습니다.");
+		return false;
+	}
+
+	if(board_status_check == false){
+		alert("가계부를 가져와야 합니다.");
+		return false;
+	}
+}
+
+
+//가계부 가져오기 클릭
+$("#board_status_import").click(function(){
+	var moneybook_date = $("#moneybook_date").val();
+	$.ajax({
+		url : "board/status",
+		data : {"insert_date" : moneybook_date},
+		dataType : "json",
+		success : function(data){
+	/* 		if(data.Data.response.length == 0){
+				alert("해당 월에 지출,수입내역이 없습니다.")
+				board_status_check = false;
+			} */
+			
+			if(data.length == 0){
+				alert("해당 월에 지출,수입내역이 없습니다.");
+				getBoard_status(data);
+				board_status_check = false;
+			}else{
+			getBoard_status(data);
+			board_status_check = true;
+			}
+		}
+	})
+})
+
+//가계부 가져오기 성공 시 보여질 내역
+function getBoard_status(data){
+	var status_disp = "";
+	var disp = "";
+	disp += "<h3 class='panel-title'>지출 테이블</h3>"
+	disp += "<table class='table table-striped table-boardered'>";
+	disp += "<thead><tr>";
+	disp += "<th>날짜</th>";
+	disp += "<th>금액</th>";
+	disp += "<th>내역</th>";
+	disp += "</tr></thead>";
+	disp += "<tbody>";
+	$(data).each(function(idx, item){
+		if(item.moneybook_type == "expense"){
+			status_disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
+			status_disp += "<input type='hidden' name='board_date' value='"+item.insert_date+"'>";
+			status_disp += "<input type='hidden' name='price' value='"+item.price+"'>";
+			status_disp += "<input type='hidden' name='cartegory' value='"+item.cartegory+"'>";
+			disp += "<tr>";
+			disp += "<td>"+item.insert_date+"</td>";
+			disp += "<td>"+item.price+"</td>";
+			disp += "<td>"+item.cartegory+"</td>";
+			disp += "</tr>";
+		}
+	})
+	disp += "<tbody>";
+	disp += "</table>";
+
+	disp += "<h3 class='panel-title'>수입 테이블</h3>"
+	disp += "<table class='table table-striped table-boardered'>";
+	disp += "<thead><tr>";
+	disp += "<th>날짜</th>";
+	disp += "<th>금액</th>";
+	disp += "<th>내역</th>";
+	disp += "</tr></thead>";
+	disp += "<tbody>";
+	$(data).each(function(idx, item){
+		if(item.moneybook_type == "earnings"){
+			status_disp += "<input type='hidden' name='moneybook_type' value='"+item.moneybook_type+"'>";
+			status_disp += "<input type='hidden' name='board_date' value='"+item.insert_date+"'>";
+			status_disp += "<input type='hidden' name='price' value='"+item.price+"'>";
+			status_disp += "<input type='hidden' name='cartegory' value='"+item.cartegory+"'>";
+			disp += "</tr>";
+			disp += "<td>"+item.insert_date+"</td>";
+			disp += "<td>"+item.price+"</td>";
+			disp += "<td>"+item.cartegory+"</td>";
+			disp += "</tr>";
+		}
+	})
+	disp += "</tbody>";
+	disp += "</table>";
+
+	document.getElementById("moneybook_status_disp").innerHTML = disp;
+	document.getElementById("status_disp").innerHTML = status_disp;
+}
+
+</script>
+</th:block>
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.moneybook.mapper.AssetPriceMapper">
+
+<!-- 자산내역 추가-->
+<insert id="assetprice_insert" parameterType="Assetprice">
+	insert into assetprice(ano, price, insert_date)
+					    values(#{ano}, #{price}, #{insert_date})
+</insert>
+
+<!-- 자산내역 목록 -->
+<select id="assetprice_select" parameterType="java.lang.Integer" resultType="Assetprice">
+	select ano, pno, price, insert_date
+	from assetprice
+	where ano = #{ano}
+	<choose>
+	<when test='sort_flag == "down"'>
+		order by ${sort}
+	</when>
+	<when test='sort_flag == "up"'>
+		order by ${sort} desc
+	</when>
+	<otherwise>
+		order by insert_date desc, pno desc
+	</otherwise>	
+	</choose>
+</select>
+
+<!-- 자산내역 삭제 -->
+<delete id="assetprice_delete" parameterType="java.lang.Integer">
+	delete from assetprice
+	where pno = #{pno}
+</delete>
+
+<!-- 자산내역 수정 폼 -->
+<select id="assetprice_updateform" parameterType="java.lang.Integer" resultType="Assetprice">
+	select pno, price, insert_date, ano
+	from assetprice
+	where pno = #{pno}
+</select>
+
+<!-- 자산내역 수정 -->
+<update id="assetprice_update" parameterType="Assetprice">
+	update assetprice
+	set price = #{price}, insert_date = #{insert_date}
+	where pno = #{pno}
+</update>
+</mapper>

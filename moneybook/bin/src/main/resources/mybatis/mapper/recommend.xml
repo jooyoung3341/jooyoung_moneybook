@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.moneybook.mapper.RecommendMapper">
+
+<!-- 추천 등록 -->
+<insert id="recommend" parameterType="Recommend">
+	<!-- insert 후 auto_increment 된 값 가져오기 -->
+	<!-- LAST_INSERT_ID : insert 후 insert된 pk값 가져오기 -->
+	<selectKey resultType="java.lang.Integer" keyProperty="reno" order="AFTER">
+		select LAST_INSERT_ID()
+	</selectKey>
+	insert into recommend(moneybook_name, status, bno)
+						  value(#{moneybook_name}, #{status}, #{bno})
+</insert>
+
+<!-- 추천 삭제 -->
+<delete id="recommend_cancel" parameterType="java.lang.Integer">
+	delete from recommend
+	where reno = #{reno}
+</delete>
+
+<!-- 게시글에 해당하는 추천이 있는지 조회 확인 -->
+<select id="recommend_select" parameterType="hashMap" resultType="Recommend">
+	select reno
+	from recommend
+	where bno = #{bno} and moneybook_name = #{moneybook_name}
+</select>
+
+<!-- 추천 중복 확인 -->
+<select id="recommendStatus" parameterType="hashMap" resultType="Recommend">
+	select count(*) as recommendStatus
+	from recommend
+	where bno = #{bno} and moneybook_name = #{moneybook_name}
+</select>
+</mapper>

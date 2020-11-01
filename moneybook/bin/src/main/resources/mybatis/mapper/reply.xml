@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.moneybook.mapper.ReplyMapper">
+
+<!-- 댓글 삽입 -->
+<insert id="reply_insert" parameterType="Reply">
+	insert into reply(moneybook_name, content, insert_date, bno)
+			      value(#{moneybook_name}, #{content}, #{insert_date}, #{bno})
+</insert>
+
+<!-- 댓글 목록 -->
+<select id="reply_select" parameterType="java.lang.Integer" resultType="Reply">
+	select rno, moneybook_name, content, insert_date
+	from reply
+	where bno = #{bno}
+</select>
+
+<!-- 댓글 삭제 -->
+<delete id="reply_delete" parameterType="java.lang.Integer">
+	delete from reply
+	where rno = #{rno}
+</delete>
+
+<!-- 댓글 수정 폼 -->
+<select id="reply_update_form" parameterType="java.lang.Integer" resultType="Reply">
+	select content, rno
+	from reply
+	where rno = #{rno}
+</select>
+
+<!-- 댓글 수정 -->
+<update id="reply_update" parameterType="Reply">
+	update reply
+	set content = #{content}
+	where rno = #{rno}
+</update>
+</mapper>

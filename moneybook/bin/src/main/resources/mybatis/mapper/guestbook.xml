@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.moneybook.mapper.GuestBookMapper">
+
+<!-- 방명록 등록 -->
+<insert id="guestbook_insert" parameterType="Guestbook">
+	insert into guestbook(moneybook_name, content, insert_date)
+						 value(#{moneybook_name}, #{content}, #{insert_date})
+</insert>
+
+<!-- 방명록 목록 -->
+<select id="guestbook_select" parameterType="Guestbook" resultType="Guestbook">
+	select *
+	from guestbook
+	order by insert_date desc
+</select>
+
+<!-- 방명록 삭제 -->
+<delete id="guestbook_delete" parameterType="java.lang.Integer">
+	delete from guestbook
+	where gno = #{gno}
+</delete>
+
+<!-- 방명록 수정 폼 -->
+<select id="guestbook_update_form" parameterType="java.lang.Integer" resultType="Guestbook">
+	select *
+	from guestbook
+	where gno = #{gno}
+</select>
+
+<!-- 방명록 수정 -->
+<update id="guestbook_update" parameterType="Guestbook">
+	update guestbook
+	set content = #{content}
+	where gno = #{gno}
+</update>
+</mapper>

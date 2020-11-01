@@ -16,17 +16,16 @@
 			<span>
 			<a href="board_register"><button type="button" class="btn btn-primary">이야기 등록</button></a>
 			</span>
-		
-		</div>
-		<div class="panel-body">
 			<span>
-			<ul class="nav nav-tabs">
+			<ol class="breadcrumb">
 				<li class="breadcrumb-item" name="sort" id="insert_date"><a href="#">최신순</a></li>
 				<li class="breadcrumb-item" name="sort" id="recommend"><a href="#">추천순</a></li>
 				<li class="breadcrumb-item" name="sort" id="reply"><a href="#">댓글순</a></li>
 				<li class="breadcrumb-item" name="sort" id="readcnt"><a href="#">조회순</a></li>
-			</ul>
+			</ol>
 			</span>
+		</div>
+		<div class="panel-body">
 		<ul class="list-group">
 		<!-- 게시판 목록 -->
 		<th:block th:each="board : ${map.board_list}">
@@ -38,7 +37,7 @@
 		    		<span class="text-primary" th:text="${board.title}"></span>
 		    	</a><!-- badge badge-pill badge-dark -->
 				</span>
-				<span style="width:300px; float: right;">
+				<span style="width:200px; float: right;">
 				<i class="ri-thumb-up-line" align="right"><span class="badge badge-dark" th:text="${board.recommend}"></span></i>
 				<i class="ri-chat-1-line" align="right"><span class="badge badge-dark" th:text="${board.reply}"></span></i>
 		    	<span class="badge badge-primary badge-pill" th:text="${board.readcnt}"></span>
@@ -106,8 +105,6 @@
 <th:block th:if="${board_updatemsg != null}">
 	<input tpye="hidden" id="board_updatemsg" th:value="${board_updatemsg}">
 </th:block>
-</div>
-</div>
 </div>
 <th:block layout:fragment="script">
 <script>

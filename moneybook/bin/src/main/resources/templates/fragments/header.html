@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head xmlns:th="http://www.thymeleaf.org">
+</head>
+<div id="container" class="effect mainnav-full">
+
+<header th:fragment="headerFragment" id="navbar">
+	<div id="navbar-container" class="boxed">
+		<div class="navbar-header">
+			
+				<div class="brand-title">
+									<!-- 로그인 한 가계부이름 넣을것 -->
+					<span class="brand-text" th:text="${#authentication.principal.username}+가계부"></span>
+				</div>
+			<!-- <a href="#" class="navbar-brand">
+			</a> -->
+		</div>
+		
+		<div class="navbar-content clearfix">
+			<ul class="nav navbar-top-links pull-right">
+				<li id="dropdown-user">
+					<span class="pull-right"><div class="username hidden-xs"><a href="/logout">로그아웃</a></div></span>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<nav class="navbar navbar-default megamenu">
+		<!-- 뭐하는 div class인지 확인해 볼 것 -->
+	<!-- 	<div class="navbar-header">
+			<button type="button" data-toggle="collapse" data-target="#defaultmenu" class="navbar-toggle">
+				<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+			</button>
+		</div> -->
+		<!-- ----------------------------- -->
+		<div id="defaultmenu" class="navbar-collapse collapse">
+				
+			<ul class="nav navbar-nav">
+				<li>
+				&emsp;&emsp;&emsp;
+				</li>
+				<li>
+					<a href="moneybook">지출</a>
+				</li>
+			
+				<li>
+					<a href="earnings">수입</a>
+				</li>
+				
+				<li>
+					<a href="asset">자산</a>	
+				</li>
+				
+				<li>
+					<a href="board">가계부 이야기</a>
+				</li>
+				
+				<li>
+					<a href="guestbook">방명록</a>
+				</li>
+				
+				<li>
+					<a href="calendar">가계부 달력</a>
+				</li>
+				
+				<!-- admin만 볼 수 있게 -->
+				<th:block th:if="${#authentication.principal.username == 'admin'}" >
+				<li>
+					<a href="admin">관리자</a>
+				</li>
+				</th:block>
+			</ul>
+			
+		</div>
+	</nav>
+</header>
+</div>
+</html>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.moneybook.mapper.EarningsMapper">
+
+<!-- 수입내역 삽입 -->
+<insert id="earnings_insert" parameterType="Earnings">
+	insert into earnings(moneybook_name, price, cartegory, insert_date, moneybook_type)
+					 values(#{moneybook_name}, #{price}, #{cartegory}, #{insert_date}, #{moneybook_type})
+</insert>
+
+<!-- 수입내역 목록 -->
+<select id="earnings_select" parameterType="java.lang.String" resultType="Earnings">
+	select price, cartegory, insert_date, ino
+	from earnings
+	where insert_date like CONCAT('%',#{insert_date},'%') and moneybook_name = #{moneybook_name}
+	<choose>
+		<when test='sort_flag == "down"'>
+			order by ${sort}
+		</when>
+		<when test='sort_flag == "up"'>
+			order by ${sort} desc
+		</when>
+		<otherwise>
+			order by insert_date desc, ino desc
+		</otherwise>	
+	</choose>
+</select>
+
+<!-- 수입내역 삭제 -->
+<delete id="earnings_delete" parameterType="java.lang.Integer">
+	delete from earnings
+	where ino = #{ino}
+</delete>
+
+<!-- 수입내역 수정 폼 -->
+<select id="earnings_updateform" parameterType="java.lang.Integer" resultType="Earnings">
+	select price, cartegory, insert_date, ino
+	from earnings
+	where ino = #{ino}
+</select>
+
+<!-- 수입내역 수정 -->
+<update id="earnings_update" parameterType="Earnings">
+	update earnings
+	set price = #{price}, cartegory = #{cartegory}, insert_date = #{insert_date}
+	where ino = #{ino}
+</update>
+</mapper>
+
+

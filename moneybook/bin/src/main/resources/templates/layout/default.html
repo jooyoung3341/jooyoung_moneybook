@@ -1,0 +1,23 @@
+<!-- 이 파일이 타임리프 레이아웃을 잡아주는 핵심파일 -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlans:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head th:replace="fragments/config :: configFragment">	
+</head> 
+<div style="height:70px;">
+<header th:replace="fragments/header :: headerFragment"></header>
+</div>
+<div class="row">
+    <div class="col-md-2">
+    	<!-- 가계부 현황 -->
+    	<th:block th:replace="fragments/status :: status"></th:block>
+    </div>
+    
+    <div class="col-md-9">
+		<div layout:fragment="content"></div>
+		<footer th:replace="fragments/footer :: footerFragment"></footer>
+		<th:block layout:fragment="script"></th:block>
+
+	</div>
+</div>
+
+</html>

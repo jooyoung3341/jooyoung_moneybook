@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.na/thymeleaf/layout"
+	    layout:decorate="~{layout/default}">
+<head>
+<meta charset="UTF-8">
+<th:block layout:fragment="css">
+<style type="text/css">
+/* 	#table {	
+		display: table; 
+		width: 100%;
+	}
+ */	/* 테이블의 행  */
+/* 	.row1 {
+		display: table-row;	
+	}
+	#cell {
+		display: table-cell; 
+		padding: 4px; 
+		border-bottom: 1px solid #DDD;
+	} */
+/* 	p{
+	width:350px;
+	} */
+</style>
+</th:block>
+<title>방명록</title>
+</head>
+<div layout:fragment="content">
+<input type="hidden" id="name" th:value="${moneybook_name}">
+<br/><br/><br/>
+<button type="button" class="btn btn-primary" id="guestbook_modal_btn">방명록 쓰기</button>
+<div id="getGuestbook"></div>
+
+<!-- 방명록 등록 Modal -->
+<div class="modal" id="guestbook_modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			  	<h5 class="modal-title">방명록</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" id="guestbook_form">
+					<div class="form-group">
+  						<textarea class="form-control" id="content" rows="3"></textarea>
+  					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="guestbook_insert">등록</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!--방명록 수정 modal -->
+<div class="modal" id="guestbook_update_modal">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+			  	<h5 class="modal-title">방명록 수정</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post">
+					<div id="modal_gno"></div>
+					<div class="form-group" id="modal_content"></div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" id="guestbook_update">등록</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal">닫기</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<th:block layout:fragment="script">
+<script>
+window.onload = function(){
+	guestbookSelect();
+	statusSelect();
+}
+
+//방명록 등록 모달창 오픈
+$("#guestbook_modal_btn").click(function(){
+	$("#guestbook_modal").modal();
+});
+//방명록 등록 모달창 리셋
+$("#guestbook_modal").on("hide.bs.modal", function(){
+		$("#guestbook_modal").find("#guestbook_form")[0].reset();
+});
+
+//방명록 등록
+$("#guestbook_insert").click(function(){ 
+	var content = $("#content").val();
+	if(content == ""){
+		alert("내용을 입력하셔야 합니다.");
+	}else
+		$.ajax({
+			url : "guestbook/insert",
+			type : "post",
+			data : {"content" : content},
+			success : function(){
+				$("#guestbook_modal").modal("hide");
+				$("#guestbook_form")[0].reset();
+				alert("등록 완료!");
+				guestbookSelect();
+			},
+			error : function(request, error){
+				alert("에러!");
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		})
+})
+
+//방명록 목록
+function guestbookSelect(){
+	$.ajax({
+		url : "guestbook/select",
+		dataType : "json",
+		success : function(data){
+			getGuestbook(data)
+		},
+		error : function(request, error){
+			alert("실패");
+			alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+		}
+	})
+}
+
+//방명록 목록 disp
+function getGuestbook(data){
+	var moneybook_name = $("#name").val();
+	var i = 4;
+	var j = 4;
+	var disp = "";
+	disp += "<div id='table'>";
+	$(data).each(function(idx, item){
+		//i j 나눈 값이 0일경우에만 i=4, j=4의 배수일경우에만
+		if(i%j == 0){
+			disp += "<div class='row'>";
+		}
+		
+		disp += "<div class='col-lg-4' id='cell' style='width:300px; float:left; margin-left:10px;'>";
+		disp += "<div class='panel'>";
+		disp += "<div class='panel-heading'>";
+		disp += item.moneybook_name+"<span style='float: right;'>"+item.insert_date+"</span>";
+		disp += "</div>";
+		disp += "<div class='panel-body'>";
+		disp += item.content;
+		disp += "</div>";
+		//disp += "<br/>"+item.content;
+		
+		if(moneybook_name == item.moneybook_name || moneybook_name == 'admin'){
+			disp += "<button type='button' class='btn btn-primary btn-round' id='"+idx+"' name='guestbook_update' value='"+item.gno+"'>수정</button>";
+			disp += "<button type='button' class='btn btn-danger btn-round' id='"+idx+item.gno+"' name='guestbook_delete' value='"+item.gno+"'>삭제</button>";
+		} 
+		disp += "</div>";
+		disp += "</div>&nbsp;&nbsp;&nbsp;";
+		
+		i += 1;
+		if(i%j == 0){
+			disp += "</div><br/>";
+		}
+	})
+	disp += "</div>";
+	$("#getGuestbook").html(disp);
+}
+
+//방명록 삭제
+$(document).on("click", "button[name=guestbook_delete]",function(){
+	var confirm_val = confirm("삭제 하시겠습니까?");
+	if(confirm_val){
+		var $delete = $(this).attr("id");
+		var gno = $("#"+$delete).attr("value");
+		$.ajax({
+			url : "guestbook/delete",
+			data : {"gno" : gno},
+			success : function(){
+				guestbookSelect();
+			},
+			error : function(request, error){
+				alert("실패");
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		})
+	}
+})
+
+//방명록 수정 폼
+$(document).on("click", "button[name=guestbook_update]", function(){
+	var $update = $(this).attr("id");
+	var gno = $("#"+$update).attr("value");
+		$.ajax({
+			url : "guestbook/update_form",
+			data : {"gno" : gno},
+			dataType : "json",
+			success : function(data){
+				$("#modal_content").html("<textarea class='form-control' id='update_content' rows='3'>"+data.content+"</textarea>");
+				$("#modal_gno").html("<input type='hidden' id='update_gno' value='"+data.gno+"'>");
+				$("#guestbook_update_modal").modal();
+			},
+			error : function(request, error){
+				alert("실패");
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		})
+})
+
+//방명록 수정
+$(document).on("click", "#guestbook_update", function(){
+	var confirm_val = confirm("수정 하시겠습니까?");
+	if(confirm_val){
+		var gno = $("#update_gno").val();
+		var content = $("#update_content").val();
+		$.ajax({
+			url : "guestbook/update",
+			type : "post",
+			data : {"gno" : gno,
+					   "content" : content},
+			success : function(){
+				$("#guestbook_update_modal").modal("hide");
+				alert("수정 완료!");
+				guestbookSelect();
+			},
+			error : function(request, error){
+				alert("실패");
+				alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+			}
+		})
+	}
+})
+
+</script>
+</th:block>
+</html>

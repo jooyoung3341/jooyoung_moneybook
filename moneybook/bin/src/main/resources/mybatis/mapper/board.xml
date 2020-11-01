@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.moneybook.mapper.BoardMapper">
+<!-- 공통으로 사용할 SQL -->
+<sql id="search">
+	<if test="keyword != null">
+		where title like CONCAT('%',#{keyword},'%')
+	</if>
+</sql>
+
+
+<!-- 지출, 수입 가져오기 -->
+<select id="board_status" parameterType="hashMap" resultType="Board">
+	select price, cartegory, insert_date, moneybook_type
+	from expense
+	where insert_date like CONCAT(#{insert_date},'%') and moneybook_name = #{moneybook_name}
+	union all
+	select price, cartegory, insert_date, moneybook_type 
+	from earnings
+	where insert_date like CONCAT(#{insert_date},'%') and moneybook_name = #{moneybook_name}
+</select>
+
+<!-- 가계부이야기 등록하기 -->
+<insert id="board_register" parameterType="Board">
+	insert into board(moneybook_name, title, content, insert_date)
+				 values(#{moneybook_name}, #{title}, #{content}, #{insert_date})
+</insert>
+
+<!-- 가계부이야기 status 등록 -->
+<insert id="board_status_insert" parameterType="Board">
+	<!-- 찾은 조건 값을 insert -->
+	<selectKey resultType="java.lang.Integer" keyProperty="bno" order="BEFORE">
+		select bno from board order by insert_date desc limit 1
+	</selectKey>
+	insert into board_status(bno, moneybook_type, price, cartegory, board_date)
+						   values(#{bno}, #{moneybook_type}, #{price}, #{cartegory}, #{board_date})
+</insert>
+
+<!-- 가계부이야기 목록 -->
+<select id="board_selete" resultType="Board" parameterType="Criteria">
+	select bno, title, insert_date, readcnt, recommend, reply, moneybook_name
+	from board
+	<!-- 검색어 -->
+	<include refid="search"></include>
+	<if test='sort == "insert_date" or sort == "recommend" or sort == "reply" or sort == "readcnt"'>
+		order by ${sort} desc
+	</if>
+	<if test='sort == null or sort == ""'>
+		order by insert_date desc
+	</if>
+
+	limit #{pageStart}, #{perPageNum}
+	
+</select>
+
+<!-- 가계부이야기 전체 가져오기 -->
+<select id="board_totalcount" resultType="java.lang.Integer" parameterType="Criteria">
+	select count(*)
+	from board
+		<include refid="search"></include>
+</select>
+
+<!-- 가계부이야기 상세보기 -->
+<select id="board_detail" parameterType="hashMap" resultType="Board">
+	select b.moneybook_name, b.title, b.content, b.insert_date, b.readcnt, b.recommend, b.bno,
+		<!-- 추천 타입찾기 (status)-->
+		(select r.status
+	 	from recommend as r
+	 	where r.bno = #{bno} and r.moneybook_name = #{moneybook_name})as recommend_status,
+	  		<!-- 추천 기본키 값 찾기 (reno)-->
+	  		(select r.reno
+             from recommend as r
+             where r.bno = #{bno} and r.moneybook_name = #{moneybook_name})as reno
+	from board as b
+	where b.bno = #{bno}
+</select>
+
+<!-- 가계부이야기 상세보기_status -->
+<select id="board_status_select" parameterType="java.lang.Integer" resultType="Board">
+	select moneybook_type, price, cartegory, board_date
+	from board_status
+	where bno = #{bno}
+</select>
+
+<!-- 가계부이야기 조회수  -->
+<update id="board_readcnt" parameterType="java.lang.Integer">
+	update board
+	set readcnt = readcnt + 1
+	where bno = #{bno}
+</update>
+
+<!-- 가계부 이야기 댓글 -->
+<update id="board_reply" parameterType="java.lang.Integer">
+	update board
+	set reply = reply + 1
+	where bno = #{bno}
+</update>
+
+<!-- 가계부 이야기 댓글 삭제-->
+<update id="board_reply_delete" parameterType="java.lang.Integer">
+	update board
+	set reply = reply - 1
+	where bno = #{bno}
+</update>
+
+<!-- 가계부 이야기 삭제 -->
+<delete id="board_delete" parameterType="java.lang.Integer">
+	delete 
+	from board
+	where bno = #{bno}
+</delete>
+
+<!-- 가계부이야기 수정 폼 -->
+<select id="board_updateform" parameterType="java.lang.Integer" resultType="Board">
+	select moneybook_name, title, content, bno
+	from board
+	where bno = #{bno}
+</select>
+
+<!-- 가계부이야기 수정 -->
+<update id="board_update" parameterType="Board">
+	update board
+	set title = #{title}, content = #{content}, insert_date = #{insert_date}
+	where bno = #{bno}
+</update>
+
+<!-- 가계부이야기 추천  -->
+<update id="board_recommend" parameterType="hashMap">
+	update board
+	<if test="status == 'up'">
+		set recommend = recommend + 1
+	</if>
+	<if test="status == 'down'">
+		set recommend = recommend - 1
+	</if>
+	where bno = #{bno}
+</update>
+
+<!-- 가계부이야기 상세보기 금액 합계-->
+<select id="board_sum" parameterType="java.lang.Integer" resultType="Board">
+	select sum(price) as sum_price, moneybook_type
+    from board_status
+    where bno = #{bno}
+    group by moneybook_type
+</select>	 
+
+</mapper>

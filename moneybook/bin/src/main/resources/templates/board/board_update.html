@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+		layout:decorate="~{layout/default}">
+<head>
+<th:block layout:fragment="css">
+</th:block>
+<meta charset="UTF-8">
+<title>가계부 이야기 - 수정</title>
+</head>
+<div layout:fragment="content">
+
+<input type="hidden" id="page" th:value="${page}">
+<input type="hidden" id="keyword" th:value="${keyword}">
+<br/><br/><br/><br/>
+<div class="row">
+	<div class="col-md-7">
+	<div class="panel">
+	<div class="panel-heading">
+		<h3 class="panel-title">가계부이야기 수정</h3>
+	</div>
+	<div class="panel-body">
+		<form method="post" th:action="@{/board/board_update}">
+			<input type="hidden" name="bno" th:value="${board.bno}">
+			<div class="form-group">
+				<label class="col-form-label">제목</label>
+				<input tpye="text" class="form-control" id="title" name="title" th:value="${board.title}">
+			</div>
+			
+			<div class="form-group">
+				<label class="col-form-label"></label>
+				<textarea class="form-control" rows="3" id="content" name="content" th:text="${board.content}"></textarea>
+			</div>
+			
+			<button type="submit" class="btn btn-primary" id="board_update">수정</button>
+			<button type="button" class="btn btn-secondary" id="board_back">뒤로가기</button>
+		</form>
+	</div>
+	</div>	
+	</div>
+	
+	<div class="col-md-3">
+	</div>
+</div>
+
+</div>
+<th:block layout:fragment="script">
+<script>
+window.onload = function(){
+	statusSelect();
+}
+//뒤로가기
+$("#board_back").click(function(){
+	var page = $("#page").val();
+	var keyword = $("#keyword").val(); 
+	var bno = $("#bno").val();
+	location.href="board_detail?bno="+bno+"&page="+page+"&perPageNum=10&keyword="+keyword;
+})
+</script>
+</th:block>
+</html> 
